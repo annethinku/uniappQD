@@ -57,6 +57,18 @@
 				"navigationStyle": "custom"
 			}
         }
+        ,{
+            "path" : "pages/jubao/jubao",
+            "style" : {
+				"navigationBarTitleText":"举报"
+			}
+        }
+        ,{
+            "path" : "pages/messages/messages",
+            "style" : {
+				"navigationBarTitleText":"消息"
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

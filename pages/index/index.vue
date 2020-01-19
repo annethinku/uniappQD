@@ -14,9 +14,11 @@
 						<input type="text" value="" placeholder="请输入你想搜索的内容" placeholder-class="input-holder" />
 					</view>
 				</view>
-				<view class="t1-mes">
-					<view class="dian"></view>
-				</view>
+				<navigator url="../messages/messages" hover-class="none">
+					<view class="t1-mes">
+						<view class="dian"></view>
+					</view>
+				</navigator>
 			</view>
 			<view class="index-top2">
 				<swiper :indicator-dots="true" :autoplay="false" :interval="3000" :duration="1000" indicator-color="rgba(254, 129, 76, 0.4)"

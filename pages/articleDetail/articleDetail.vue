@@ -17,7 +17,7 @@
 			</view>
 		</view>
 		<view class="det-title">
-			世人皆圣人，唯我想撒旦世人皆圣人，唯我想撒旦
+			世人皆圣人，唯我想撒旦世人皆圣人，唯我想撒旦 {{comHeig}}
 		</view>
 		<view class="det-arts" id="artTop">
 			<view class="arts-left">
@@ -72,7 +72,7 @@
 							说点什么吧说点什么吧说点什么吧说点什么
 							说点什么吧说点什么吧说点什么吧说点什么
 						</view>
-						<view class="lir_bot">
+						<view class="lir_bot" @click="showCommets">
 							<text>999条回复</text>
 							<view class="brjian"></view>
 						</view>
@@ -94,39 +94,6 @@
 				<view class="fix_l5" @click="open2"></view>
 			</view>
 		</view>
-		<!-- 回复消息弹窗 -->
-		<uni-popup ref="popup" type="bottom">
-			<view class="replyK">
-				<view class="rep-top">
-					<view class="rep-left" @click="hideMask">
-						<image src="../../static/images/art-close.png" mode="widthFix"></image>
-					</view>
-					<view class="rep-right">
-						发布
-					</view>
-				</view>
-				<view class="rep-center">
-					<textarea :value="inputValue" placeholder="说点什么吧.. " placeholder-class="placeh" :focus="textP" />
-					</view>
-				 <view class="rep-bot">
-				 	<view class="repb-left">
-				 		<view class="name">
-				 			常用：
-				 		</view>
-						<view class="emjos">
-							<image src="../../static/images/emji01.png" mode="widthFix"></image>
-							<image src="../../static/images/emji02.png" mode="widthFix"></image>
-							<image src="../../static/images/emji03.png" mode="widthFix"></image>
-							<image src="../../static/images/emji04.png" mode="widthFix"></image>
-						</view>
-				 	</view>
-					<view class="repb-right" @click="qiehImg">
-						<image src="../../static/images/art-smaile.png" mode=""></image>
-					</view>
-				 </view>
-				 <bkhumorEmoji @emotion="getIcon" v-if="haveBq"></bkhumorEmoji>
-			</view>
-		</uni-popup>
 		<!-- 分享弹窗 -->
 		<uni-popup ref="share" type="bottom">
 			<view class="share_con">
@@ -173,13 +140,94 @@
 		<uni-popup ref="toushu" type="top">
 			<view class="toushuC">
 				<view class="tc-li">
-					投诉
+					<navigator url="../jubao/jubao">
+						投诉
+					</navigator>
 				</view>
-				<view class="tc-li">
+				<view class="tc-li" @click="open2">
 					分享
 				</view>
 			</view>
 		</uni-popup>
+		<!-- 评论详情弹窗 -->
+		<uni-popup ref="comments" type="bottom">
+			<view class="comment-mask" :style="'height:'+comHeig+'upx'">
+				<view class="comment-top">
+					<text>评论详情</text>
+					<image src="../../static/images/art-close.png" mode="" @click="hideCommets"></image>
+				</view>
+				<scroll-view scroll-y="true" class="comment-center">
+					<view class="hotc-cont">
+							<view class="cont_li" v-for="(item,index) in lisarr" :key="index">
+								<view class="li_left">
+									<image src="" mode="widthFix"></image>
+								</view>
+								<view class="li_right">
+									<view class="lir_top">
+										<view class="t1name">
+											长发大帅哥
+										</view>
+										<view class="t1zan">
+											<view class="zanicon"></view>
+											<text>20</text>
+										</view>
+									</view>
+									<view class="lir_con">
+										说点什么吧说点什么吧说点什么吧说点什么
+										说点什么吧说点什么吧说点什么吧说点什么
+										说点什么吧说点什么吧说点什么吧说点什么
+									</view>
+									<view class="lir_bot2">
+									 <text>5-21 20:56 </text>
+                                      · 举报 · 回复
+									</view>
+								</view>
+					
+							</view> 
+						</view>
+					
+				</scroll-view>
+				<view class="comment-bottom">
+					<view class="inbor">
+						<input type="text" value=""  placeholder="回复zc169 :" placeholder-class="plai" @click="open"/>
+					</view>
+				</view>
+			</view>
+		</uni-popup>
+	<!-- 回复消息弹窗 -->
+	<uni-popup ref="popup" type="bottom">
+		<view class="replyK">
+			<view class="rep-top">
+				<view class="rep-left" @click="hideMask">
+					<image src="../../static/images/art-close.png" mode="widthFix"></image>
+				</view>
+				<view class="rep-right">
+					发布
+				</view>
+			</view>
+			<view class="rep-center">
+				<textarea :value="inputValue" placeholder="说点什么吧.. " placeholder-class="placeh" :focus="textP" @input="fuzhiBq"/>
+				</view>
+			 <view class="rep-bot">
+			 	<view class="repb-left">
+			 		<view class="name">
+			 			常用：
+			 		</view>
+					<view class="emjos">
+						<image src="../../static/images/emji01.png" mode="widthFix"></image>
+						<image src="../../static/images/emji02.png" mode="widthFix"></image>
+						<image src="../../static/images/emji03.png" mode="widthFix"></image>
+						<image src="../../static/images/emji04.png" mode="widthFix"></image>
+					</view>
+			 	</view>
+				<view class="repb-right" @click="qiehImg">
+					<image src="../../static/images/art-smaile.png" mode=""></image>
+				</view>
+			 </view>
+			 <bkhumorEmoji @emotion="getIcon" v-if="haveBq"></bkhumorEmoji>
+		</view>
+	</uni-popup>
+	
 	</view>
 </template>
 
@@ -190,11 +238,12 @@
 		data() {
 			return {
 				desc: '',
-				lisarr: 3,
+				lisarr: 10,
 				textP:false,
 				inputValue:'',
 				haveBq:false,
-				isTop:false
+				isTop:false,
+				comHeig:1000
 			};
 		},
 		components: {
@@ -202,6 +251,13 @@
 			bkhumorEmoji
 		},
 		mounted() {
+			// 获取到屏幕高度了 但是没生效
+			uni.getSystemInfo({
+				success(res) {
+					this.comHeig=res.windowHeight*2;
+					console.log(this.comHeig);
+				}
+			})
 			this.desc =
 				'<p style="padding:15px">感觉。 但是一个女孩无论她多么孤傲、 多么特立独行孩之间的故事是最交心的。 感觉。 但是一个女孩无论多么孤傲、 多么特立独行、 多么不被常人肯定， 她也有那么几个好朋友。 两个女孩之间的故事是最交心的感觉。 但是一个女孩无论她多么孤傲、 多么特立独行多么不被常人肯定， 她也总有那么几个好朋友。 两个孩之间的故事是最交心的。</p><img width="100%" src="https://goss.veer.com/creative/vcg/veer/800water/veer-144753511.jpg"/><p style="padding:15px;">感觉。 但是一个女孩无论她多么孤傲、 多么特立独行孩之间的故事是最交心的。 感觉。</p>';
 		},
@@ -214,6 +270,9 @@
 			}
 		},
 		methods: {
+			showCommets(){
+			  this.$refs.comments.open();
+			},
 			open() {
 				this.textP=true;
 				this.inputValue='';
@@ -222,6 +281,8 @@
 			},
 			open2() {
 				this.$refs.share.open();
+				this.$refs.toushu.close();
+				this.isTop=false;
 			},
 			getIcon(i){
 				// console.log(i)
@@ -231,6 +292,9 @@
 				} else {
 					this.inputValue += i;
 				}
+			},
+			hideCommets(){
+				this.$refs.comments.close()
 			},
 			hideMask(){
 				this.$refs.popup.close()
@@ -330,6 +394,10 @@
 				  this.divTop=data.top;
 				}).exec();
 			},
+			// 文字赋值
+			fuzhiBq(e){
+				this.inputValue=e.detail.value;
+			}
 		}
 	}
 </script>
@@ -508,6 +576,13 @@
 						@include bg-image('../../static/images/bbs_jian2');
 						display: inline-block;
 						margin-left: 12upx;
+					}
+				}
+				.lir_bot2{
+					font-size: 24upx;
+					text{
+						color: #AAAAAA;
+						margin-right: 10upx;
 					}
 				}
 			}
@@ -743,6 +818,62 @@
 			border-bottom: 1upx #EEEEEE solid;
 			padding: 30upx 0;
 			text-align: center;
+		}
+	}
+	.comment-mask{
+		width: 100%;
+		background-color: #FFFFFF;
+		border-top-left-radius: 40upx;
+		border-top-right-radius: 40upx;
+		.comment-top{
+			width: 100%;
+			height: 98upx;
+			line-height: 98upx;
+			text-align: center;
+			font-size: 30upx;
+			color: #333333;
+			font-weight: bold;
+			position: absolute;
+			top: 0;
+			left: 0;
+			image{
+				width: 40upx;
+				height: 40upx;
+				position: absolute;
+				top:30upx;
+				right: 30upx;
+			}
+		}
+		.comment-center{
+			width: 100%;
+			height: auto;
+			position: absolute;
+			top: 98upx;
+			bottom: 98upx;
+		}
+		.comment-bottom{
+			width: 100%;
+			height: 98upx;
+			background-color: #F4F4F4;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			.inbor{
+				height: 60upx;
+				margin: 19upx 45upx 0;
+				border-radius: 30upx;
+				background: #E5E5E5;
+				input{
+					padding: 0 38upx;
+					width: 100%;
+					height: 100%;
+					box-sizing: border-box;
+					font-size: 24upx;
+				}
+				.plai{
+					color: #999999;
+				}
+			}
 		}
 	}
 </style>

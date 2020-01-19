@@ -4,9 +4,11 @@
 			<view class="my-set">
 				<view class="setBox">
 					<view class="seticon"></view>
+					<navigator url="../messages/messages" hover-class="none">
 					<view class="messicon">
 						<view class="dian"></view>
 					</view>
+					</navigator>
 				</view>
 			</view>
 			<view class="userimg">
