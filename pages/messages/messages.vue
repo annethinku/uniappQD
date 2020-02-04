@@ -5,96 +5,103 @@
 				消息列表
 			</view>
 			<view class="contents">
-				<view class="con_lis">
-					<view class="lis_left">
-						<image src="../../static/images/mess_icon01.png" mode=""></image>
-						<view class="red">12</view>
-					</view>
-					<view class="lis_right">
-						<view class="r_title">
-							<view class="rt_left">
-								服务通知
+				<uni-swipe-action>
+					<uni-swipe-action-item :options="options" @click="onClick($event,index)" v-for="(item,index) in messages" :key="index">
+						<navigator :url="'../messageList/messageList?title='+item.title" hover-class="none">
+							<view class="con_lis" v-if="!item.delete">
+								<view class="lis_left">
+									<image :src="item.icon" mode=""></image>
+									<view class="red" v-show="item.new">{{item.num}}</view>
+								</view>
+								<view class="lis_right">
+									<view class="r_title">
+										<view class="rt_left">
+											{{item.title}}
+										</view>
+										<view class="rt_right">
+											{{item.time}}
+										</view>
+									</view>
+									<view class="r_desc">
+										{{item.desc}}
+									</view>
+								</view>
 							</view>
-							<view class="rt_right">
-								2个小时前
-							</view>
-						</view>
-						<view class="r_desc">
-							您已成功开通银豆永久VIP服务，详情请您已成功开通银豆永久VIP服务，详情请您已成功开通银豆永久VIP服务，详情请
-						</view>
-					</view>
-				</view>
-				<view class="con_lis">
-					<view class="lis_left">
-						<image src="../../static/images/mess_icon02.png" mode=""></image>
-						<view class="red">12</view>
-					</view>
-					<view class="lis_right">
-						<view class="r_title">
-							<view class="rt_left">
-								账户通知
-							</view>
-							<view class="rt_right">
-								3天前
-							</view>
-						</view>
-						<view class="r_desc">
-							您已成功开通银豆永久VIP服务，详情请您已成功开通银豆永久VIP服务，详情请您已成功开通银豆永久VIP服务，详情请
-						</view>
-					</view>
-				</view>
-
-				<view class="con_lis">
-					<view class="lis_left">
-						<image src="../../static/images/mess_icon03.png" mode=""></image>
-						<view class="red">12</view>
-					</view>
-					<view class="lis_right">
-						<view class="r_title">
-							<view class="rt_left">
-								订单交易
-							</view>
-							<view class="rt_right">
-								2019-5-2
-							</view>
-						</view>
-						<view class="r_desc">
-							您已成功开通银豆永久VIP服务，详情请您已成功开通银豆永久VIP服务，详情请您已成功开通银豆永久VIP服务，详情请
-						</view>
-					</view>
-				</view>
-
-				<view class="con_lis">
-					<view class="lis_left">
-						<image src="../../static/images/mess_icon04.png" mode=""></image>
-						<view class="red">12</view>
-					</view>
-					<view class="lis_right">
-						<view class="r_title">
-							<view class="rt_left">
-								奇豆客服
-							</view>
-							<view class="rt_right">
-								2019-1-2
-							</view>
-						</view>
-						<view class="r_desc">
-							您已成功开通银豆永久VIP服务，详情请您已成功开通银豆永久VIP服务，详情请您已成功开通银豆永久VIP服务，详情请
-						</view>
-					</view>
-				</view>
-
+						</navigator>
+					</uni-swipe-action-item>
+				</uni-swipe-action>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import uniSwipeAction from '@/components/uni-swipe-action/uni-swipe-action.vue'
+	import uniSwipeActionItem from '@/components/uni-swipe-action-item/uni-swipe-action-item.vue'
 	export default {
 		data() {
 			return {
-
+				messages:[{
+					icon:'../../static/images/mess_icon01.png',
+					title:'服务通知',
+					desc:'	您已成功开通银豆永久VIP服务，详情请您已成功开通银豆永久VIP服务，详情请您已成功开通银豆永久VIP服务，详情请',
+					num:12,
+					time:'2小时前',
+					new:true
+				},{
+					icon:'../../static/images/mess_icon02.png',
+					title:'账户通知',
+					desc:'	您已成功开通银豆永久VIP服务，详情请您已成功开通银豆永久VIP服务，详情请您已成功开通银豆永久VIP服务，详情请',
+					num:12,
+					time:'3天前',
+					new:true
+				},{
+					icon:'../../static/images/mess_icon03.png',
+					title:'订单交易',
+					desc:'	您已成功开通银豆永久VIP服务，详情请您已成功开通银豆永久VIP服务，详情请您已成功开通银豆永久VIP服务，详情请',
+					num:12,
+					time:'2019-5-2',
+					new:true
+				},{
+					icon:'../../static/images/mess_icon04.png',
+					title:'奇豆客服',
+					desc:'	您已成功开通银豆永久VIP服务，详情请您已成功开通银豆永久VIP服务，详情请您已成功开通银豆永久VIP服务，详情请',
+					num:12,
+					time:'2019-1-2',
+					new:true
+				}],
+				options: [{
+					text: '标记已读',
+					style: {
+						backgroundColor: '#FFA13C'
+					}
+				}, {
+					text: '删除',
+					style: {
+						backgroundColor: '#F15E5E'
+					}
+				}]
 			};
+		},
+		components: {
+			uniSwipeAction,
+			uniSwipeActionItem
+		},
+		methods: {
+			onClick(e,index) {
+				console.log('当前点击的是第' + e.index + '个按钮，点击内容是' + e.content.text)
+				if(e.content.text=='删除'){
+					// this.messages[index].delete=true;
+					this.$set(this.messages[index],'delete',true);
+				}else{
+					// 标记已读
+					// this.messages[index].new=false;
+					this.$set(this.messages[index],'new',false);
+				}
+			},
+			change(open) {
+				console.log('当前开启状态：' + open)
+			}
 		}
 	}
 </script>
@@ -144,6 +151,7 @@
 						color: #FFFFFF;
 						font-size: 18upx;
 						background-color: #F15A5A;
+						border: 1upx #FFFFFF solid;
 					}
 				}
 

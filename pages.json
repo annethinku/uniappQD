@@ -5,68 +5,87 @@
 			"style": {
 				"navigationStyle": "custom"
 			}
+		}, {
+			"path": "components/tabbar/tabbar",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}, {
+			"path": "pages/my/my",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}, {
+			"path": "pages/caddress/caddress",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}, {
+			"path": "pages/searchCitys/searchCitys",
+			"style": {
+				"navigationBarTitleText": "城市定位",
+				"navigationBarBackgroundColor": "#FFFFFF"
+			}
+		}, {
+			"path": "pages/vip/vip",
+			"style": {
+				"navigationBarTitleText": "奇豆会员",
+				"backgroundColor": "#454653",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#454653"
+			}
+		}, {
+			"path": "pages/vipMX/vipMX",
+			"style": {
+				"navigationBarTitleText": "会员成长详细"
+			}
+		}, {
+			"path": "pages/bbs/bbs",
+			"style": {
+				"navigationBarTitleText": "社区"
+			}
+		}, {
+			"path": "pages/articleDetail/articleDetail",
+			"style": {
+				"navigationBarTitleText": "文章详情",
+				"navigationStyle": "custom"
+			}
+		}, {
+			"path": "pages/jubao/jubao",
+			"style": {
+				"navigationBarTitleText": "举报"
+			}
+		}, {
+			"path": "pages/messages/messages",
+			"style": {
+				"navigationBarTitleText": "消息",
+				"disableScroll": true,
+				"app-plus": {
+					"bounce": "none"
+				}
+			}
+		},{
+			"path": "pages/messageList/messageList",
+			"style": {
+				"navigationBarTitleText": "消息记录"
+			}
 		}
 	    ,{
-            "path" : "components/tabbar/tabbar",
+            "path" : "pages/tixian/tixian",
             "style" : {
 				"navigationStyle": "custom"
 			}
         }
         ,{
-            "path" : "pages/my/my",
+            "path" : "pages/tixianRecords/tixianRecords",
             "style" : {
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "提现记录"
 			}
         }
         ,{
-            "path" : "pages/caddress/caddress",
+            "path" : "pages/tixianDetail/tixianDetail",
             "style" : {
-				"navigationStyle": "custom"
-				}
-        } ,{
-            "path" : "pages/searchCitys/searchCitys",
-            "style" : {
-				"navigationBarTitleText":"城市定位",
-				"navigationBarBackgroundColor":"#FFFFFF"
-			}
-        }
-        ,{
-            "path" : "pages/vip/vip",
-            "style" : {
-				"navigationBarTitleText":"奇豆会员",
-				"backgroundColor":"#454653",
-				"navigationBarTextStyle": "white",
-				"navigationBarBackgroundColor":"#454653"
-			}
-        }  ,{
-            "path" : "pages/vipMX/vipMX",
-            "style" : {
-				"navigationBarTitleText":"会员成长详细"
-			}
-        }
-        ,{
-            "path" : "pages/bbs/bbs",
-            "style" : {
-				"navigationBarTitleText":"社区"
-			}
-        }
-        ,{
-            "path" : "pages/articleDetail/articleDetail",
-            "style" : {
-				"navigationBarTitleText":"文章详情",
-				"navigationStyle": "custom"
-			}
-        }
-        ,{
-            "path" : "pages/jubao/jubao",
-            "style" : {
-				"navigationBarTitleText":"举报"
-			}
-        }
-        ,{
-            "path" : "pages/messages/messages",
-            "style" : {
-				"navigationBarTitleText":"消息"
+				"navigationBarTitleText": "佣金提现"
 			}
         }
     ],
