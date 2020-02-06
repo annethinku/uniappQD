@@ -1,0 +1,14 @@
+	@mixin bg-image($url) {
+		background-image: url($url + "@2x.png");
+		@media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3) {
+			background-image: url($url + "@3x.png");
+		}
+	}
+	/* 渐变 */
+	@mixin gradual($color, $color1){
+	  background: $color; /* Old browsers */
+	  background: -moz-linear-gradient(top,  $color 0%, $color1 100%); /* FF3.6-15 */
+	  background: -webkit-linear-gradient(top,  $color 0%,$color1 100%); /* Chrome10-25,Safari5.1-6 */
+	  background: linear-gradient(to bottom,  $color 0%,$color1 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$color, endColorstr=$color1,GradientType=0 ); /* IE6-9 */
+	}

@@ -3,27 +3,27 @@
 		<view class="bbs-con">
 			<view class="bc-navs" id="the-id">
 				<scroll-view scroll-x="true" class="bc-scroll" :class="top<10&&top?'fixed':''">
-					<view class="nav_li" v-for="(item,index) in navList" :key="index" :class="index==0?'active':''">
-						{{item}}
+					<view class="nav_li" v-for="(item,index) in navList" :key="index" :class="index==curIndex?'active':''" @click="changeNav(index,item.id)">
+						{{item.title}}
 					</view>
 				</scroll-view>
 			</view>
 			<view class="bc-content">
 				<view class="bcc_li" v-for="(item,index) in conList" :key="index">
-			     <navigator url="../articleDetail/articleDetail" hover-class="none">
+			     <navigator :url="'../articleDetail/articleDetail?pid='+item.id+'&bid='+item.bid" hover-class="none">
 					 <view class="li_title">
-					 		得花一支，孤闻方圆百里。无一是景，无一是情dfffffffffffffffffffffg
+					 		{{item.title}}
 					 	</view>
 					 	<view class="li_imgs">
-					 		<image src="" mode="aspectFill"></image>
+					 		<image :src="item.img" mode="aspectFill"></image>
 					 	</view>
 					 	<view class="li_controls">
 					 		<view class="control_left">
-					 			<image src="" mode="widthFix"></image>
-					 			<text>1.232</text>
+					 			<image src="../../static/images/bbs-love@2x.png" mode="widthFix"></image>
+					 			<text>{{item.like}}</text>
 					 		</view>
 					 		<view class="control_right">
-					 			今天
+					 			{{item.createtime | timeChange}}
 					 		</view>
 					 	</view>
 					 
@@ -37,22 +37,59 @@
 </template>
 
 <script>
+	import tools from '../../static/js/tools.js'
 	import tabbar from '../../components/tabbar/tabbar.vue'
 	export default {
 		data() {
 			return {
 				navList: ['热门', '同城话题', '旅行旅拍', '特色美食', '旅行旅拍', '特色美食', '旅行旅拍', '特色美食'],
 				conList: 6,
-				top:null
+				top:null,
+				bid:null,
+				curIndex:0
 			};
 		},
 		components: {
 			'my-tab': tabbar
 		},
+		filters:{
+			timeChange(val){
+				return tools.timeFormat(val);
+			}
+		},
+		mounted() {
+			this.getData();
+		},
 		onPageScroll(e){
 			this.getDivtop();
 		},
 		methods:{
+			getData(){
+				let _that=this;
+				uni.showToast({
+					icon:'loading',
+					title:'加载中'
+				});
+				tools.myRequest('api.sns.posts', {
+					bid: _that.bid
+				}, 'GET').then(res => {
+					// console.log(res);
+					uni.hideToast();
+					_that.navList=res.result.category;
+					_that.conList=res.result.list;
+					if(!_that.bid){
+						_that.bid=res.result.category[0].id;
+					}
+				}).catch(error => {
+					console.log('请求失败：');
+					console.log(error);
+				})
+			},
+			changeNav(index,id){
+				this.curIndex=index;
+				this.bid=id;
+				this.getData();
+			},
 			// 获取导航距离顶部的位置
 			getDivtop(){
 				const query = uni.createSelectorQuery().in(this);
@@ -139,7 +176,8 @@
 						width: 23upx;
 						height: 20upx;
 						margin-right: 10upx;
-						vertical-align: middle;
+						position: relative;
+						top: 2upx;
 					}
 				}
 			}

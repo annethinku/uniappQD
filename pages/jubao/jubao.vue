@@ -10,7 +10,7 @@
 						<image src="../../static/images/jubao_gou.png" mode="" v-show="liOn==index"></image>
 					</view>
 					<view class="li_right">
-						{{item}}
+						{{item.name}}
 					</view>
 				</view>
 			</view>
@@ -18,17 +18,17 @@
 				其他问题
 			</view>
 			<view class="other_con">
-                  <textarea value="" placeholder="请输入你所遇到的问题，我们将尽快处理" placeholder-class="texta"/>
+                  <textarea value="" placeholder="请输入你所遇到的问题，我们将尽快处理" placeholder-class="texta" @input="fuzhi"/>
 			</view>
 			<view class="title">
 				照片截图
 				<text>0/6</text>
 			</view>
 			<view class="upload_imgs">
-				<sunui-upimg @change="getImageInfo1" :upload_auto="false" ref="upimg1"></sunui-upimg>
+				<sunui-upimg @change="getImageInfo1" :upload_auto="true" ref="upimg1" upload_count="6" url=""></sunui-upimg>
 			</view>
 			<view class="vh"></view>
-			<view class="r-btns">
+			<view class="r-btns" @click="submitWt">
 				提交
 			</view>
 		</view>
@@ -37,18 +37,36 @@
 
 <script>
 	import sunUiUpimg from '@/components/sunui-upimg/sunui-upimg.vue';
+	import tools from '../../static/js/tools.js'
 	export default {
 		data() {
 			return {
 				liOn: null,
 				contArrs: ['标题党', '色情低俗', '过时旧闻', '内容虚假', '内容质量差', '广告软文', '内容引起不适', '错别字、段落重复', '政治铭感', '侵权抄袭'],
-				serviceArr1: []
+				serviceArr1: [],
+				content:''
 			};
 		},
 		components:{
 			'sunui-upimg': sunUiUpimg
 		},
-		methods: {
+		onLoad(options) {
+			let _that=this;
+			// _that.$nextTick(function(){
+			// 	_that.getInfo();
+			// });
+			if(options.pid){
+				_that.pid=options.pid;
+			}
+			_that.getData();
+		},
+		mounted(){
+			this.$refs.upimg1.upload_before_list = this.serviceArr1;
+		},
+		methods:{
+			getImageInfo1(e){
+				console.log(e);
+			},
 			chooseCon(index) {
 				this.liOn = index;
 			},
@@ -64,14 +82,69 @@
 					}
 				});
 			},
-		},
-		onLoad() {
-			this.$nextTick(function(){
-				this.getInfo();
-			});
-		},
-		mounted(){
-			this.$refs.upimg1.upload_before_list = this.serviceArr1;
+			getData(){
+				let _that=this;
+				tools.myRequest('api.sns.posts.checkPost', {
+					postid: _that.pid
+				}, 'GET').then(res => {
+					// console.log(res);
+					uni.hideToast();
+					if(res.status==1){
+						_that.contArrs=res.result.catelist;
+					}
+				}).catch(error => {
+					console.log('请求失败：');
+					console.log(error);
+				})
+			},
+			submitWt(){
+				let _that=this;
+				let token=uni.getStorageSync('token');
+				if(!_that.contArrs[_that.liOn]){
+					uni.showToast({
+						title:'请选择投诉类别',
+						icon:'none'
+					})
+					return false;
+				}
+				if(!_that.content){
+					uni.showToast({
+						title:'请输入投诉内容',
+						icon:'none'
+					})
+					return false;
+				}
+				tools.myRequest('api.sns.posts.complain', {
+					id: _that.pid,
+					type:_that.contArrs[_that.liOn].id,
+					content:_that.content,
+					images:[],
+					token:token
+				}, 'GET').then(res => {
+					// console.log(res);
+					uni.hideToast();
+					if(res.status==1){
+					  uni.showToast({
+					  	icon:'none',
+						title:"投诉成功",
+						success() {
+							uni.navigateBack({});
+						}
+					  })	
+					}else{
+						uni.showToast({
+							icon:'none',
+							title:res.result.message
+						})
+					}
+				}).catch(error => {
+					console.log('请求失败：');
+					console.log(error);
+				})
+			},
+			fuzhi(e){
+				this.content=e.detail.value;
+			}
 		}
 	}
 </script>

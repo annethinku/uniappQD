@@ -12,7 +12,7 @@
 			<view class="zh-yue">
 				<text>账户余额 (元)</text>
 				<view class="zh-nums">
-					21,365.00
+					{{info.money}}
 				</view>
 			</view>
 			<view class="white-box">
@@ -22,12 +22,12 @@
 				<view class="wb-group">
 					<view class="group-left">
 						<text>￥</text>
-						<input type="number" value="" />
+						<input type="number" :value="money" @input="fuzhi"/>
 					</view>
-					<view class="group-right">全部</view>
+					<view class="group-right" @click="clickAll">全部</view>
 				</view>
 				<view class="wb-desc">
-					手续费每笔2%手续费，提现后24小时内到账
+					手续费每笔{{info.withdrawmoney}}%手续费，提现后24小时内到账
 				</view>
 			</view>
 		</view>
@@ -44,19 +44,19 @@
 			</view>
 			<view class="txc-lis">
 				<view class="lis-left">
-					限额明细
+					{{detailed.navname}}
 				</view>
 				<view class="lis-right">
 					<image src="../../static/images/bbs_jian2@3x.png" mode="widthFix" class="img02"></image>
 				</view>
 			</view>
-			<view class="txc-btn">
+			<view class="txc-btn" @click="tixian">
 				确认提现
 			</view>
 		</view>
 		<view class="tx-foot">
-			<navigator url="" hover-class="none">《奇豆提现手续费说明》</navigator>
-			<navigator url="" hover-class="none">《账户隐私安全》</navigator>
+			<navigator url="" hover-class="none">《{{explain.navname}}》</navigator>
+			<navigator url="" hover-class="none">《{{privacy.navname}}》</navigator>
 		</view>
 		<!-- 选择收款账户弹窗 -->
 		<uni-popup ref="chooseZH" type="bottom">
@@ -68,13 +68,13 @@
 					选择一个账户
 				</view>
 				<view class="content">
-					<view class="con-li">
+				<!-- 	<view class="con-li">
 						<image src="../../static/images/zfbpay.png" mode=""></image>
 						<text>支付宝账户</text>
-					</view>
-					<view class="con-li">
+					</view> -->
+					<view class="con-li" v-for="(item,index) in info.type_array" :key="index">
 						<image src="../../static/images/wechat.png" mode=""></image>
-						<text>微信账户</text>
+						<text>{{item.title}}</text>
 					</view>
 				</view>
 			</view>
@@ -84,16 +84,55 @@
 
 <script>
 	import uniPopup from "@/components/uni-popup/uni-popup.vue"
+	import tools from '../../static/js/tools.js'
 	export default {
 		data() {
 			return {
-
+               info:[],
+			   money:'',
+			   explain:{},
+			   privacy:{},
+			   detailed:{}
 			};
 		},
 		components: {
 			uniPopup
 		},
+		mounted(){
+			let _that=this;
+			let token=uni.getStorageSync('token');
+			uni.showToast({
+				icon:'loading'
+			})
+			tools.myRequest('api.member.withdrawal', {
+				token: token
+			}, '').then(res => {
+				// console.log(res);
+				uni.hideToast();
+			   if(res.status==1){
+			     _that.info=res.result;
+				 _that.explain=res.result.explain;
+				 _that.privacy=res.result.privacy;
+				 _that.detailed=res.result.detailed;
+			   }else{
+			   	uni.showToast({
+			   		icon:'none',
+			   		title:res.result.message
+			   	})
+			   }
+			}).catch(error => {
+				console.log('请求失败：');
+				console.log(error);
+			})
+		},
 		methods: {
+			fuzhi(e){
+				if(parseFloat(e.detail.value)>parseFloat(this.info.money)){
+					this.money=this.info.money;	
+				}else{
+					this.money=e.detail.value;
+				}
+			},
 			returnTop() {
 				uni.navigateBack({});
 			},
@@ -102,6 +141,44 @@
 			},
 			closeChoose(){
 				this.$refs.chooseZH.close();
+			},
+			clickAll(){
+				 this.money=this.info.money;	
+			},
+			tixian(){
+				let _that=this;
+				let token=uni.getStorageSync('token');
+				if(!_that.money){
+					uni.showToast({
+						title:"请输入提现金额",
+						icon:"none"
+					})
+					return false;
+				}
+				uni.showToast({
+					icon:'loading'
+				})
+				tools.myRequest('api.member.withdrawal.submit', {
+					token: token,
+					money:_that.money
+				}, '').then(res => {
+					// console.log(res);
+					uni.hideToast();
+				   if(res.status==1){
+					  uni.showToast({
+						icon:'none',
+						title:res.result.message
+					  })
+				   }else{
+				   	uni.showToast({
+				   		icon:'none',
+				   		title:res.result.message
+				   	})
+				   }
+				}).catch(error => {
+					console.log('请求失败：');
+					console.log(error);
+				})
 			}
 		}
 	}

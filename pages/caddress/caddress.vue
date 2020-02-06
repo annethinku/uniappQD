@@ -65,7 +65,7 @@
 			for (var i = 0; i < 26; i++) {
 				this.zimuArr.push(String.fromCharCode((65 + i)));
 			}
-			// 获取城市数据json
+			// 获取城市数据json 加了下面请求就会闪退 希望数据存到后台
 			uni.request({
 				url: '../../static/js/city.json',
 				data: {},

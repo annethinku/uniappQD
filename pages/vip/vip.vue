@@ -124,8 +124,8 @@
 				<view class="content">
 					<view class="con_box">
 						<view class="conb_title">
+							<image src="../../static/images/vip-douGrey01.png" mode="" class="w1"></image>
 							<text>银豆推荐</text>
-							<image src="../../static/images/vip-douGrey01.png" mode="widthFix" class="pos01"></image>
 						</view>
 						<view class="conb_num">
 							50/100
@@ -136,8 +136,8 @@
 					</view>
 					<view class="con_box">
 						<view class="conb_title">
+							<image src="../../static/images/vip-douGrey02.png" mode="" class="w2"></image>
 							<text>团队银豆</text>
-							<image src="../../static/images/vip-douGrey02.png" mode="widthFix" class="pos02"></image>
 						</view>
 						<view class="conb_num">
 							0/2000
@@ -148,23 +148,23 @@
 					</view>
 				</view>
 			</view>
-		    <view class="oa-three">
-		    	<view class="three-title">
-		    		<image src="../../static/images/vip-titleicon.png" mode="widthFix"></image>
+			<view class="oa-three">
+				<view class="three-title">
+					<image src="../../static/images/vip-titleicon.png" mode="aspectFit"></image>
 					<text>我的权益</text>
-					<image src="../../static/images/vip-titleicon.png" mode="widthFix"></image>
-		    	</view>
+					<image src="../../static/images/vip-titleicon.png" mode="aspectFit"></image>
+				</view>
 				<view class="three-con">
-					<view class="con-box">
-						<image src="../../static/images/vip-icon01.png" mode="widthFix"></image>
+					<view class="con-box" v-for="(item,index) in vipQy.list" :key="index">
+						<image :src="item.icon" mode="widthFix"></image>
 						<view class="title">
-							自购省100%
+							{{item.navname}}
 						</view>
 						<view class="des">
-							等级越高 省的越多
+							{{item.f_title}}
 						</view>
 					</view>
-					<view class="con-box">
+					<!-- 		<view class="con-box">
 						<image src="../../static/images/vip-icon02.png" mode="widthFix"></image>
 						<view class="title">
 							佣金提成
@@ -209,19 +209,43 @@
 							专属标志 尊贵的你
 						</view>
 					</view>
-					
+					 -->
 				</view>
-		    </view>
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import tools from '../../static/js/tools.js'
 	export default {
 		data() {
 			return {
-				isVip: true
+				isVip: false,
+				vipQy: []
 			};
+		},
+		mounted() {
+			let token = uni.getStorageSync('token'); //登录后才会有token
+			tools.myRequest('api.attestation.home', {
+				token: token
+			}, 'GET').then(res => {
+				// console.log(res);
+				if (res.status == 1) {
+					this.isVip = true;
+					this.vipQy = res.result;
+				} else {
+					if (token) {
+						// 不是vip 未开通
+						this.isVip = false;
+					} else {
+						// 跳转到登录页面
+					}
+				}
+			}).catch(error => {
+				console.log('请求失败：');
+				console.log(error);
+			})
 		}
 	}
 </script>
@@ -231,13 +255,14 @@
 		background-image: url($url + "@2x.png");
 		background-size: 100% auto;
 		background-repeat: no-repeat;
-	
+
 		@media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3) {
 			background-image: url($url + "@3x.png");
 			background-size: 100% auto;
 			background-repeat: no-repeat;
 		}
 	}
+
 	.no-open {
 		padding-top: 30upx;
 		background-color: #454653;
@@ -379,7 +404,8 @@
 			// background-color: #454653;
 			padding: 40upx 44upx 16upx 53upx;
 			position: relative;
-            @include bg-image('../../static/images/vip-bgy');
+			@include bg-image('../../static/images/vip-bgy');
+
 			.oat-img {
 				width: 262upx;
 				margin: 0 auto;
@@ -494,23 +520,19 @@
 						color: #333333;
 						position: relative;
 						display: inline-block;
-
-						image.pos01 {
-							width: 33upx;
-							height: 38upx;
-							position: absolute;
-							left: -45upx;
-							top: 0;
-							// margin-top: -19upx;
-						}
-
-						image.pos02 {
-							width: 47upx;
-							height: 43upx;
-							position: absolute;
-							left: -56upx;
-							top: 0;
-							// margin-top: -21upx;
+						image {
+							margin-right: 10upx;
+							vertical-align: middle;
+							&.w1{
+								width: 33upx;
+								height: 38upx;
+								margin-left: -33upx;
+							}
+							&.w2{
+								width: 47upx;
+								height: 43upx;
+								margin-left: -47upx;
+							}
 						}
 					}
 
@@ -528,50 +550,68 @@
 				}
 			}
 		}
-		.oa-three{
+
+		.oa-three {
 			margin-top: 74upx;
-			.three-title{
+
+			.three-title {
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				image{
+
+				image {
 					width: 12upx;
 					height: 18upx;
 				}
-				text{
+
+				text {
 					font-size: 30upx;
 					color: #333333;
 					margin: 0 33upx;
 				}
 			}
-			.three-con{
+
+			.three-con {
 				margin-top: 54upx;
 				display: flex;
-				justify-content: space-between;
 				flex-wrap: wrap;
+
 				.con-box {
 					width: 33%;
 					text-align: center;
 					margin-bottom: 47upx;
-				
+
 					image {
 						width: 72upx;
 						height: 72upx;
 					}
-				
+
 					.title {
+						width: 70%;
 						font-weight: bold;
 						font-size: 24upx;
 						color: #343434;
-						margin-top: 15upx;
+						margin: 15upx auto 0;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						-ms-text-overflow: ellipsis;
+						white-space: nowrap;
 					}
-				
+
 					.des {
-						width: 138upx;
+						width: 70%;
 						margin: 9upx auto 0;
 						font-size: 22upx;
 						color: #A3A3A7;
 						text-align: left;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						-ms-text-overflow: ellipsis;
+						display: box;
+						display: -webkit-box;
+						line-clamp: 2;
+						-webkit-line-clamp: 2;
+						-webkit-box-orient: vertical;
 					}
 				}
 			}

@@ -5,9 +5,9 @@
 				<view class="t1-sao" @click="saoFun"></view>
 				<view class="t1-search">
 					<view class="name">
-						<navigator url="../caddress/caddress">{{curP}}</navigator>
+						<navigator url="../caddress/caddress" hover-class="none">{{curP}}</navigator>
 					</view>
-					<navigator url="../caddress/caddress"><view class="jt"></view></navigator>
+					<navigator url="../caddress/caddress" hover-class="none"><view class="jt"></view></navigator>
 					<view class="line"></view>
 					<view class="search"></view>
 					<view class="search-input">
@@ -209,7 +209,9 @@
 			'my-tab': tabbar
 		},
 		onLoad() {
-			
+			// 暂时将token设置为缓存
+			let token = 'a6a95673-351a-aa7b-67bc-fc0b38a81f54';
+			uni.setStorageSync('token',token);
 		},
 		onShow() {
 			let curp=uni.getStorageSync('curPos');
@@ -483,8 +485,8 @@
 		flex-wrap: wrap;
 
 		.t3c-box {
-			width: calc((100% - 12px) / 2);
-			margin-right: 20upx;
+			width: 48%;
+			margin-right: 1%;
 			margin-bottom: 20upx;
 			border-radius: 12upx;
 			background: rgba(255, 255, 255, 1);
