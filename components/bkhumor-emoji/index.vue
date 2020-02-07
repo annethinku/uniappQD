@@ -101,8 +101,9 @@
 			emotion(res) {
 				const list = Array.from({length:100}, (v,k) => k)
 				let index = list.indexOf(res)
+				// /static/bkhumor-emoji/${index}.gif
 				//  请将此处地址更换为自己服务器的地址
-				return `<img src="/static/bkhumor-emoji/${index}.gif" align="middle">`
+				return `<img src="http://qidou.eezzz.cn/attachment/images/emj/bkhumor-emoji/${index}.gif" align="middle">`
 			}
 		}
 	}

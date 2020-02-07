@@ -68,7 +68,8 @@
 							</view>
 						</view>
 						<view class="lir_con">
-							{{item.content}}
+							<!-- {{item.content | imgJq}} -->
+							<rich-text :nodes="item.content | imgJq"></rich-text>
 						</view>
 						<view class="lir_bot" @click="showCommets(item.bid,info.post.id,item.id)" v-show="item.count>0">
 							<text>{{item.count}}条回复</text>
@@ -159,36 +160,74 @@
 				</view>
 				<scroll-view scroll-y="true" class="comment-center">
 					<view class="hotc-cont">
-						<view class="cont_li" v-for="(item,index) in lisarr" :key="index">
-							<view class="li_left">
-								<image :src="item.avatar?item.avatar:'../../static/images/default.png'" mode=""></image>
-							</view>
-							<view class="li_right">
-								<view class="lir_top">
-									<view class="t1name">
-										{{item.nickname}}
+						<block v-for="(item,index) in lisarr" :key="index">
+							<view class="cont_li">
+								<view class="li_left">
+									<image :src="item.avatar?item.avatar:'../../static/images/default.png'" mode=""></image>
+								</view>
+								<view class="li_right">
+									<view class="lir_top">
+										<view class="t1name">
+											{{item.nickname}}
+										</view>
+										<view class="t1zan" @click="dianZan(item.bid,item.id,index,'detail')">
+											<view class="zanicon" :class="item.active==1?'active':''"></view>
+											<text>{{item.like}}</text>
+										</view>
 									</view>
-									<view class="t1zan" @click="dianZan(item.bid,item.id,index,'detail')">
-										<view class="zanicon" :class="item.active==1?'active':''"></view>
-										<text>{{item.like}}</text>
+									<view class="lir_con">
+										<!-- {{item.content}} -->
+										<!-- <rich-text :nodes="item.content | imgJq"></rich-text> -->
+										<rich-text :nodes="item.content | imgJq" style="display: inline-block;"></rich-text>
+										<text style="color: #999;">{{item.ss}}</text>
+									</view>
+									<view class="lir_bot2">
+										<text class="gray">{{item.createtime | jiequTime2}}</text>
+										<text class="d">·</text>
+										<navigator :url="'../jubao/jubao?pid='+item.id" style="display: inline-block;">
+											举报
+										</navigator><text class="d">·</text><text @click="open(item.id,item.nickname)">回复</text>
 									</view>
 								</view>
-								<view class="lir_con">
-									{{item.content}}
-								</view>
-								<view class="lir_bot2">
-									<text class="gray">{{item.createtime | jiequTime2}}</text>
-									<text class="d">·</text><text>举报</text> <text class="d">·</text><text @click="open(item.id,item.nickname)">回复</text>
-								</view>
 							</view>
+							<!-- 三层回复展示 -->
+							<view v-if="item.ls">
+								<view class="cont_li" v-for="(item2,index2) in item.ls" :key="index2">
+									<view class="li_left">
+										<image :src="item2.avatar?item2.avatar:'../../static/images/default.png'" mode=""></image>
+									</view>
+									<view class="li_right">
+										<view class="lir_top">
+											<view class="t1name">
+												{{item2.nickname}}
+											</view>
+											<view class="t1zan" @click="dianZan(item2.bid,item2.id,index2,'detail')">
+												<view class="zanicon" :class="item2.active==1?'active':''"></view>
+												<text>{{item2.like}}</text>
+											</view>
+										</view>
+										<view class="lir_con">
+											<!-- {{item2.content}} -->
+											<rich-text :nodes="item2.content | imgJq" style="display: inline-block;"></rich-text>
+											<text style="color: #999;">{{item2.ss}}</text>
+										</view>
+										<view class="lir_bot2">
+											<text class="gray">{{item2.createtime | jiequTime2}}</text>
+											<text class="d">·</text>
+											<navigator :url="'../jubao/jubao?pid='+item2.id" style="display: inline-block;">
+												举报
+											</navigator><text class="d">·</text><text @click="open(item2.id,item2.nickname)">回复</text>
+										</view>
+									</view>
+								</view>
 
-						</view>
+							</view>
+						</block>
 					</view>
-
 				</scroll-view>
 				<view class="comment-bottom">
 					<view class="inbor">
-						<input type="text" value="" placeholder="回复:" placeholder-class="plai"  @click="open(outCommentid)"/>
+						<input type="text" value="" placeholder="回复:" placeholder-class="plai" @click="open(outCommentid)" />
 					</view>
 				</view>
 			</view>
@@ -205,7 +244,8 @@
 					</view>
 				</view>
 				<view class="rep-center">
-					<textarea :value="inputValue" :placeholder="inCommentname?('@'+inCommentname):'说点什么吧.. '" placeholder-class="placeh" :focus="textP" @input="fuzhiBq" />
+					<textarea :value="inputValue" :placeholder="inCommentname?('@'+inCommentname):'说点什么吧.. '" placeholder-class="placeh"
+					 :focus="textP" @input="fuzhiBq" />
 					</view>
 			 <view class="rep-bot">
 			 	<view class="repb-left">
@@ -262,6 +302,10 @@
 			jiequTime2(val){
 				let a=tools.timestampToTime(val).substr(5,val.length);
 				return a;
+			},
+			imgJq(val){
+				let n=val.replace(/\[em_/g,'<img style="position:relative;top:5px;" src="http://qidou.eezzz.cn/attachment/images/emj/bkhumor-emoji/').replace(/]/g,'.gif"/>');
+				return n;
 			}
 		},
 		mounted() {
@@ -301,7 +345,7 @@
 					pid:pid,
 					token:token,
 					rpid:_that.rpid,
-					content:_that.inCommentname?('@'+_that.inCommentname+':'+content):content
+					content:content
 				};
 				tools.myRequest('api.sns.posts.reply', params, 'POST').then(res => {
 					// console.log(res);
@@ -644,6 +688,10 @@
 		font-size: 30upx;
 		color: #333333;
 		padding: 0 20upx;
+		line-height: 50upx!important;
+		img{
+			width: 100%!important;
+		}
 	}
 
 	.read_nums {

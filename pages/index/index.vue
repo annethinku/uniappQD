@@ -27,12 +27,14 @@
 						<view class="swiper-item">
 							<view class="t2-tools">
 								<view class="tool-box" v-for="(item,index) in arrs" :key="index">
-									<view class="icon">
-										<image :src="item.icon"></image>
-									</view>
-									<view class="title">
-										{{item.title}}
-									</view>
+									<navigator url="../indexList/indexList" hover-class="none">
+										<view class="icon">
+											<image :src="item.icon"></image>
+										</view>
+										<view class="title">
+											{{item.title}}
+										</view>
+									</navigator>
 								</view>
 							</view>
 						</view>
@@ -211,6 +213,7 @@
 		onLoad() {
 			// 暂时将token设置为缓存
 			let token = 'a6a95673-351a-aa7b-67bc-fc0b38a81f54';
+			// let token = '85d5101b-db7c-974e-b2b8-b61884c17286';
 			uni.setStorageSync('token',token);
 		},
 		onShow() {

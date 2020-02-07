@@ -8,6 +8,11 @@
 		},
 		onHide: function() {
 			console.log('App Hide')
+		},
+		methods:{
+			returnPage(){
+				uni.navigateBack({});
+			}
 		}
 	}
 </script>
@@ -21,5 +26,18 @@
    .tabH{
 	   width: 100%;
 	   height: 100upx;
+   }
+   .elisOne{
+	  white-space:nowrap;
+	  text-overflow:ellipsis;
+	  -webkit-text-overflow:ellipsis;
+	  overflow:hidden;
+   }
+   .elisTwo{
+	   display: -webkit-box;
+	   text-overflow: ellipsis;
+	   overflow: hidden;
+	   -webkit-line-clamp: 2;
+	   -webkit-box-orient: vertical;
    }
 </style>

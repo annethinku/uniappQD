@@ -67,7 +67,7 @@
 			}
 			// 获取城市数据json 加了下面请求就会闪退 希望数据存到后台
 			uni.request({
-				url: '../../static/js/city.json',
+				url: 'http://qidou.eezzz.cn/attachment/images/emj/city.json',
 				data: {},
 				header: {},
 				success: (res) => {

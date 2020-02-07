@@ -5,12 +5,8 @@
 			"style": {
 				"navigationStyle": "custom"
 			}
-		}, {
-			"path": "components/tabbar/tabbar",
-			"style": {
-				"navigationStyle": "custom"
-			}
-		}, {
+		}, 
+		{
 			"path": "pages/my/my",
 			"style": {
 				"navigationStyle": "custom"
@@ -88,6 +84,17 @@
 				"navigationBarTitleText": "佣金提现"
 			}
         }
+        ,{
+            "path" : "pages/indexList/indexList",
+            "style" : {
+				"navigationStyle": "custom"
+			}
+        }
+        ,{
+            "path" : "pages/live/live",
+            "style" : {}
+        }
+
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

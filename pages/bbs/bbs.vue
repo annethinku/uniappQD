@@ -156,7 +156,7 @@
 				background: rgba(191, 217, 236, 1);
 				border-radius: 10upx;
 				margin-top: 17upx;
-
+                overflow: hidden;
 				image {
 					width: 100%;
 					height: 100%;

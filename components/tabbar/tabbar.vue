@@ -1,8 +1,12 @@
 <template name="tabBar">
 	<view class="tabbar_box">
 		<block v-for="(item,index) in tabbar.list" :key="index">
+			<view class="tabbar_nav" v-if="item.text == '直播'" @click="showZbts"  :style="'color:'+(index==mindex ? tabbar.selectedColor : tabbar.color)">
+				<image class="tabbar_icon" :src="index==mindex?item.selectedIconPath:item.iconPath"></image>
+				<text v-show="item.text!='vip'">{{item.text}}</text>
+			</view>
 			<navigator class="tabbar_nav" :url="item.pagePath" :style="'color:'+(index==mindex ? tabbar.selectedColor : tabbar.color)"
-			 hover-class="none" :open-type="item.text == 'vip' ?'navigate':'reLaunch'">
+			 hover-class="none" :open-type="item.text == 'vip' ?'navigate':'reLaunch'" v-else>
 				<image class="tabbar_icon" :src="index==mindex?item.selectedIconPath:item.iconPath"></image>
 				<text v-show="item.text!='vip'">{{item.text}}</text>
 			</navigator>
@@ -28,7 +32,7 @@
 				          "selected": true
 				        },
 				        {
-				          "pagePath": "/pages/hots/hots",
+				          "pagePath": "/pages/live/live",
 				          "text": "直播",
 				          "iconPath": "/static/images/tabbar_2.png",
 				          "selectedIconPath": "/static/images/tabbar_02.png",
@@ -58,6 +62,14 @@
 				      ],
 				    }
 			};
+		},
+		methods:{
+			showZbts(){
+				uni.showToast({
+					title:"该功能暂未开放,敬请期待",
+					icon:"none"
+				})
+			}
 		}
 	}
 </script>
