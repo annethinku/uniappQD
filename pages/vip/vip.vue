@@ -227,21 +227,16 @@
 		},
 		mounted() {
 			let token = uni.getStorageSync('token'); //登录后才会有token
+			let _that=this;
 			tools.myRequest('api.attestation.home', {
 				token: token
 			}, 'GET').then(res => {
 				// console.log(res);
-				if (res.status == 1) {
-					this.isVip = true;
-					this.vipQy = res.result;
-				} else {
-					if (token) {
-						// 不是vip 未开通
-						this.isVip = false;
-					} else {
-						// 跳转到登录页面
-					}
-				}
+				tools.warnMessage(res.status,res.result.message,function(){
+					_that.isVip = true;
+					_that.vipQy = res.result;
+				});
+			
 			}).catch(error => {
 				console.log('请求失败：');
 				console.log(error);

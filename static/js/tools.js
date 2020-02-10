@@ -6,7 +6,6 @@ const urlStr = 'http://qidou.eezzz.cn/app/index.php?i=1&c=entry&m=ewei_shopv2&do
 url      请求路径
 data     参数传值
 method   请求方式
-header   自定义请求头
 */
 const myRequest = function(url, data, method) {
 	return new Promise((resolve, reject) => {
@@ -26,7 +25,28 @@ const myRequest = function(url, data, method) {
 		});
 	})
 }
-
+/**
+ * @param {Object} status 状态码 0/1/-2
+ * @param {Object} data 提示信息
+ * @param {Object} func 回调函数
+ */
+const warnMessage=function(status,data,func){
+	if(status==-2){
+		// 跳转登录
+		uni.navigateTo({
+			url:"/pages/login/login"
+		})
+	}else if(status==1){
+		// 接口请求成功执行
+		func();
+	}else{
+		// 提示接口错误信息
+		uni.showToast({
+			icon:'none',
+			title:data
+		})
+	}
+}
 /* 
 参数
 data 需加密数据
@@ -116,5 +136,6 @@ export default {
 	getDAesString: getDAesString,
 	myRequest: myRequest,
 	timeFormat: timeFormat,
-	timestampToTime: timestampToTime
+	timestampToTime: timestampToTime,
+	warnMessage:warnMessage
 }

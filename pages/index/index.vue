@@ -200,7 +200,7 @@
 		},
 		computed:{
 			nfixed(){
-				if(this.divTop<=10){
+				if(this.divTop<=10 && this.scrTop>0){
 					return true;
 				}else{
 					return false;

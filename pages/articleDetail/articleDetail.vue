@@ -349,24 +349,19 @@
 				};
 				tools.myRequest('api.sns.posts.reply', params, 'POST').then(res => {
 					// console.log(res);
-				    if(res.status==1){
-					  _that.info.list=res.result.list;
-					  _that.hideMask();
-					  if(_that.outCommentid){
-						  // 如果是内层回复 更新内层数据
-						  _that.showCommets(bid,pid,_that.outCommentid);
-					  }else{
-						  uni.pageScrollTo({
-						     scrollTop: 99999999999
-						  })
-					  }
-					
-					}else{
-						uni.showToast({
-							icon:'none',
-							title:res.result.message
-						})
-					}
+					tools.warnMessage(res.status,res.result.message,function(){
+						 _that.info.list=res.result.list;
+						 _that.hideMask();
+						 if(_that.outCommentid){
+							  // 如果是内层回复 更新内层数据
+							  _that.showCommets(bid,pid,_that.outCommentid);
+						 }else{
+							  uni.pageScrollTo({
+								 scrollTop: 99999999999
+							  })
+						 }
+					});
+		
 				}).catch(error => {
 					console.log('请求失败：');
 					console.log(error);
@@ -386,40 +381,35 @@
 				tools.myRequest('api.sns.posts.like', params, 'POST').then(res => {
 					uni.hideToast();
 					// console.log(res);
-				    if(res.status==1){
-						if(index || index==0){
-							// 评论点赞
-							if(res.result.isgood==1){//点赞
-							   if(str=='detail'){//评论详情弹窗里的点赞
-								   _that.lisarr[index].active=1;
-								   _that.lisarr[index].like=res.result.good;
-							   }else{
-								   _that.info.list[index].active=1;
-								  	_that.info.list[index].like=res.result.good;
-							   }
-							}else{//取消点赞
-								if(str=='detail'){//评论详情弹窗里的点赞
-										_that.lisarr[index].active=0;
-										_that.lisarr[index].like=res.result.good;
-								}else{
-										_that.info.list[index].active=0;
-										_that.info.list[index].like=res.result.good;
-								}
-							}
-						}else{
-							// 文章点赞
-							if(res.result.isgood==1){//点赞
-								_that.info.post.lk=1;
-							}else{//取消点赞
-								_that.info.post.lk=0;
-							}
-						}
-					}else{
-						uni.showToast({
-							icon:'none',
-							title:res.result.message
-						})
-					}
+					tools.warnMessage(res.status,res.result.message,function(){
+						 if(index || index==0){
+						 	// 评论点赞
+						 	if(res.result.isgood==1){//点赞
+						 	   if(str=='detail'){//评论详情弹窗里的点赞
+						 		   _that.lisarr[index].active=1;
+						 		   _that.lisarr[index].like=res.result.good;
+						 	   }else{
+						 		   _that.info.list[index].active=1;
+						 		  	_that.info.list[index].like=res.result.good;
+						 	   }
+						 	}else{//取消点赞
+						 		if(str=='detail'){//评论详情弹窗里的点赞
+						 				_that.lisarr[index].active=0;
+						 				_that.lisarr[index].like=res.result.good;
+						 		}else{
+						 				_that.info.list[index].active=0;
+						 				_that.info.list[index].like=res.result.good;
+						 		}
+						 	}
+						 }else{
+						 	// 文章点赞
+						 	if(res.result.isgood==1){//点赞
+						 		_that.info.post.lk=1;
+						 	}else{//取消点赞
+						 		_that.info.post.lk=0;
+						 	}
+						 }
+					});
 				}).catch(error => {
 					console.log('请求失败：');
 					console.log(error);
@@ -439,14 +429,10 @@
 				tools.myRequest('api.sns.posts', params, 'POST').then(res => {
 					// console.log(res);
 					uni.hideToast();
-				    if(res.status==1){
-						_that.info=res.result;
-					}else{
-						uni.showToast({
-							icon:'none',
-							title:res.result.message
-						})
-					}
+					tools.warnMessage(res.status,res.result.message,function(){
+							_that.info=res.result;
+					});
+			
 				}).catch(error => {
 					console.log('请求失败：');
 					console.log(error);
@@ -471,15 +457,9 @@
 			  tools.myRequest('api.sns.posts.getlist_show', params, 'POST').then(res => {
 			  	// console.log(res);
 				uni.hideToast();
-			      if(res.status==1){
-			  	  _that.lisarr=res.result.list.list;
-			  	  
-			  	}else{
-			  		uni.showToast({
-			  			icon:'none',
-			  			title:res.result.message
-			  		})
-			  	}
+				tools.warnMessage(res.status,res.result.message,function(){
+					  _that.lisarr=res.result.list.list;
+				});
 			  }).catch(error => {
 			  	console.log('请求失败：');
 			  	console.log(error);

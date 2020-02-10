@@ -109,17 +109,12 @@
 			}, '').then(res => {
 				// console.log(res);
 				uni.hideToast();
-			   if(res.status==1){
-			     _that.info=res.result;
-				 _that.explain=res.result.explain;
-				 _that.privacy=res.result.privacy;
-				 _that.detailed=res.result.detailed;
-			   }else{
-			   	uni.showToast({
-			   		icon:'none',
-			   		title:res.result.message
-			   	})
-			   }
+				tools.warnMessage(res.status,res.result.message,function(){
+					_that.info=res.result;
+					_that.explain=res.result.explain;
+					_that.privacy=res.result.privacy;
+					_that.detailed=res.result.detailed;
+				});
 			}).catch(error => {
 				console.log('请求失败：');
 				console.log(error);
@@ -164,17 +159,13 @@
 				}, '').then(res => {
 					// console.log(res);
 					uni.hideToast();
-				   if(res.status==1){
-					  uni.showToast({
-						icon:'none',
-						title:res.result.message
-					  })
-				   }else{
-				   	uni.showToast({
-				   		icon:'none',
-				   		title:res.result.message
-				   	})
-				   }
+					tools.warnMessage(res.status,res.result.message,function(){
+						uni.showToast({
+							icon:'none',
+							title:res.result.message
+						})
+					});
+	
 				}).catch(error => {
 					console.log('请求失败：');
 					console.log(error);

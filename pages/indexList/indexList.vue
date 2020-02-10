@@ -19,7 +19,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="list_navs">
+		<view class="list_navs" id="the-id" :class="(nfixed?'navFixed':'')">
 			<view class="navs_box" @click="open($event,1)" :class="curindex==1?'active':''">
 				<text>附近</text>
 				<text class="nav_jt"></text>
@@ -34,53 +34,55 @@
 			</view>
 		</view>
 		<view class="list_contents">
-			<view class="cont_li" v-for="(item,index) in 5" :key="index">
-				<view class="cl_left">
-					<view class="thumb">
-						<image src="" mode=""></image>
+			<navigator url="../detail/detail" v-for="(item,index) in 5" :key="index">
+				<view class="cont_li">
+					<view class="cl_left">
+						<view class="thumb">
+							<image src="" mode=""></image>
+						</view>
+						<view class="pinpai"></view>
+						<view class="xiuxi">
+							休息中
+						</view>
 					</view>
-					<view class="pinpai"></view>
-					<view class="xiuxi">
-						休息中
+					<view class="cl_right">
+						<view class="clr_title elisOne">
+							大小先生小碗菜
+						</view>
+						<view class="clr_pos">
+							<view class="starCompo">
+								<my-star score="4.88"></my-star>
+							</view>
+							<view class="pricePer">
+								￥32/人
+							</view>
+							<view class="pos">
+								3.2km
+							</view>
+						</view>
+						<view class="clr_name">
+							<view class="name_l">
+								新都区 七一国际广场
+							</view>
+							<view class="name_xl">
+								月销量1005
+							</view>
+						</view>
+						<view class="clr_paihang">
+							<text class="bor">您收藏的餐厅</text>
+							<text>新都区中餐销量排行NO.1</text>
+						</view>
+						<view class="clr_quan">
+							<image src="../../static/images/il_quan.png" mode=""></image>
+							<text class="elisOne">100代金卷79元</text>
+						</view>
+						<view class="clr_quan">
+							<image src="../../static/images/il_tuan.png" mode=""></image>
+							<text class="elisOne">双人超值套餐79元，四人超值套餐158元</text>
+						</view>
 					</view>
 				</view>
-				<view class="cl_right">
-					<view class="clr_title elisOne">
-						大小先生小碗菜
-					</view>
-					<view class="clr_pos">
-						<view class="starCompo">
-							<my-star score="4.88"></my-star>
-						</view>
-						<view class="pricePer">
-							￥32/人
-						</view>
-						<view class="pos">
-							3.2km
-						</view>
-					</view>
-					<view class="clr_name">
-						<view class="name_l">
-							新都区 七一国际广场
-						</view>
-						<view class="name_xl">
-							月销量1005
-						</view>
-					</view>
-					<view class="clr_paihang">
-						<text class="bor">您收藏的餐厅</text>
-						<text>新都区中餐销量排行NO.1</text>
-					</view>
-					<view class="clr_quan">
-						<image src="../../static/images/il_quan.png" mode=""></image>
-						<text class="elisOne">100代金卷79元</text>
-					</view>
-					<view class="clr_quan">
-						<image src="../../static/images/il_tuan.png" mode=""></image>
-						<text class="elisOne">双人超值套餐79元，四人超值套餐158元</text>
-					</view>
-				</view>
-			</view>
+			</navigator>
 		</view>
 		<!-- 筛选条件弹窗 -->
 		<uni-popup ref="popup" type="top" @change="isShowMask">
@@ -149,6 +151,34 @@
 						</view>
 						<view class="saix_box">
 							<view class="sab_title">
+								价格
+								<text v-if="parseInt(rangeValues3[0])>= parseInt(rangeValues3[1])">￥{{ rangeValues3[1] }}+</text>
+								<text v-else>￥{{ rangeValues3[0] }}~{{ rangeValues3[1] }}</text>
+							</view>
+							<!-- <text>{{ rangeValues3[0] }}</text> -->
+							<!-- <text>~</text> -->
+							<!-- <text>{{ rangeValues3[1] }}</text> -->
+							<RangeSlider
+								:width="slideWidth"
+								:height="slideHeight"
+								:blockSize="slideBlockSize"
+								:min="slideMin"
+								:max="slideMax"
+								:values="rangeValues3"
+								:step="step"
+								:liveMode="isLiveMode"
+								@rangechange="onRangeChange3"
+								background-color="#AAAAAA"
+								active-color="#FF8B2D"
+							>
+								<view slot="minBlock" class="range-slider-block"></view>
+								<!-- 左边滑块的内容 -->
+								<view slot="maxBlock" class="range-slider-block"></view>
+								<!-- 右边滑块的内容 -->
+							</RangeSlider>
+						</view>
+						<view class="saix_box">
+							<view class="sab_title">
 								其他服务
 							</view>
 							<view class="sab_options">
@@ -160,7 +190,7 @@
 							</view>
 						</view>
 					    <view class="saix_btns">
-					    	<view class="btn_cz btn">重置</view>
+					    	<view class="btn_cz btn" @click="chongzhi">重置</view>
 							<view class="btn_sure btn">确认</view>
 					    </view>
 					</view>
@@ -173,6 +203,7 @@
 <script>
 	import uniPopup from "@/components/uni-popup/uni-popup.vue"
 	import stars from '../../components/stars/stars.vue'
+	import RangeSlider from '../../components/range-slider/range-slider.vue';
 	export default {
 		data() {
 			return {
@@ -234,14 +265,50 @@
 				otherArr: ['营业中', '可停车', '有包厢', '可预定', '24小时营业', '有WIFI', '可排队'],
 				canyi: null,
 				huodong: null,
-				other: null
+				other: null,
+				slideWidth: 600,
+				slideHeight: 30,
+				slideBlockSize: 30,
+				slideMin: 0,
+				slideMax: 300,
+				isLiveMode: true,
+				step: 50,
+				rangeValues3: [0, 300],
+				scrTop:0,
+				divTop:100
 			};
 		},
 		components: {
 			uniPopup,
+			RangeSlider,
 			'my-star': stars
 		},
+		computed:{
+			nfixed(){
+				if(this.divTop<=10 && this.scrTop>0){
+					return true;
+				}else{
+					return false;
+				}
+			}
+		},
+		onPageScroll(res) {
+			this.scrTop=res.scrollTop;
+			this.getDivtop();
+		},
+		mounted() {
+			this.getDivtop();
+		},
 		methods: {
+			// 获取导航距离顶部的位置
+			getDivtop(){
+				const query = uni.createSelectorQuery().in(this);
+				query.select('#the-id').boundingClientRect(data => {
+				  // console.log("得到布局位置信息" + JSON.stringify(data));
+				  // console.log("节点离页面顶部的距离为" + data.top);
+				  this.divTop=data.top;
+				}).exec();
+			},
 			returnPage() {
 				uni.navigateBack({});
 			},
@@ -279,6 +346,15 @@
 			},
 			checkedCur3(index) {
 				this.other = index;
+			},
+			onRangeChange3: function(e) {
+				this.rangeValues3 = [e.minValue, e.maxValue];
+			},
+			chongzhi(){
+				this.canyi=null;
+				this.huodong=null;
+				this.other=null;
+				this.rangeValues3=[0,300];
 			}
 		}
 	}
@@ -375,13 +451,20 @@
 	}
 
 	.list_navs {
+		width: 100%;
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
 		background-color: #FFFFFF;
 		margin-top: 10upx;
 		padding: 20upx 0;
-
+        &.navFixed{
+			position: fixed;
+			top: 0;
+			left: 0;
+			margin-top: 0;
+			z-index: 11;
+		}
 		.navs_box {
 			font-size: 28upx;
 			color: #333333;
@@ -416,146 +499,6 @@
 
 				.nav_jt2 {
 					@include bg-image('../../static/images/il_sxOn');
-				}
-			}
-		}
-	}
-
-	.list_contents {
-		margin: 0 22upx;
-
-		.cont_li {
-			background-color: #FFFFFF;
-			padding: 21upx 19upx 30upx 17upx;
-			box-shadow: 0 1upx 20upx 0 rgba(187, 187, 187, 0.2);
-			border-radius: 6upx;
-			display: flex;
-			margin-top: 20upx;
-
-			.cl_left {
-				width: 172upx;
-				height: 172upx;
-				flex-shrink: 0;
-				position: relative;
-
-				.thumb {
-					width: 172upx;
-					height: 172upx;
-					border-radius: 6upx;
-					overflow: hidden;
-					background-color: #EEEEEE;
-
-					image {
-						width: 100%;
-						height: 100%;
-					}
-				}
-
-				.pinpai {
-					width: 72upx;
-					height: 35upx;
-					@include bg-image('../../static/images/il_pinpai');
-					position: absolute;
-					top: 0;
-					left: 0;
-				}
-
-				.xiuxi {
-					width: 82upx;
-					height: 36upx;
-					line-height: 36upx;
-					background: rgba(255, 255, 255, 1);
-					box-shadow: 0 1upx 10upx 0 rgba(51, 51, 51, 0.1);
-					border-radius: 18upx;
-					font-size: 20upx;
-					color: #666666;
-					text-align: center;
-					position: absolute;
-					bottom: -18upx;
-					left: 50%;
-					margin-left: -41upx;
-				}
-			}
-
-			.cl_right {
-				flex: 1;
-				line-height: 27upx;
-				margin-left: 29upx;
-
-				.clr_title {
-					font-size: 30upx;
-					color: #333333;
-					font-weight: bold;
-				}
-
-				.clr_pos {
-					display: flex;
-					align-items: center;
-					margin-top: 20upx;
-
-					.pricePer {
-						font-size: 22upx;
-						color: #666666;
-						margin-left: 20upx;
-					}
-
-					.pos {
-						margin-left: auto;
-						font-size: 22upx;
-						color: #666666;
-					}
-				}
-
-				.clr_name {
-					display: flex;
-					align-items: center;
-					justify-content: space-between;
-					margin-top: 20upx;
-
-					.name_l {
-						font-size: 22upx;
-						color: #666666;
-					}
-
-					.name_xl {
-						font-size: 22upx;
-						color: #FD773A;
-					}
-				}
-
-				.clr_paihang {
-					margin-top: 20upx;
-
-					text {
-						font-size: 22upx;
-						color: #FD773A;
-					}
-
-					.bor {
-						color: rgba(253, 119, 58, 1);
-						border: 1upx solid rgba(255, 200, 176, 1);
-						border-radius: 6upx;
-						padding: 7upx;
-						margin-right: 12upx;
-						font-weight: bold;
-					}
-				}
-
-				.clr_quan {
-					margin-top: 20upx;
-					font-size: 22upx;
-					color: #666;
-
-					image {
-						width: 24upx;
-						height: 24upx;
-						margin-right: 18upx;
-					}
-
-					text {
-						width: 90%;
-						display: inline-block;
-					}
 				}
 			}
 		}
@@ -611,6 +554,10 @@
 					.sab_title {
 						margin-bottom: 29upx;
 						margin-top: 45upx;
+						text{
+							color: #FF8B2D;
+							margin-left: 33upx;
+						}
 					}
 
 					.sab_options {

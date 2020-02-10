@@ -75,11 +75,13 @@
 				}, 'GET').then(res => {
 					// console.log(res);
 					uni.hideToast();
-					_that.navList=res.result.category;
-					_that.conList=res.result.list;
-					if(!_that.bid){
-						_that.bid=res.result.category[0].id;
-					}
+					tools.warnMessage(res.status,res.result.message,function(){
+						 _that.navList=res.result.category;
+						 _that.conList=res.result.list;
+						 if(!_that.bid){
+						 	_that.bid=res.result.category[0].id;
+						 }
+					});
 				}).catch(error => {
 					console.log('请求失败：');
 					console.log(error);

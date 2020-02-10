@@ -18,14 +18,17 @@
 				其他问题
 			</view>
 			<view class="other_con">
-                  <textarea value="" placeholder="请输入你所遇到的问题，我们将尽快处理" placeholder-class="texta" @input="fuzhi"/>
-			</view>
+				<textarea value="" placeholder="请输入你所遇到的问题，我们将尽快处理" placeholder-class="texta" @input="fuzhi" />
+				</view>
 			<view class="title">
 				照片截图
 				<text>0/6</text>
 			</view>
 			<view class="upload_imgs">
-				<sunui-upimg @change="getImageInfo1" :upload_auto="true" ref="upimg1" upload_count="6" url=""></sunui-upimg>
+				<sunui-upimg  :upload_auto="true" ref="upimg1" upload_count="6" 
+				url="http://qidou.eezzz.cn/app/index.php?i=1&c=entry&m=ewei_shopv2&do=mobile&r=api.uploader.uploader"
+				 @change="getImageInfo1"
+				 @onUpImg="getImageInfo1"></sunui-upimg>
 			</view>
 			<view class="vh"></view>
 			<view class="r-btns" @click="submitWt">
@@ -52,9 +55,6 @@
 		},
 		onLoad(options) {
 			let _that=this;
-			// _that.$nextTick(function(){
-			// 	_that.getInfo();
-			// });
 			if(options.pid){
 				_that.pid=options.pid;
 			}
@@ -70,18 +70,6 @@
 			chooseCon(index) {
 				this.liOn = index;
 			},
-			async getInfo() {
-				await uni.request({
-					url: 'http://www.pbdpw.com/info.php',
-					method: 'GET',
-					data: {},
-					success: res => {
-						if (res.data.status == 'ok') {
-							this.$refs.upimg2.upload_before_list = res.data.data;
-						}
-					}
-				});
-			},
 			getData(){
 				let _that=this;
 				tools.myRequest('api.sns.posts.checkPost', {
@@ -89,9 +77,9 @@
 				}, 'GET').then(res => {
 					// console.log(res);
 					uni.hideToast();
-					if(res.status==1){
+					tools.warnMessage(res.status,res.result.message,function(){
 						_that.contArrs=res.result.catelist;
-					}
+					});
 				}).catch(error => {
 					console.log('请求失败：');
 					console.log(error);
@@ -123,20 +111,16 @@
 				}, 'GET').then(res => {
 					// console.log(res);
 					uni.hideToast();
-					if(res.status==1){
-					  uni.showToast({
-					  	icon:'none',
-						title:"投诉成功",
-						success() {
-							uni.navigateBack({});
-						}
-					  })	
-					}else{
+					tools.warnMessage(res.status,res.result.message,function(){
 						uni.showToast({
 							icon:'none',
-							title:res.result.message
+							title:"投诉成功",
+							success() {
+								uni.navigateBack({});
+							}
 						})
-					}
+					});
+				
 				}).catch(error => {
 					console.log('请求失败：');
 					console.log(error);
