@@ -3,9 +3,9 @@
 		<view class="dp_top1">
 			<view class="dpt1_left" @click="returnPage"></view>
 			<view class="dpt1_right">
-				<view class="collect"></view>
-				<view class="share"></view>
-				<view class="more">
+				<view class="collect active"></view>
+				<view class="share" @click="showSh"></view>
+				<view class="more" @click="showMore">
 					<view class="dian"></view>
 				</view>
 			</view>
@@ -87,19 +87,19 @@
 			</view>
 		</view>
 		<view class="youh_navs">
-			<view class="navs">
-				<view class="n_box active">
+			<view class="navs" :class="nfixed?'fixed':''" id="the-id">
+				<view class="n_box" :class="choose1?'active':''" @click="scrollP(oneCtop1)">
 					优惠
 				</view>
-				<view class="n_box">
+				<view class="n_box" :class="choose2?'active':''" @click="scrollP(oneCtop2)">
 					菜品
 				</view>
-				<view class="n_box">
+				<view class="n_box" :class="choose3?'active':''" @click="scrollP(oneCtop3)">
 					点评
 				</view>
 			</view>
 			<!-- 优惠 -->
-			<view class="nav_change">
+			<view class="nav_change" id="youhui">
 				<view class="yh_content">
 					<view class="yhc_quan">
 						<view class="quan_left">
@@ -148,9 +148,11 @@
 									</view>
 								</view>
 								<view class="quan_right">
-									<view class="btn">
-										抢购
-									</view>
+									<navigator url="../qgDetail/qgDetail" hover-class="none">
+										<view class="btn">
+											抢购
+										</view>
+									</navigator>
 									<view class="yueshou">
 										月售255
 									</view>
@@ -165,7 +167,7 @@
 				</view>
 			</view>
 			<!-- 推荐菜品 -->
-			<view class="tuij_cai">
+			<view class="tuij_cai" id="caipin">
 				<view class="common_title">
 					<view class="title_left">
 						推荐菜品
@@ -230,7 +232,7 @@
 				</view>
 			 </view>
 		<!-- 精选点评 -->
-		<view class="tuij_cai" style="padding-bottom: 1upx;">
+		    <view class="tuij_cai" style="padding-bottom: 1upx;" id="dianping">
 			<view class="common_title">
 				<view class="title_left">
 					精选点评（99）
@@ -267,7 +269,7 @@
 				</view>
 			
 		  </view>
-		</view>
+		    </view>
 	   <!-- 其他商家-->
 	   <view class="other_sj">
 	   	  <view class="title">
@@ -325,28 +327,175 @@
 		  	</navigator>
 		  </view>
 	   </view>
+	   <!-- 商家详情 更多 弹窗 -->
+	   <uni-popup ref="mores" type="top">
+	   	<view class="toushuC">
+	   		<view class="tc-li">
+	   			<navigator url="../jubao/jubao" hover-class="none" >
+	   				<image src="../../static/images/detail_ricon01@2x.png" mode="aspectFit"></image> 商户报错
+	   			</navigator>
+	   		</view>
+	   		<view class="tc-li">
+	   			<navigator url="../jubao/jubao" hover-class="none" >
+	   					<image src="../../static/images/detail_ricon02@2x.png" mode="aspectFit"></image> 投诉
+	   			</navigator>
+	   		</view>
+			<view class="tc-li">
+				<navigator url="../jubao/jubao" hover-class="none" >
+						<image src="../../static/images/detail_ricon03@2x.png" mode="aspectFit"></image> 商家入驻
+				</navigator>
+			</view>
+			<view class="tc-li">
+				<navigator url="../messages/messages" hover-class="none" >
+						<image src="../../static/images/detail_ricon04@2x.png" mode="aspectFit"></image> 消息
+				</navigator>
+				<view class="dian"></view>
+			</view>
+			<view class="tc-li">
+				<navigator url="../index/index" hover-class="none" open-type="reLaunch">
+						<image src="../../static/images/detail_ricon05@2x.png" mode="aspectFit"></image> 返回首页
+				</navigator>
+			</view>
+	   	</view>
+	   </uni-popup>
+	   <!-- 分享组件 -->
+	    <share ref="myShare"></share>
 	</view>
 </template>
 
 <script>
 	import stars from '../../components/stars/stars.vue'
 	import mythumb from '../../components/thumb-three/thumb-three.vue'
+	import uniPopup from "@/components/uni-popup/uni-popup.vue"
+	import share from '@/components/share/share.vue'
 	export default {
 		data() {
 			return {
 				indicatorDots: true,
 				autoplay: true,
 				interval: 3000,
-				duration: 1000
+				duration: 1000,
+				scrTop:0,
+				divTop:0,
+				iddivTop1:0,
+				iddivTop2:0,
+				iddivTop3:0,
+				oneCtop1:0,
+				oneCtop2:0,
+				oneCtop3:0
 			};
 		},
 		components: {
 			'my-star': stars,
-			 mythumb
+			 mythumb,
+			 uniPopup,
+			 share
+		},
+		computed:{
+			nfixed(){
+				if(this.divTop<=10 && this.scrTop>500){
+					return true;
+				}else{
+					return false;
+				}
+			},
+			choose1(){
+				if(this.iddivTop2>100){
+					return true;
+				}else{
+					return false;
+				}
+			},
+			choose2(){
+				if(this.iddivTop2<=100 && this.iddivTop3>100){
+					return true;
+				}else{
+					return false;
+				}
+			},
+			choose3(){
+				if(this.iddivTop3<=100){
+					return true;
+				}else{
+					return false;
+				}
+			}
+		},
+		mounted(){
+			this.getDivtop();
+			this.getDivtopID1();
+			this.getDivtopID2();
+			this.getDivtopID3();
+		},
+		onPageScroll(res) {
+			this.scrTop=res.scrollTop;
+			this.getDivtop();
+			this.getDivtopID1();
+			this.getDivtopID2();
+			this.getDivtopID3();
 		},
 		methods: {
 			returnPage() {
 				uni.navigateBack({})
+			},
+			showMore(){
+				this.$refs.mores.open();
+			},
+			showSh(){
+				// 调用分享子组件的方法
+				this.$refs.myShare.showShare();
+			},
+			// 获取导航距离顶部的位置
+			getDivtop(){
+				const query = uni.createSelectorQuery().in(this);
+				query.select('#the-id').boundingClientRect(data => {
+				  // console.log("得到布局位置信息" + JSON.stringify(data));
+				  // console.log("节点离页面顶部的距离为" + data.top);
+				  this.divTop=data.top;
+				}).exec();
+			},
+			// 获取元素距离顶部的位置
+			getDivtopID1(){
+				const query = uni.createSelectorQuery().in(this);
+				query.select('#youhui').boundingClientRect(data => {
+				  // console.log("得到布局位置信息" + JSON.stringify(data));
+				  // console.log("节点离页面顶部的距离为" + data.top);
+				  if(this.iddivTop1==0){
+				      this.oneCtop1=data.top
+				  }
+				  this.iddivTop1=data.top;
+				
+				}).exec();
+			},
+			// 获取元素距离顶部的位置
+			getDivtopID2(){
+				const query = uni.createSelectorQuery().in(this);
+				query.select('#caipin').boundingClientRect(data => {
+				  // console.log("得到布局位置信息" + JSON.stringify(data));
+				  // console.log("节点离页面顶部的距离为" + data.top);
+				  if(this.iddivTop2==0){
+				      this.oneCtop2=data.top
+				  }
+				  this.iddivTop2=data.top;
+				
+				}).exec();
+			},
+			// 获取元素距离顶部的位置
+			getDivtopID3(){
+				const query = uni.createSelectorQuery().in(this);
+				query.select('#dianping').boundingClientRect(data => {
+				  // console.log("得到布局位置信息" + JSON.stringify(data));
+				  // console.log("节点离页面顶部的距离为" + data.top);
+				  if(this.iddivTop3==0){
+				      this.oneCtop3=data.top
+				  }
+				  this.iddivTop3=data.top;
+				}).exec();
+			},
+			scrollP(top){
+				uni.pageScrollTo({
+					scrollTop:(top-100)
+				})
 			}
 		}
 	}
@@ -375,7 +524,8 @@
 		align-items: center;
 		padding: 23upx 36upx 23upx 25upx;
 		background-color: #FFFFFF;
-
+        position: relative;
+		z-index: 999;
 		.dpt1_left {
 			width: 19upx;
 			height: 35upx;
@@ -391,6 +541,9 @@
 				height: 44upx;
 				@include bg-image('../../static/images/detail_collect');
 				margin-right: 33upx;
+				&.active{
+					@include bg-image('../../static/images/detail_collectOn');
+				}
 			}
 
 			.share {
@@ -550,6 +703,17 @@
 					color: #FD7E3C;
 					border-bottom: 2upx #FD7E3C solid;
 				}
+			}
+			&.fixed{
+				width: 100%;
+				position: fixed;
+				top: 0;
+				left: 0;
+				z-index: 99;
+				background-color: #FFFFFF;
+				margin-left: 0;
+				padding: 20upx 20upx 0 40upx;
+				box-sizing: border-box;
 			}
 		}
 		.nav_change{
@@ -870,6 +1034,49 @@
 			font-weight: bold;
 			color: #333333;
 			margin-left: 17upx;
+		}
+	}
+	.toushuC{
+		width: 259upx;
+		height: 453upx;
+		@include bg-image('../../static/images/detail_wbg');
+		position: absolute;
+		top: 80upx;
+		right: 0;
+		line-height: 27upx;
+		.tc-li{
+			width: 75%;
+			margin: 0 auto;
+			font-size: 26upx;
+			color: #333333;
+			border-bottom: 1upx #EAEAEA solid;
+			padding: 20upx 0 20upx 10upx;
+			box-sizing: border-box;
+			position: relative;
+			&:first-child{
+				padding-top: 60upx;
+			}
+			&:last-child{
+				border-bottom: none;
+			}
+			image{
+				width: 36upx;
+				height: 36upx;
+				margin-right: 17upx;
+				vertical-align: middle;
+				position: relative;
+				top: -4upx;
+			}
+			.dian{
+				width:16upx;
+				height:16upx;
+				background:rgba(255,0,21,1);
+				border:1upx solid rgba(255,255,255,1);
+				border-radius:50%;
+				position: absolute;
+				left: 34upx;
+				top: 10upx;
+			}
 		}
 	}
 </style>

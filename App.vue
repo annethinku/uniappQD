@@ -51,7 +51,7 @@
 	   -webkit-line-clamp: 2;
 	   -webkit-box-orient: vertical;
    }
-   
+   // 商家列表
    .list_contents {
    	margin: 0 22upx;
    

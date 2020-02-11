@@ -105,6 +105,26 @@
 				"navigationStyle": "custom"
 			}
         }
+        ,{
+            "path" : "pages/myOrder/myOrder",
+            "style" : {
+				"navigationBarTitleText": "我的订单"
+			}
+        }
+        ,{
+            "path" : "pages/orderDetail/orderDetail",
+            "style" : {
+				"navigationBarTitleText": "订单详情",
+				"navigationBarBackgroundColor":"#FF8048",
+				"navigationBarTextStyle":"white"
+			}
+        }
+        ,{
+            "path" : "pages/qgDetail/qgDetail",
+            "style" : {
+				"navigationStyle": "custom"
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

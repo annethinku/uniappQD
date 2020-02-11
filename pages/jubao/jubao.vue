@@ -22,13 +22,12 @@
 				</view>
 			<view class="title">
 				照片截图
-				<text>0/6</text>
+				<text>{{curnum}}/6</text>
 			</view>
 			<view class="upload_imgs">
 				<sunui-upimg  :upload_auto="true" ref="upimg1" upload_count="6" 
 				url="http://qidou.eezzz.cn/app/index.php?i=1&c=entry&m=ewei_shopv2&do=mobile&r=api.uploader.uploader"
-				 @change="getImageInfo1"
-				 @onUpImg="getImageInfo1"></sunui-upimg>
+				 @change="getImageInfo1"></sunui-upimg>
 			</view>
 			<view class="vh"></view>
 			<view class="r-btns" @click="submitWt">
@@ -47,7 +46,9 @@
 				liOn: null,
 				contArrs: ['标题党', '色情低俗', '过时旧闻', '内容虚假', '内容质量差', '广告软文', '内容引起不适', '错别字、段落重复', '政治铭感', '侵权抄袭'],
 				serviceArr1: [],
-				content:''
+				content:'',
+				filenames:[],
+				curnum:0
 			};
 		},
 		components:{
@@ -62,10 +63,16 @@
 		},
 		mounted(){
 			this.$refs.upimg1.upload_before_list = this.serviceArr1;
+			// this.$refs.upimg1.upload(true);
 		},
 		methods:{
 			getImageInfo1(e){
-				console.log(e);
+				let files=[];
+				e.map((item,index)=>{
+					files.push(item.split('attachment/')[1]);
+				})
+				this.filenames=files;
+				this.curnum=files.length;
 			},
 			chooseCon(index) {
 				this.liOn = index;
@@ -106,7 +113,7 @@
 					id: _that.pid,
 					type:_that.contArrs[_that.liOn].id,
 					content:_that.content,
-					images:[],
+					filename:_that.filenames,
 					token:token
 				}, 'GET').then(res => {
 					// console.log(res);
@@ -116,7 +123,7 @@
 							icon:'none',
 							title:"投诉成功",
 							success() {
-								uni.navigateBack({});
+								// uni.navigateBack({});
 							}
 						})
 					});

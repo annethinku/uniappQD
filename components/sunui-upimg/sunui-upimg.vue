@@ -84,6 +84,7 @@
 
 				Promise.all(promises).then(function(data) {
 					uni.hideLoading();
+					console.log(data);
 					_self.upload_cache_list.push(...data);
 					_self.emit();
 				}).catch(function(res) {
@@ -171,7 +172,7 @@
 				var data = res.data
 				try {
 					//Tip : 切记->主要修改这里图片的返回值为真实返回路径!!! 详情见示例
-					data = JSON.parse(res.data).info;
+					data = JSON.parse(res.data).result.result.url;
 				} catch (e) {
 					throw (e, data)
 				}

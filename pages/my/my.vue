@@ -82,13 +82,15 @@
 					我的订单
 				</view>
 				<view class="ot-right">
+					<navigator url="../myOrder/myOrder" hover-class="none">
 					<text>全部订单</text>
 					<image src="../../static/images/my-jiant.png" mode="widthFix"></image>
+					</navigator>
 				</view>
 			</view>
 			<view class="order-bot">
 				<view class="ob-box">
-					<navigator url="">
+					<navigator url="../myOrder/myOrder" hover-class="none">
 						<image src="../../static/images/my-order01.png" mode=""></image>
 						<view class="title">
 							待付款
@@ -96,7 +98,7 @@
 					</navigator>
 				</view>
 				<view class="ob-box">
-					<navigator url="">
+					<navigator url="../myOrder/myOrder" hover-class="none">
 						<image src="../../static/images/my-order02.png" mode=""></image>
 						<view class="title">
 							待使用
@@ -104,7 +106,7 @@
 					</navigator>
 				</view>
 				<view class="ob-box">
-					<navigator url="">
+					<navigator url="../myOrder/myOrder" hover-class="none">
 						<image src="../../static/images/my-order03.png" mode=""></image>
 						<view class="title">
 							待评价
@@ -112,7 +114,7 @@
 					</navigator>
 				</view>
 				<view class="ob-box">
-					<navigator url="">
+					<navigator url="../myOrder/myOrder" hover-class="none">
 						<image src="../../static/images/my-order04.png" mode=""></image>
 						<view class="title">
 							退款／售后
