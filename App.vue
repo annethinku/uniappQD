@@ -191,5 +191,17 @@
    		}
    	}
    }
-   
+   // 支付按钮
+   .compay-btn{
+   	width:auto;
+   	height:84upx;
+   	line-height: 84upx;
+   	background:linear-gradient(90deg,rgba(252,136,64,1),rgba(255,103,51,1));
+   	border-radius:42upx;
+   	margin:0 33upx;
+   	font-size: 32upx;
+   	color: #FFFFFF;
+   	font-weight: bold;
+   	text-align: center;
+   }
 </style>

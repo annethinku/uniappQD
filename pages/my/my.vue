@@ -32,31 +32,37 @@
 		</view>
 		<view class="my-month">
 			<view class="month-box">
-				<view class="num">
-					0.00
-				</view>
-				<view class="des">
-					<text>本月预估</text>
-					<image src="../../static/images/my-jiant.png" mode="widthFix"></image>
-				</view>
+				<navigator url="../shouyiMX/shouyiMX" hover-class="none">
+					<view class="num">
+						0.00
+					</view>
+					<view class="des">
+						<text>本月预估</text>
+						<image src="../../static/images/my-jiant.png" mode="widthFix"></image>
+					</view>
+				</navigator>
 			</view>
 			<view class="month-box">
-				<view class="num">
-					0.00
-				</view>
-				<view class="des">
-					<text>本月结算</text>
-					<image src="../../static/images/my-jiant.png" mode="widthFix"></image>
-				</view>
+				<navigator url="../shouyiMX/shouyiMX" hover-class="none">
+					<view class="num">
+						0.00
+					</view>
+					<view class="des">
+						<text>本月结算</text>
+						<image src="../../static/images/my-jiant.png" mode="widthFix"></image>
+					</view>
+				</navigator>
 			</view>
 			<view class="month-box">
-				<view class="num">
-					0.00
-				</view>
-				<view class="des">
-					<text>累计收益</text>
-					<image src="../../static/images/my-jiant.png" mode="widthFix"></image>
-				</view>
+				<navigator url="../shouyiMX/shouyiMX" hover-class="none">
+					<view class="num">
+						0.00
+					</view>
+					<view class="des">
+						<text>累计收益</text>
+						<image src="../../static/images/my-jiant.png" mode="widthFix"></image>
+					</view>
+				</navigator>
 			</view>
 		</view>
 		<view class="my-red">
@@ -83,8 +89,8 @@
 				</view>
 				<view class="ot-right">
 					<navigator url="../myOrder/myOrder" hover-class="none">
-					<text>全部订单</text>
-					<image src="../../static/images/my-jiant.png" mode="widthFix"></image>
+						<text>全部订单</text>
+						<image src="../../static/images/my-jiant.png" mode="widthFix"></image>
 					</navigator>
 				</view>
 			</view>

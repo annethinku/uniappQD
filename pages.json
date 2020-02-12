@@ -125,6 +125,32 @@
 				"navigationStyle": "custom"
 			}
         }
+        ,{
+            "path" : "pages/pay1/pay1",
+            "style" : {
+				"navigationBarTitleText":"阿斯顿餐厅"
+			}
+        }
+        ,{
+            "path" : "pages/pay2/pay2",
+            "style" : {
+				"navigationBarTitleText":"订单支付"
+			}
+        }
+        ,{
+            "path" : "pages/payStatus/payStatus",
+            "style" : {
+				"navigationBarTitleText": "支付",
+				"navigationBarBackgroundColor":"#FF8048",
+				"navigationBarTextStyle":"white"
+			}
+        }
+        ,{
+            "path" : "pages/shouyiMX/shouyiMX",
+            "style" : {
+				"navigationBarTitleText": "收益明细"
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

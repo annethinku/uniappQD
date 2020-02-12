@@ -213,10 +213,10 @@
 			 			常用：
 			 		</view>
 					<view class="emjos">
-						<image src="../../static/images/emji01.png" mode="widthFix"></image>
-						<image src="../../static/images/emji02.png" mode="widthFix"></image>
-						<image src="../../static/images/emji03.png" mode="widthFix"></image>
-						<image src="../../static/images/emji04.png" mode="widthFix"></image>
+						<image src="http://qidou.eezzz.cn//attachment/images/emj/bkhumor-emoji/1.gif" mode="widthFix" @click="emUseful(1)"></image>
+						<image src="http://qidou.eezzz.cn//attachment/images/emj/bkhumor-emoji/2.gif" mode="widthFix" @click="emUseful(2)"></image>
+						<image src="http://qidou.eezzz.cn//attachment/images/emj/bkhumor-emoji/3.gif" mode="widthFix" @click="emUseful(3)"></image>
+						<image src="http://qidou.eezzz.cn//attachment/images/emj/bkhumor-emoji/4.gif" mode="widthFix" @click="emUseful(4)"></image>
 					</view>
 			 	</view>
 				<view class="repb-right" @click="qiehImg">
@@ -488,6 +488,9 @@
 			// 文字赋值
 			fuzhiBq(e){
 				this.inputValue=e.detail.value;
+			},
+			emUseful(num){
+				this.inputValue += '[em_'+num+']';
 			}
 		}
 	}

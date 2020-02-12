@@ -73,18 +73,24 @@
 						<text>支付宝账户</text>
 					</view> -->
 					<view class="con-li" v-for="(item,index) in info.type_array" :key="index">
-						<image src="../../static/images/wechat.png" mode=""></image>
+						<image src="../../static/images/wechat.png" mode="aspectFit"></image>
 						<text>{{item.title}}</text>
+					</view>
+					<view class="con-li">
+						<text class="addFont">+ 添加新的账户</text>
 					</view>
 				</view>
 			</view>
 		</uni-popup>
+		<!-- 输入支付密码弹窗 -->
+		<myCode ref="password"></myCode>
 	</view>
 </template>
 
 <script>
 	import uniPopup from "@/components/uni-popup/uni-popup.vue"
 	import tools from '../../static/js/tools.js'
+	import myCode from '@/components/password/password.vue'
 	export default {
 		data() {
 			return {
@@ -96,7 +102,8 @@
 			};
 		},
 		components: {
-			uniPopup
+			uniPopup,
+			myCode
 		},
 		mounted(){
 			let _that=this;
@@ -143,6 +150,8 @@
 			tixian(){
 				let _that=this;
 				let token=uni.getStorageSync('token');
+			    _that.$refs.password.showCode();
+				return false;
 				if(!_that.money){
 					uni.showToast({
 						title:"请输入提现金额",
@@ -382,5 +391,11 @@
 				}
 			}
 		}
+	}
+	.addFont{
+		font-size: 33upx;
+		font-weight: bold;
+		color: #333333;
+		padding-left: 20upx;
 	}
 </style>

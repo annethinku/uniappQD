@@ -136,9 +136,11 @@
 			 <view style="height: 200upx;"></view>
 		</view>
 		<view class="pay-btn">
-			<view class="self-btn">
-				去支付
-			</view>
+			<navigator url="../pay1/pay1" hover-class="none">
+				<view class="self-btn">
+					去支付
+				</view>
+			</navigator>
 		</view>
 	</view>
 </template>
