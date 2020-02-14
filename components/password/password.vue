@@ -6,12 +6,13 @@
 					<text>输入支付密码</text>
 					<image src="../../static/images/art-close.png" mode="" @click="hideCode"></image>
 				</view>
-				<view class="code_money">
-					提现1300元
+				<view class="code_money" v-show="isTixian=='true'">
+					提现{{money}}元
 				</view>
 				<view class="six_code">
-					<view class="sixbox" v-for="(item,index) in 6" :key="index">
-						<input type="number" value="":focus="index==curindex?true:false" maxlength="1" @input="fuzhiC(index)"/>
+					<view class="sixbox" v-for="(item,index) in karr" :key="index">
+						<input type="number" :value="item":focus="index==curindex?true:false" maxlength="1" @input="fuzhiC($event,index)"
+						 @confirm="isTixian?enterTixian:enterT"/>
 					</view>
 				</view>
 				<view class="forget_code">
@@ -24,10 +25,14 @@
 
 <script>
 	import uniPopup from "@/components/uni-popup/uni-popup.vue"
+	import tools from '../../static/js/tools.js'
 	export default {
+		props:['isTixian','money'],
 		data() {
 			return {
-				curindex:0
+				curindex:0,
+				passArr:'',
+				karr:[null,null,null,null,null,null]
 			};
 		},
 		components:{
@@ -40,8 +45,84 @@
 			hideCode(){
 				this.$refs.password.close();
 			},
-			fuzhiC(i){
+			fuzhiC(e,i){
 				this.curindex=i;
+				this.karr[i]=e.detail.value;
+				// 密码输入完成
+				if(i==5 && e.detail.value){
+					if(this.isTixian){
+						this.enterTixian();
+					}else{
+						this.enterT();
+					}
+				}
+			},
+			enterT(){
+				let _that=this;
+				let token = uni.getStorageSync('token');
+				// id(订单id),ordersn(订单编号),token(uuid),type(credit)，pwd（操作密码）
+				tools.myRequest('api.attestation.order.complete', {
+					id:uni.getStorageSync('orderid'),
+					ordersn:uni.getStorageSync('ordersn'),
+					token: token,
+					type:'credit',
+					pwd:_that.karr.join('')
+					// sign:tools.getAesString(params)
+				}, 'POST').then(res => {
+					// console.log(res);
+					tools.warnMessage(res.status,res.result.message,function(){
+					    if(res.result.result){
+							uni.reLaunch({
+								url:'../../pages/vip/vip'
+							})
+						}
+					});
+				
+				}).catch(error => {
+					console.log('请求失败：');
+					console.log(error);
+				})
+			},
+			enterTixian(){
+				let _that=this;
+				let token = uni.getStorageSync('token');
+				uni.showToast({
+					icon:'loading'
+				})
+				tools.myRequest('api.member.withdrawal.submit', {
+					token: token,
+					money:_that.money,
+					pwd:_that.karr.join('')
+				}, '').then(res => {
+					// console.log(res);
+					uni.hideToast();
+					tools.warnMessage(res.status,res.result.message,function(){
+						if(res.result.row.status==0){
+							uni.showToast({
+								icon:'none',
+								title:'提现审核中'
+							})
+						}else if(res.result.row.status==1){
+							uni.showToast({
+								icon:'none',
+								title:'提现成功'
+							})
+						}else if(res.result.row.status==-1){
+							uni.showToast({
+								icon:'none',
+								title:'已拒绝提现'
+							})
+						}
+				       setTimeout(function(){
+						   uni.navigateBack({});
+					   },1000)
+					});
+					
+				}).catch(error => {
+					console.log('请求失败：');
+					console.log(error);
+				})
+			
 			}
 		}
 	}

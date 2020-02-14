@@ -97,7 +97,9 @@
 
         ,{
             "path" : "pages/login/login",
-            "style" : {}
+            "style" : {
+				"navigationBarTitleText": ""
+			}
         }
         ,{
             "path" : "pages/detail/detail",
@@ -149,6 +151,72 @@
             "path" : "pages/shouyiMX/shouyiMX",
             "style" : {
 				"navigationBarTitleText": "收益明细"
+			}
+        }
+        ,{
+            "path" : "pages/hezuo/hezuo",
+            "style" : {
+				"navigationBarTitleText": "合作咨询"
+			}
+        }
+        ,{
+            "path" : "pages/ruzhu/ruzhu",
+            "style" : {
+				"navigationStyle": "custom"
+			}
+        }
+        ,{
+            "path" : "pages/ruzhuNeed/ruzhuNeed",
+            "style" : {
+				"navigationBarTitleText": "入驻须知"
+			}
+        }
+        ,{
+            "path" : "pages/setCode/setCode",
+            "style" : {
+				"navigationBarTitleText": ""
+			}
+        }
+        ,{
+            "path" : "pages/loginCode/loginCode",
+            "style" : {
+				"navigationBarTitleText": ""
+			}
+        }
+        ,{
+            "path" : "pages/register/register",
+            "style" : {
+				"navigationBarTitleText": ""
+			}
+        }
+        ,{
+            "path" : "pages/foundPassword/foundPassword",
+            "style" : {
+				"navigationBarTitleText": ""
+			}
+        }
+        ,{
+            "path" : "pages/settingCode/settingCode",
+            "style" : {
+				"navigationBarTitleText": ""
+			}
+        }
+        ,{
+            "path" : "pages/updateCodeSuccess/updateCodeSuccess",
+            "style" : {
+				"navigationBarTitleText": ""
+			}
+        }
+        ,{
+            "path" : "pages/shuruYanzm/shuruYanzm",
+            "style" : {
+				"navigationBarTitleText": ""
+			}
+        }
+        ,{
+            "path" : "pages/ydQuestion/ydQuestion",
+            "style" : {
+				"navigationBarTitleText": ""
 			}
         }
     ],

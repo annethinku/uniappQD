@@ -39,6 +39,11 @@ const warnMessage=function(status,data,func){
 	}else if(status==1){
 		// 接口请求成功执行
 		func();
+	}else if(status==-5){
+		//未设置支付密码跳转到设置支付密码页面
+		uni.navigateTo({
+			url:"/pages/setCode/setCode"
+		})
 	}else{
 		// 提示接口错误信息
 		uni.showToast({

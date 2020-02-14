@@ -204,4 +204,108 @@
    	font-weight: bold;
    	text-align: center;
    }
+   // 登录样式
+   .login{
+   	
+   	.login_title{
+   		font-size: 42upx;
+   		color: #444444;
+   		font-weight: bold;
+   		margin: 77upx 0 170upx 46upx;
+		.desc{
+			font-size: 24upx;
+			color: #999999;
+			margin-top: 23upx;
+		}
+   	}
+   	.login_phone{
+   		margin: 0 36upx 35upx;
+   		padding-bottom: 39upx;
+   		border-bottom: 1upx #E6E6E6 solid;
+   		display: flex;
+   		align-items: center;
+		.phead{
+			image{
+				width: 33upx;
+				height: 39upx;
+			}
+		}
+   		.phead,.inputs{
+   			font-size: 30upx;
+   			color: #666666;
+   			font-weight: bold;
+   		}
+   		.inputs{
+   			flex: 1;
+   			margin: 0 40upx;
+   			font-weight: normal;
+   		}
+		.close{
+			image{
+				width: 32upx;
+				height: 33upx;
+			}
+		}
+   	}
+   	.gray_tis{
+   		font-size: 26upx;
+   		color: #999999;
+   		margin-top: 29upx;
+   		text-align: center;
+   		text{
+   			color: #FE7238;
+   		}
+   	}
+   	.orange-btn{
+   		height:90upx;
+   		line-height: 90upx;
+   		margin: 84upx 50upx 0;
+   		background:linear-gradient(90deg,rgba(252,136,64,1),rgba(255,103,51,1));
+   		border-radius:45upx;
+   		font-size: 36upx;
+   		color: #FFFFFF;
+   		font-weight: bold;
+   		text-align: center;
+   	}
+   	.other-contorl{
+   		display: flex;
+   		align-items: center;
+   		justify-content: center;
+   		margin-top: 52upx;
+   		font-size: 22upx;
+   		color: #444444;
+   		.line{
+   			width:1upx;
+   			height:26upx;
+   			border-left:1upx solid rgba(141,141,141,1);
+   			margin: 0 107upx;
+   		}
+   	}
+   	.other-login{
+   		text-align: center;
+   		margin: 200upx 0 60upx;
+   		.name{
+   			font-size: 22upx;
+   			color: #888888;
+   		}
+   		.icon{
+   			margin-top: 34upx;
+   			image{
+   				width: 72upx;
+   				height: 72upx;
+				vertical-align: middle;
+   			}
+   		}
+   	}
+	.yzm{
+		width:150upx;
+		height:50upx;
+		line-height: 50upx;
+		font-size: 22upx;
+		color: #333333;
+		background:rgba(238,238,238,1);
+		border-radius:25upx;
+		text-align: center;
+	}
+   }
 </style>

@@ -4,7 +4,7 @@
 			<view class="dpt1_left" @click="returnPage"></view>
 			<view class="dpt1_right">
 				<view class="collect active"></view>
-				<view class="share" @click="showSh"></view>
+				<!-- <view class="share" @click="showSh"></view> -->
 				<view class="more" @click="showMore">
 					<view class="dian"></view>
 				</view>
@@ -241,7 +241,7 @@
 			  </view> -->
 			  <!-- 非第一次购买显示 -->
 			  <view class="r_btns2">
-			  	  <view class="btn-one black">
+			  	  <view class="btn-one black" @tap="shareFc()">
 			  	  	  <image src="../../static/images/detail_shareM.png" mode="aspectFit"></image>
 			  	      <text>分享赚￥3.12</text>
 				  </view>
@@ -285,6 +285,25 @@
 	   </uni-popup>
 	   <!-- 分享组件 -->
 	    <share ref="myShare"></share>
+		<view class="hideCanvasView">
+			<canvas class="hideCanvas" canvas-id="default_PosterCanvasId" :style="{width: (poster.width||0) + 'px', height: (poster.height||0) + 'px'}"></canvas>
+		</view>
+		<!-- 海报展示位置 -->
+		<view class="flex_row_c_c modalView" :class="qrShow?'show':''" @tap="hideQr()">
+			<view class="flex_column">
+				<view class="flex_row">
+					<image src="../../static/images/share_close.png" mode=""></image>
+					<button type="primary" size="mini" @tap.prevent.stop="saveImage()" class="downLoadBtn">下载原图</button>
+				</view>
+				<view class="backgroundColor-white padding1vh border_radius_10px marginTop2vh">
+					<image :src="poster.finalPath" mode="widthFix" class="posterImage"></image>
+				</view>
+			<!-- 	<view class="flex_row marginTop2vh">
+					<button type="primary" size="mini" @tap.prevent.stop="saveImage()">保存图片</button>
+					<button type="primary" size="mini" @tap.prevent.stop="share()">分享图片</button>
+				</view> -->
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -293,13 +312,20 @@
 	import mythumb from '../../components/thumb-three/thumb-three.vue'
 	import uniPopup from "@/components/uni-popup/uni-popup.vue"
 	import share from '@/components/share/share.vue'
+	import _app from '@/js_sdk/QuShe-SharerPoster/util/QS-SharePoster/app.js';
+	import {
+		getSharePoster
+	} from '@/js_sdk/QuShe-SharerPoster/util/QS-SharePoster/QS-SharePoster.js';
 	export default {
 		data() {
 			return {
 				indicatorDots: true,
 				autoplay: true,
 				interval: 3000,
-				duration: 1000
+				duration: 1000,
+				poster: {},
+				qrShow: false,
+				canvasId: 'default_PosterCanvasId'
 			};
 		},
 		components: {
@@ -322,6 +348,240 @@
 			showSh(){
 				// 调用分享子组件的方法
 				this.$refs.myShare.showShare();
+			},
+			async shareFc() {
+				try {
+					console.log('准备生成:' + new Date())
+					const d = await getSharePoster({
+						_this: this, //若在组件中使用 必传
+						type: 'testShareType',
+						formData: {
+							//访问接口获取背景图携带自定义数据
+						},
+						background:{
+							width:750,
+							height:1060,
+							backgroundColor:'#FFF'
+						},
+						posterCanvasId: this.canvasId,	//canvasId
+						delayTimeScale: 20, //延时系数
+						/* background: {
+							width: 1080,
+							height: 1920,
+							backgroundColor: '#666'
+						}, */
+						drawArray: ({
+							bgObj,
+							type,
+							bgScale
+						}) => {
+							const dx = bgObj.width * 0.3;
+							const fontSize = bgObj.width * 0.045;
+							const lineHeight = bgObj.height * 0.04;
+							//可直接return数组，也可以return一个promise对象, 但最终resolve一个数组, 这样就可以方便实现后台可控绘制海报
+							return new Promise((rs, rj) => {
+								rs([
+									{
+										type: 'image',
+										url: '/static/2.jpg',
+										alpha: 1,
+										dx:(bgObj.width-bgObj.width*0.9)/2,
+										dy: bgObj.height*0.2,
+										infoCallBack(imageInfo) {
+											let scale = bgObj.width * 0.2 / imageInfo.height;
+											return {
+												dWidth: bgObj.width*0.9, 
+												dHeight: bgObj.width*0.7,
+												roundRectSet: { // 圆角矩形
+													r: imageInfo.width * .03
+												}
+											}
+										}
+									},
+									{
+										type: 'text',
+										text: '阿斯顿餐厅',
+										size: fontSize,
+										color: '#333333',
+										alpha: 1,
+										textAlign: 'center',
+										textBaseline: 'middle',
+										infoCallBack(textLength) {
+											_app.log('index页面的text的infocallback ，textlength:' + textLength);
+											return {
+												dx: bgObj.width/2,
+												dy: bgObj.height*0.05
+											}
+										},
+										serialNum: 0,
+										id: 'tag1'	//自定义标识
+									},
+									{
+										type: 'text',
+										text: '79元代100元 代金卷',
+										fontWeight: 'bold',
+										size: fontSize,
+										color: '#333',
+										alpha:1,
+										textAlign: 'center',
+										textBaseline: 'middle',
+										serialNum: 1,
+										allInfoCallback({	//v3.0.1 更新 可以获取drawArray中全部数据
+											drawArray
+										} = {}) {
+											const obj = drawArray.find(item => item.id === 'tag1');
+											/* return {
+												dx: obj.dx,
+												dy: obj.dy + lineHeight
+											} */
+											//也可以return promise对象
+											return new Promise((rs, rj) => {
+												setTimeout(() => {
+													rs({
+														dx: bgObj.width/2,
+														dy:  bgObj.height*0.12
+													});
+												}, 1);
+											});
+										}
+									},
+									
+									{
+										type: 'qrcode',
+										text: '你好，我是奇豆',
+										size: bgObj.width * 0.2,
+										// image:'/static/1.png',
+										// imageSize:110,
+										dx: bgObj.width * 0.72,
+										dy: bgObj.height - bgObj.width * 0.3
+									},
+									{
+											type: 'custom',
+											setDraw(Context) {
+												Context.setFillStyle('#FFF1EC');
+												Context.fillRect(bgObj.width*0.05, bgObj.height - bgObj.height * 0.25, bgObj.width*0.6, bgObj.height * 0.25);
+												Context.setGlobalAlpha(1);
+											}
+										},
+										{
+											type: 'text',
+											text: '如何购买？',
+											size: fontSize,
+											color: '#FF6934',
+											alpha: 1,
+											textAlign: 'center',
+											textBaseline: 'middle',
+											infoCallBack(textLength) {
+												return {
+													dx:bgObj.width*0.38,
+													dy:bgObj.height - bgObj.height * 0.2
+												}
+											}
+										},
+										{
+											type: 'text',
+											text: '1、长按识别二维码 ',
+											size: 20,
+											color: '#FF6934',
+											alpha: 1,
+											textAlign: 'left',
+											textBaseline: 'middle',
+											infoCallBack(textLength) {
+												return {
+													dx:bgObj.width*0.1,
+													dy:bgObj.height - bgObj.height * 0.14
+												}
+											}
+										},
+										{
+											type: 'text',
+											text: '2、点击页面右上角，复制链接',
+											size: 20,
+											color: '#FF6934',
+											alpha: 1,
+											textAlign: 'left',
+											textBaseline: 'middle',
+											infoCallBack(textLength) {
+												return {
+													dx:bgObj.width*0.1,
+													dy:bgObj.height - bgObj.height * 0.09
+												}
+											}
+										},
+										{
+											type: 'text',
+											text: '3、打开奇豆app购买',
+											size: 20,
+											color: '#FF6934',
+											alpha: 1,
+											textAlign: 'left',
+											textBaseline: 'middle',
+											infoCallBack(textLength) {
+												return {
+													dx:bgObj.width*0.1,
+													dy:bgObj.height - bgObj.height * 0.04
+												}
+											}
+										},
+										{
+											type: 'text',
+											text: '长按二维码购买',
+											size: 20,
+											color: '#666',
+											alpha: 1,
+											textAlign: 'center',
+											textBaseline: 'middle',
+											infoCallBack(textLength) {
+												return {
+													dx: bgObj.width * 0.82,
+													dy: bgObj.height - bgObj.width * 0.05
+												}
+											}
+										},
+								]);
+							})
+						},
+						setCanvasWH: ({
+							bgObj,
+							type,
+							bgScale
+						}) => { // 为动态设置画布宽高的方法，
+							this.poster = bgObj;
+						}
+					});
+					console.log('海报生成成功, 时间:' + new Date() + '， 临时路径: ' + d.poster.tempFilePath)
+					this.poster.finalPath = d.poster.tempFilePath;
+					this.qrShow = true;
+				} catch (e) {
+					_app.hideLoading();
+					_app.showToast(JSON.stringify(e));
+					console.log(JSON.stringify(e));
+				}
+			},
+			saveImage() {
+				// #ifndef H5
+				uni.saveImageToPhotosAlbum({
+					filePath: this.poster.finalPath,
+					success(res) {
+						_app.showToast('保存成功');
+					}
+				})
+				// #endif
+				// #ifdef H5
+				_app.showToast('保存了');
+				// #endif
+			},
+			share() {
+				// #ifdef APP-PLUS
+				_app.getShare(false, false, 2, '', '', '', this.poster.finalPath, false, false);
+				// #endif
+			
+				// #ifndef APP-PLUS
+				_app.showToast('分享了');
+				// #endif
+			},
+			hideQr() {
+				this.qrShow = false;
 			}
 		}
 	}
@@ -847,5 +1107,96 @@
 				}
 			}
 		}
+	}
+	.hideCanvasView {
+		position: relative;
+	}
+	
+	.hideCanvas {
+		position: fixed;
+		top: -99999upx;
+		left: -99999upx;
+		z-index: -99999;
+	}
+	
+	.flex_row_c_c {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	.modalView {
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		opacity: 0;
+		outline: 0;
+		transform: scale(1.2);
+		perspective: 2500upx;
+		background: rgba(0, 0, 0, 0.6);
+		transition: all .3s ease-in-out;
+		pointer-events: none;
+		backface-visibility: hidden;
+		z-index: 999;
+	}
+	
+	.modalView.show {
+		opacity: 1;
+		transform: scale(1);
+		pointer-events: auto;
+	}
+	
+	.flex_column {
+		display: flex;
+		flex-direction: column;
+	}
+	
+	.backgroundColor-white {
+		background-color: white;
+	}
+	
+	.border_radius_10px {
+		// border-radius: 10px;
+	}
+	
+	.padding1vh {
+		padding: 1vh;
+	}
+	
+	.posterImage {
+		width: 100vw;
+	}
+	
+	.flex_row {
+		// width: 100vh;
+		display: flex;
+		align-items: center;
+		flex-direction: row;
+		justify-content: space-between;
+		padding: 0 50upx;
+		box-sizing: border-box;
+		image{
+			width: 50upx;
+			height: 50upx;
+		}
+	}
+	
+	.marginTop2vh {
+		margin-top: 2vh;
+	}
+	.downLoadBtn{
+		width: 130upx;
+		padding: 0;
+		margin: 0;
+		height:49upx;
+		line-height: 49upx;
+		border:2upx solid rgba(255,255,255,1);
+		border-radius:25upx;
+		background-color: transparent;
 	}
 </style>

@@ -139,7 +139,15 @@
 			<view class="others">
 				<view class="box">
 					<navigator url="">
-						<image src="../../static/images/my-other01.png" mode=""></image>
+						<image src="../../static/images/my-otherYQ.png" mode="aspectFit"></image>
+						<view class="name">
+							邀请有礼
+						</view>
+					</navigator>
+				</view>
+				<view class="box">
+					<navigator url="../hezuo/hezuo">
+						<image src="../../static/images/my-other01.png" mode="aspectFit"></image>
 						<view class="name">
 							合作咨询
 						</view>
@@ -147,7 +155,7 @@
 				</view>
 				<view class="box">
 					<navigator url="">
-						<image src="../../static/images/my-other02.png" mode=""></image>
+						<image src="../../static/images/my-other02.png" mode="aspectFit"></image>
 						<view class="name">
 							我的朋友
 						</view>
@@ -155,23 +163,23 @@
 				</view>
 				<view class="box">
 					<navigator url="">
-						<image src="../../static/images/my-other03.png" mode=""></image>
+						<image src="../../static/images/my-other03.png" mode="aspectFit"></image>
 						<view class="name">
 							我的上级
 						</view>
 					</navigator>
 				</view>
-				<view class="box" v-show="!isSh">
+			<!-- 	<view class="box" v-show="!isSh">
 					<navigator url="">
-						<image src="../../static/images/my-other04.png" mode=""></image>
+						<image src="../../static/images/my-other04.png" mode="aspectFit"></image>
 						<view class="name">
 							商家入驻
 						</view>
 					</navigator>
-				</view>
+				</view> -->
 				<view class="box">
 					<navigator url="">
-						<image src="../../static/images/my-other05.png" mode=""></image>
+						<image src="../../static/images/my-other05.png" mode="aspectFit"></image>
 						<view class="name">
 							我的足迹
 						</view>
@@ -179,7 +187,7 @@
 				</view>
 				<view class="box">
 					<navigator url="">
-						<image src="../../static/images/my-other06.png" mode=""></image>
+						<image src="../../static/images/my-other06.png" mode="aspectFit"></image>
 						<view class="name">
 							我的收藏
 						</view>
@@ -187,7 +195,7 @@
 				</view>
 				<view class="box">
 					<navigator url="">
-						<image src="../../static/images/my-other07.png" mode=""></image>
+						<image src="../../static/images/my-other07.png" mode="aspectFit"></image>
 						<view class="name">
 							优惠券
 						</view>
@@ -195,7 +203,7 @@
 				</view>
 				<view class="box">
 					<navigator url="">
-						<image src="../../static/images/my-other08.png" mode=""></image>
+						<image src="../../static/images/my-other08.png" mode="aspectFit"></image>
 						<view class="name">
 							银行卡
 						</view>
@@ -203,7 +211,7 @@
 				</view>
 				<view class="box">
 					<navigator url="">
-						<image src="../../static/images/my-other09.png" mode=""></image>
+						<image src="../../static/images/my-other09.png" mode="aspectFit"></image>
 						<view class="name">
 							联系客服
 						</view>
@@ -211,7 +219,7 @@
 				</view>
 				<view class="box">
 					<navigator url="">
-						<image src="../../static/images/my-other10.png" mode=""></image>
+						<image src="../../static/images/my-other10.png" mode="aspectFit"></image>
 						<view class="name">
 							关于奇豆
 						</view>
@@ -539,6 +547,7 @@
 				image {
 					width: 45upx;
 					height: 45upx;
+					vertical-align: middle;
 				}
 
 				.name {

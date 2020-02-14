@@ -33,7 +33,8 @@
         /* 模块配置 */
         "modules" : {
             "Payment" : {},
-            "OAuth" : {}
+            "OAuth" : {},
+            "Share" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
@@ -78,6 +79,12 @@
                     "weixin" : {
                         "appid" : "wxbb578fc952de9c3d",
                         "appsecret" : "303b996cb88aa440416a17bbcb2e2ddb",
+                        "UniversalLinks" : ""
+                    }
+                },
+                "share" : {
+                    "weixin" : {
+                        "appid" : "wxbb578fc952de9c3d",
                         "UniversalLinks" : ""
                     }
                 }

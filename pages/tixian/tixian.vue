@@ -38,7 +38,7 @@
 				</view>
 				<view class="lis-right">
 					<image src="../../static/images/wechat.png" mode="widthFix" class="img01"></image>
-					<text>微信账户</text>
+					<text>{{zhname}}</text>
 					<image src="../../static/images/bbs_jian2@3x.png" mode="widthFix" class="img02"></image>
 				</view>
 			</view>
@@ -59,31 +59,9 @@
 			<navigator url="" hover-class="none">《{{privacy.navname}}》</navigator>
 		</view>
 		<!-- 选择收款账户弹窗 -->
-		<uni-popup ref="chooseZH" type="bottom">
-			<view class="zh-con">
-				<view class="close" @click="closeChoose">
-					<image src="../../static/images/art-close.png" mode=""></image>
-				</view>
-				<view class="title">
-					选择一个账户
-				</view>
-				<view class="content">
-				<!-- 	<view class="con-li">
-						<image src="../../static/images/zfbpay.png" mode=""></image>
-						<text>支付宝账户</text>
-					</view> -->
-					<view class="con-li" v-for="(item,index) in info.type_array" :key="index">
-						<image src="../../static/images/wechat.png" mode="aspectFit"></image>
-						<text>{{item.title}}</text>
-					</view>
-					<view class="con-li">
-						<text class="addFont">+ 添加新的账户</text>
-					</view>
-				</view>
-			</view>
-		</uni-popup>
+		<chooseZh :info="info.type_array" ref="zhanghu" tixian="true" @getName="getName"></chooseZh>
 		<!-- 输入支付密码弹窗 -->
-		<myCode ref="password"></myCode>
+		<myCode ref="password" isTixian="true" :money="money"></myCode>
 	</view>
 </template>
 
@@ -91,6 +69,7 @@
 	import uniPopup from "@/components/uni-popup/uni-popup.vue"
 	import tools from '../../static/js/tools.js'
 	import myCode from '@/components/password/password.vue'
+	import chooseZh from '@/components/chooseZhanghu/chooseZhanghu.vue'
 	export default {
 		data() {
 			return {
@@ -98,12 +77,14 @@
 			   money:'',
 			   explain:{},
 			   privacy:{},
-			   detailed:{}
+			   detailed:{},
+			   zhname:'微信账户'
 			};
 		},
 		components: {
 			uniPopup,
-			myCode
+			myCode,
+			chooseZh
 		},
 		mounted(){
 			let _that=this;
@@ -128,6 +109,9 @@
 			})
 		},
 		methods: {
+			getName(name){
+				this.zhname=name;
+			},
 			fuzhi(e){
 				if(parseFloat(e.detail.value)>parseFloat(this.info.money)){
 					this.money=this.info.money;	
@@ -139,10 +123,7 @@
 				uni.navigateBack({});
 			},
 			showSorts() {
-				this.$refs.chooseZH.open();
-			},
-			closeChoose(){
-				this.$refs.chooseZH.close();
+				this.$refs.zhanghu.showZhanghu();
 			},
 			clickAll(){
 				 this.money=this.info.money;	
@@ -150,8 +131,6 @@
 			tixian(){
 				let _that=this;
 				let token=uni.getStorageSync('token');
-			    _that.$refs.password.showCode();
-				return false;
 				if(!_that.money){
 					uni.showToast({
 						title:"请输入提现金额",
@@ -159,22 +138,15 @@
 					})
 					return false;
 				}
-				uni.showToast({
-					icon:'loading'
-				})
-				tools.myRequest('api.member.withdrawal.submit', {
-					token: token,
-					money:_that.money
+				tools.myRequest('api.member.withdrawal.cli', {
+					token: token
 				}, '').then(res => {
 					// console.log(res);
 					uni.hideToast();
 					tools.warnMessage(res.status,res.result.message,function(){
-						uni.showToast({
-							icon:'none',
-							title:res.result.message
-						})
+						  _that.$refs.password.showCode();
 					});
-	
+					
 				}).catch(error => {
 					console.log('请求失败：');
 					console.log(error);
@@ -356,46 +328,5 @@
 		margin-top: 100upx;
 	}
 
-	.zh-con {
-		background-color: #FFFFFF;
-        .close{
-			position: absolute;
-			top: 34upx;
-			right: 34upx;
-			image{
-				width: 40upx;
-				height: 40upx;
-			}
-		}
-		.title {
-			font-size: 32upx;
-			color: #333333;
-			text-align: center;
-			padding: 28upx 0 42upx;
-			border-bottom: 1upx #EEEEEE solid;
-		}
-		.content{
-			.con-li{
-				padding: 44upx 0;
-				margin: 0 40upx;
-				border-bottom: 1upx #EEEEEE solid;
-				image{
-					width: 31upx;
-					height: 31upx;
-					margin-right: 35upx;
-					vertical-align: middle;
-				}
-				text{
-					font-size: 30upx;
-					color: #333333;
-				}
-			}
-		}
-	}
-	.addFont{
-		font-size: 33upx;
-		font-weight: bold;
-		color: #333333;
-		padding-left: 20upx;
-	}
+	
 </style>

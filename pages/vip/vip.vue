@@ -18,16 +18,16 @@
 					</view>
 				</view>
 				<view class="noc-con">
-					<view class="con-box">
-						<image src="../../static/images/vip-icon01.png" mode="widthFix"></image>
+					<view class="con-box" v-for="(item,index) in vipQy.list" :key="index">
+						<image :src="item.icon" mode="widthFix"></image>
 						<view class="title">
-							自购省100%
+							{{item.navname}}
 						</view>
 						<view class="des">
-							等级越高 省的越多
+							{{item.f_title}}
 						</view>
 					</view>
-					<view class="con-box">
+			<!-- 		<view class="con-box">
 						<image src="../../static/images/vip-icon02.png" mode="widthFix"></image>
 						<view class="title">
 							佣金提成
@@ -72,15 +72,15 @@
 							专属标志 尊贵的你
 						</view>
 					</view>
-
+ -->
 				</view>
 			</view>
 			<view class="nh"></view>
 			<view class="noo-fixed">
 				<view class="fflex">
-					<view class="btn">
+					<view class="btn" @click="openVip">
 						<text class="f1">￥</text>
-						<text class="f2">98</text>
+						<text class="f2">{{marketprice}}</text>
 						<text class="f3">立即开通</text>
 					</view>
 				</view>
@@ -213,17 +213,25 @@
 				</view>
 			</view>
 		</view>
+		<!-- 选择支付账户弹窗 -->
+		<chooseZh :info="info" ref="zhanghu"></chooseZh>
 	</view>
 </template>
 
 <script>
 	import tools from '../../static/js/tools.js'
+	import chooseZh from '@/components/chooseZhanghu/chooseZhanghu.vue'
 	export default {
 		data() {
 			return {
 				isVip: false,
-				vipQy: []
+				vipQy: [],
+				info:[],
+				marketprice:0
 			};
+		},
+		components:{
+			chooseZh
 		},
 		mounted() {
 			let token = uni.getStorageSync('token'); //登录后才会有token
@@ -233,14 +241,55 @@
 			}, 'GET').then(res => {
 				// console.log(res);
 				tools.warnMessage(res.status,res.result.message,function(){
-					_that.isVip = true;
-					_that.vipQy = res.result;
+					if(res.result.status==0){
+						_that.isVip = false;
+					}else{
+						_that.isVip = true;
+					}
+						_that.vipQy = res.result;
+						_that.marketprice=res.result.goods.marketprice;
 				});
 			
 			}).catch(error => {
 				console.log('请求失败：');
 				console.log(error);
 			})
+			uni.removeStorageSync('orderid');
+			uni.removeStorageSync('ordersn');
+		},
+		methods:{
+			openVip(){
+				let token = uni.getStorageSync('token'); //登录后才会有token
+				let _that=this;
+				tools.myRequest('api.attestation.order.submit', {
+					goodsid:_that.vipQy.goods.id,
+					total:1,
+					token: token,
+					// sign:tools.getAesString(params)
+				}, 'POST').then(res => {
+					// console.log(res);
+					tools.warnMessage(res.status,res.result.message,function(){
+						_that.info=[];
+						let newInfo=_that.info;
+						if(res.result.credit){
+							newInfo.push({title:'余额'});
+						}
+						if(res.result.wechat){
+							newInfo.push({title:'微信'});
+						}
+						if(res.result.alipay){
+							newInfo.push({title:'支付宝'});
+						}
+							_that.$refs.zhanghu.showZhanghu();
+							uni.setStorageSync('orderid',res.result.order.id)
+							uni.setStorageSync('ordersn',res.result.order.ordersn)
+					});
+				
+				}).catch(error => {
+					console.log('请求失败：');
+					console.log(error);
+				})
+			}
 		}
 	}
 </script>

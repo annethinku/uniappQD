@@ -212,8 +212,11 @@
 		},
 		onLoad() {
 			// 暂时将token设置为缓存
-			let token = 'a6a95673-351a-aa7b-67bc-fc0b38a81f54';
+			// let token = 'a6a95673-351a-aa7b-67bc-fc0b38a81f54';
 			// let token = '85d5101b-db7c-974e-b2b8-b61884c17286';
+			// let token='f061b504-cf6e-421e-fccc-f5c58ec1926c130123166181217';//（没有余额）
+			let token='703aa66c-f377-d49e-ab5a-7cab355f2e7c177251822091215';//（有余额）
+			// let token='';
 			uni.setStorageSync('token',token);
 		},
 		onShow() {

@@ -4,7 +4,7 @@
 			<view class="dpt1_left" @click="returnPage"></view>
 			<view class="dpt1_right">
 				<view class="collect active"></view>
-				<view class="share" @click="showSh"></view>
+				<!-- <view class="share" @click="showSh"></view> -->
 				<view class="more" @click="showMore">
 					<view class="dian"></view>
 				</view>
