@@ -25,7 +25,8 @@
 					     <text>阿斯顿餐厅代金卷</text>
 					</view>
 					<view class="ctopright">
-						<text class="">待付款</text>
+						<!-- <text class="">待付款</text> -->
+						<text class="red">退款中</text>
 					</view>
 				</view>
 			    <view class="con_bot">
@@ -43,8 +44,11 @@
 							<view class="font">
 								总价：￥88
 							</view>
+						</view>
+						<view class="btnflex">
 							<view class="btn difw">
-								删除
+								<!-- 再来一单  查看卷码  去点评 -->
+								删除 
 							</view>
 							<view class="btn">
 								<navigator url="../orderDetail/orderDetail" hover-class="none">去付款</navigator>
@@ -154,6 +158,9 @@
 					display: flex;
 					justify-content: space-between;
 					margin-top: 18upx;
+				}
+				.btnflex{
+					display: flex;
 					.btn{
 						width:160upx;
 						height:50upx;

@@ -2,7 +2,7 @@
 	<view>
 		<view class="orange">
 			<view class="ts_font">
-				订单还未付款噢~
+				{{isPay?'订单待使用':'订单还未付款噢~'}}
 			</view>
 			<view class="orange_gan"></view>
 			<view class="big_white">
@@ -27,7 +27,8 @@
 							<image src="../../static/images/detail_rightJ.png" mode=""></image>
 						</view>
 					</view>
-					<view class="bgwo-bot">
+					<!-- 订单未付款显示 -->
+					<view class="bgwo-bot" v-show="!isPay">
 						<view class="bgwobli">
 							<view class="lilabel">
 								有效期：
@@ -51,6 +52,40 @@
 							<view class="lifont">
 								仅适用于菜品
 							</view>
+						</view>
+					</view>
+				</view>
+				<!-- 订单付款显示 -->
+				<view class="bgw_two" v-show="isPay">
+					<view class="bgwt-li">
+						<view class="name">
+							代金券
+							<view class="desc">
+								8张可以用 2020-2-23 22:00到期
+							</view>
+						</view>
+						<view class="phone">
+							<text>我要退款</text>
+						</view>
+					</view>
+					<view class="juanma">
+						<view class="jum_left" :style="'height: '+(isZk?'':'80upx')+';'">
+							<view class="jum_li" v-for="(item,index) in 6" :key="index">
+								8889 6542 5432
+							</view>
+						</view>
+						<view class="jum_right">
+							<image src="" mode=""></image>
+						</view>
+					</view>
+					<view class="seeAll" @click="toggleAll()">
+						<view v-show="!isZk">
+							查看全部
+							<image src="../../static/images/index-up@2x.png" mode=""></image>
+						</view>
+						<view v-show="isZk">
+							收起
+							<image src="../../static/images/index-down@2x.png" mode=""></image>
 						</view>
 					</view>
 				</view>
@@ -98,7 +133,7 @@
 								下单时间：
 							</view>
 							<view class="lifont">
-								2020-1-9  21:55
+								2020-1-9 21:55
 							</view>
 						</view>
 						<view class="bgwobli">
@@ -109,9 +144,87 @@
 								1
 							</view>
 						</view>
+						<view class="bgwobli">
+							<view class="lilabel">
+								总价：
+							</view>
+							<view class="lifont">
+								￥88.00
+							</view>
+						</view>
+						<view class="bgwobli">
+							<view class="lilabel">
+								实      付：
+							</view>
+							<view class="lifont">
+								￥88.00
+							</view>
+						</view>
 					</view>
+
 				</view>
-	<view class="bgw_two">
+				<!-- 温馨提示 付款后显示 -->
+				<view class="bgw_two" v-show="isPay"  :style="'height: '+(isZk02?'':'250upx')+';overflow:hidden;'">
+					<view class="bgwt-li">
+						<view class="name">
+							温馨提示
+						</view>
+					</view>
+					<view class="bgwo-bot">
+						<view class="bgwobli">
+							<view class="lilabel">
+                                有效期：
+							</view>
+							<view class="lifont">
+								2020-2-4 至 2020-2-23（周末、法定节假日通用）               
+							</view>
+						</view>
+						<view class="bgwobli">
+							<view class="lilabel">
+								使用时间：
+							</view>
+							<view class="lifont">
+								11:00 至 22:00
+							</view>
+						</view>
+						<view class="bgwobli">
+							<view class="lilabel">
+								使用范围：
+							</view>
+							<view class="lifont">
+								 仅适用于菜品
+							</view>
+						</view>
+						<view class="bgwobli" style="padding-bottom: 50upx;">
+							<view class="lilabel">
+								使用规则：
+							</view>
+							<view class="lifont">
+							   无需预约，消费高峰期可能需要排
+							   无需预约，消费高峰期可能需要排
+							   无需预约，消费高峰期可能需要排
+							   无需预约，消费高峰期可能需要排
+							   无需预约，消费高峰期可能需要排
+							   无需预约，消费高峰期可能需要排
+							   无需预约，消费高峰期可能需要排
+							   无需预约，消费高峰期可能需要排
+							   无需预约，消费高峰期可能需要排
+							</view>
+						</view>
+				  </view>
+				</view>
+				<view class="seeAll diffpad" @click="toggleAll02()">
+						<view v-show="!isZk02">
+							查看全部
+							<image src="../../static/images/index-up@2x.png" mode=""></image>
+						</view>
+						<view v-show="isZk02">
+							收起
+							<image src="../../static/images/index-down@2x.png" mode=""></image>
+						</view>
+					</view>
+				
+				<view class="bgw_two" v-show="!isPay">
 					<view class="bgwt-li">
 						<view class="name">
 							商品金额
@@ -133,24 +246,76 @@
 					</view>
 				</view>
 			</view>
-			 <view style="height: 200upx;"></view>
+			<view style="height: 200upx;"></view>
 		</view>
-		<view class="pay-btn">
+		<view class="pay-btn" v-show="!isPay">
 			<navigator url="../pay1/pay1" hover-class="none">
 				<view class="self-btn">
 					去支付
 				</view>
 			</navigator>
 		</view>
+		<view class="pay-btn" v-show="isPay">
+			<view class="fukuan-btn">
+				<view class="fk-common orange" @click="showEwm">
+					扫码使用
+				</view>
+				<view class="fk-common">
+					再来一单
+				</view>
+			</view>
+		</view>
+		<!-- 二维码弹窗 -->
+		<uni-popup ref="useful" type="center">
+			<view class="ewm-white">
+				<view class="use-top">
+					<view class="title">
+						向商家扫码即可消费
+					</view>
+					<image src="../../static/images/art-close.png" mode="" class="close" @click="hideUse"></image>
+				</view>
+				<view class="use-bot">
+					<image src="" mode=""></image>
+				</view>
+			</view>
+		</uni-popup>
 	</view>
 </template>
 
 <script>
+	import uniPopup from "@/components/uni-popup/uni-popup.vue"
 	export default {
 		data() {
 			return {
-
+				isPay: true,
+				isZk: false,
+				isZk02:false
 			};
+		},
+		components:{
+			uniPopup
+		},
+		methods: {
+			toggleAll() {
+				if (this.isZk) {
+					this.isZk = false;
+				} else {
+					this.isZk = true;
+				}
+			},
+			toggleAll02() {
+				if (this.isZk02) {
+					this.isZk02 = false;
+				} else {
+					this.isZk02 = true;
+				}
+			},
+			showEwm(){
+				this.$refs.useful.open();
+			},
+			hideUse(){
+				this.$refs.useful.close();
+			}
 		}
 	}
 </script>
@@ -159,7 +324,7 @@
 	page {
 		background-color: #F8F9F7;
 	}
-
+ 
 	.orange {
 		width: 100%;
 		height: 409upx;
@@ -247,11 +412,13 @@
 
 					.lilabel {
 						width: 120upx;
-						text-align: right;
+						text-align: justify;
+						text-align-last: justify;
 						color: #A4A4A4;
 					}
 
 					.lifont {
+						width: 75%;
 						color: #333333;
 						margin-left: 10upx;
 					}
@@ -271,7 +438,14 @@
 					.name {
 						font-size: 28upx;
 						color: #333333;
-						font-weight: bold;
+
+						// font-weight: bold;
+						.desc {
+							font-size: 24upx;
+							color: #A4A4A4;
+							font-weight: normal;
+							margin-top: 20upx;
+						}
 					}
 
 					.phone {
@@ -291,12 +465,14 @@
 							vertical-align: middle;
 						}
 					}
-					.fonts{
+
+					.fonts {
 						font-size: 22upx;
 						color: #333333;
 					}
 				}
-				.totalPrice{
+
+				.totalPrice {
 					font-size: 30upx;
 					color: #646364;
 					font-weight: bold;
@@ -304,9 +480,56 @@
 					text-align: right;
 				}
 			}
+
+			.juanma {
+				display: flex;
+				margin-top: 40upx;
+
+				.jum_left {
+					overflow: hidden;
+					font-size: 30upx;
+					color: #333333;
+					line-height: 27upx;
+
+					.jum_li {
+						margin-bottom: 17upx;
+					}
+				}
+
+				.jum_right {
+					width: 80upx;
+					height: 80upx;
+					background-color: #EEEEEE;
+					margin-left: auto;
+
+					image {
+						width: 100%;
+						height: 100%;
+					}
+				}
+			}
+
+			.seeAll {
+				text-align: center;
+				font-size: 28upx;
+				color: #333333;
+				margin-top: 45upx;
+
+				image {
+					width: 20upx;
+					height: 12upx;
+					margin-left: 15upx;
+					position: relative;
+					top: -4upx;
+				}
+				&.diffpad{
+					padding: 20upx 0;
+				}
+			}
 		}
 	}
-	.pay-btn{
+
+	.pay-btn {
 		width: 100%;
 		position: fixed;
 		bottom: 0;
@@ -314,15 +537,68 @@
 		background-color: #FFFFFF;
 		padding: 23upx 36upx;
 		box-sizing: border-box;
-		.self-btn{
+
+		.self-btn {
 			width: 100%;
-			height:84upx;
-			background:linear-gradient(90deg,rgba(252,136,64,1),rgba(255,103,51,1));
-			border-radius:42upx;
+			height: 84upx;
+			background: linear-gradient(90deg, rgba(252, 136, 64, 1), rgba(255, 103, 51, 1));
+			border-radius: 42upx;
 			line-height: 84upx;
 			font-weight: bold;
 			color: #FFFFFF;
 			text-align: center;
+		}
+		.fukuan-btn{
+			display: flex;
+			flex-direction: row-reverse;
+			.fk-common{
+				width:208upx;
+				height:80upx;
+				line-height: 80upx;
+				background:rgba(238,238,238,1);
+				border-radius:12upx;
+				color: #333;
+				font-size: 32upx;
+				text-align: center;
+				&.orange{
+					margin-left: 42upx;
+					color: #FFFFFF;
+					font-size: 32upx;
+					background:linear-gradient(90deg,rgba(252,136,64,1),rgba(255,103,51,1));				
+				}
+			}
+		}
+	}
+	.ewm-white{
+		width:674upx;
+		height:658upx;
+		background:rgba(255,255,255,1);
+		box-shadow:0 1ipx 24upx 0 rgba(136,136,136,0.2);
+		border-radius:40upx;
+		.use-top{
+			position: relative;
+			border-bottom: 1upx #C4C4C4 dashed;
+			color: #333333;
+			font-size: 30upx;
+			text-align: center;
+			padding: 42upx 0;
+			image{
+				width: 40upx;
+				height: 40upx;
+				position: absolute;
+				right: 42upx;
+				top: 42upx;
+			}
+		}
+		.use-bot{
+			width: 394upx;
+			height: 394upx;
+			margin: 66upx auto 0;
+			background-color: #eee;
+			image{
+				width: 100%;
+				height: 100%;
+			}
 		}
 	}
 </style>

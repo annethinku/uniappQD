@@ -308,4 +308,16 @@
 		text-align: center;
 	}
    }
+   .contentPass{
+   	display: flex;
+   	align-items: center;
+   	justify-content: space-between;
+	flex: 1;
+	margin: 0 40upx;
+	font-weight: normal;
+		input {
+			width: 80%;
+		}
+   }
+   
 </style>

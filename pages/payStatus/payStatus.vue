@@ -7,52 +7,44 @@
 			</view>
 			<view class="orange_gan"></view>
 			<view class="big_white">
+				<view class="dname">
+					阿斯顿餐厅代金卷
+				</view>
 				<view class="order-price">
 					￥ <text>79.00</text>
 				</view>
-				<view class="bgw_two">
-					<view class="bgwo-bot">
-						<view class="bgwobli">
-							<view class="lilabel">
-								订单编号：
-							</view>
-							<view class="lifont">
-								HG 8156542
-							</view>
-						</view>
-						<view class="bgwobli">
-							<view class="lilabel">
-								下单手机：
-							</view>
-							<view class="lifont">
-								155 **** 9665
+			    <view class="n-update">
+			    	<view class="nup_left">
+			    		<view class="name">
+			    			卷码：
+			    		</view>
+						<view class="numbers">
+							<view class="nli" v-for="(item,index) in 6" :key="index">
+								8889  6542  5432
 							</view>
 						</view>
-						<view class="bgwobli">
-							<view class="lilabel">
-								下单时间：
-							</view>
-							<view class="lifont">
-								2020-1-9 21:55
-							</view>
+			    	</view>
+					<view class="nup_right">
+						<view class="name">
+							发给朋友
 						</view>
-						<view class="bgwobli">
-							<view class="lilabel">
-								商品数量：
-							</view>
-							<view class="lifont">
-								1
-							</view>
+						<view class="ewmcode">
+							<image src="" mode=""></image>
 						</view>
 					</view>
-				</view>
-
+			    </view>
 			</view>
 			<navigator url="../orderDetail/orderDetail" hover-class="none">
 				<view class="ddxq-btn mt">
 					订单详情
 				</view>
 			</navigator>
+			<view class="ad">
+				<image src="../../static/images/pays-ad.png" mode="widthFix"></image>
+				<view class="zz_phone">
+					招商热线：155-5555-5555
+				</view>
+			</view>
 		</view>
         <!-- 支付失败显示 -->
 		<view class="orange" v-show="!status">
@@ -118,47 +110,63 @@
 			background-color: #FFFFFF;
 			margin: -10upx 30upx 0;
 			padding-bottom: 56upx;
-
-			.bgwo-bot {
-				margin-top: 44upx;
-
-				.bgwobli {
-					display: flex;
-					margin-bottom: 40upx;
-					font-size: 24upx;
-
-					.lilabel {
-						width: 120upx;
-						text-align: right;
-						color: #A4A4A4;
-					}
-
-					.lifont {
-						color: #333333;
-						margin-left: 10upx;
-					}
-				}
+            .dname{
+				font-size: 26upx;
+				color: #333333;
+				padding: 29upx 0;
+				text-align: center;
 			}
 
 			.order-price {
 				text-align: center;
 				font-size: 36upx;
 				color: #333333;
-				padding: 80upx 0 66upx;
+				padding:0 0 66upx;
 
 				text {
 					font-size: 72upx;
 					font-weight: bold;
 				}
 			}
-
-			.bgw_two {
-				margin: 0 12upx;
-				border-top: 1upx #C4C4C4 dashed;
-				padding: 38upx 33upx 0;
-
-			}
-
+           .n-update{
+			   border-top: 1upx #BBBBBB dashed;
+			   margin: 0 13upx;
+			   padding: 26upx 26upx 0;
+			   display: flex;
+			   .nup_left{
+				   .name{
+					   font-size: 26upx;
+					   color: #333333;
+					   margin-bottom: 40upx;
+				   }
+				   .numbers{
+					   font-size: 30upx;
+					   color: #333333;
+					   font-weight: bold;
+					   .nli{
+						   margin-bottom: 29upx;
+					   }
+				   }
+			   }
+			   .nup_right{
+				   text-align: right;
+				   margin-left: auto;
+				   .name{
+					   color: #FF8048;
+					   font-size: 26upx;
+					   margin-bottom: 24upx;
+				   }
+				   .ewmcode{
+					   width: 290upx;
+					   height: 290upx;
+					   background-color: #EEEEEE;
+					   image{
+						   width: 100%;
+						   height: 100%;
+					   }
+				   }
+			   }
+		   }
 		}
 	}
 
@@ -191,6 +199,28 @@
 			font-size: 22upx;
 			color: #FFFFFF;
 			margin-top: 15px;
+		}
+	}
+	.ad{
+		width: 100%;
+		margin-top: 100upx;
+		position: relative;
+		image{
+			width: 100%;
+		}
+		.zz_phone{
+			font-size: 22upx;
+			color: #F6B40B;
+			width:343upx;
+			height:30upx;
+			background:#FFFFFF;
+			border-radius:15upx;
+			text-align: center;
+			line-height: 30upx;
+		    position: absolute;
+			bottom: 22upx;
+			left: 50%;
+			margin-left: -171upx;
 		}
 	}
 </style>

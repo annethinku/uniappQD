@@ -38,7 +38,7 @@
 		}, {
 			"path": "pages/bbs/bbs",
 			"style": {
-				"navigationBarTitleText": "社区"
+				"navigationStyle": "custom"
 			}
 		}, {
 			"path": "pages/articleDetail/articleDetail",
@@ -172,12 +172,6 @@
 			}
         }
         ,{
-            "path" : "pages/setCode/setCode",
-            "style" : {
-				"navigationBarTitleText": ""
-			}
-        }
-        ,{
             "path" : "pages/loginCode/loginCode",
             "style" : {
 				"navigationBarTitleText": ""
@@ -219,6 +213,24 @@
 				"navigationBarTitleText": ""
 			}
         }
+        ,{
+            "path" : "pages/yaoqing/yaoqing",
+            "style" : {
+				"navigationStyle": "custom"
+			}
+        }
+        ,{
+            "path" : "pages/sqTuiKuan/sqTuiKuan",
+            "style" : {
+				"navigationBarTitleText": "申请退款"
+			}
+        }
+        ,{
+            "path" : "pages/tuikDetail/tuikDetail",
+            "style" : {
+				"navigationBarTitleText": "退款详情"
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -226,4 +238,5 @@
 		"navigationBarBackgroundColor": "#FFFFFF",
 		"backgroundColor": "#FFFFFF"
 	}
+	
 }

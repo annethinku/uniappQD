@@ -3,7 +3,7 @@
 		<view class="login_title">
 			请输入验证码
 			<view class="desc">
-				短信验证码已发送至155****6656
+				短信验证码已发送至{{phone | filterPhone}}
 			</view>
 		</view>
 		<view class="yzm_kua">
@@ -13,59 +13,98 @@
 			</view>
 		</view>
 		<view class="gray_tis">
-			59s后<text class="ml">重新发送</text>
+			{{seconds}}s后<text class="ml">重新发送</text>
 		</view>
 
 	</view>
 </template>
 
 <script>
+	import tools from '../../static/js/tools.js'
 	export default {
 		data() {
 			return {
 				curindex:0,
 				passArr:'',
-				karr:[null,null,null,null,null,null],
+				karr:[],
+				seconds:60,
+				type:1
 			};
+		},
+		filters:{
+			filterPhone(val){
+				let phone=val.replace(val.substring(3,7), "****");
+				return phone;
+			}
+		},
+		onLoad(options) {
+			this.karr.length=5;
+			if(options.phone){
+				// tools.getDAesString(options.phone,'phoneabc',11);
+				this.phone=options.phone;
+			}
+			if(options.type){
+				this.type=options.type;
+			}
+			this.timeDjs();
 		},
 		methods: {
 			fuzhiC(e,i){
 				this.curindex=i;
 				this.karr[i]=e.detail.value;
 				// 密码输入完成
-				if(i==5 && e.detail.value){
+				if(i==4 && e.detail.value){
 					this.enterT();
 				}
 			},
 			enterT(){
 				let _that=this;
-				let token = uni.getStorageSync('token');
-				// id(订单id),ordersn(订单编号),token(uuid),type(credit)，pwd（操作密码）
-				console.log(_that.karr.join(''));
-				// tools.myRequest('api.attestation.order.complete', {
-				// 	id:uni.getStorageSync('orderid'),
-				// 	ordersn:uni.getStorageSync('ordersn'),
-				// 	token: token,
-				// 	type:'credit',
-				// 	pwd:_that.karr.join('')
-				// 	// sign:tools.getAesString(params)
-				// }, 'POST').then(res => {
-				// 	// console.log(res);
-				// 	tools.warnMessage(res.status,res.result.message,function(){
-				// 	    if(res.result.result){
-				// 			uni.reLaunch({
-				// 				url:'../../pages/vip/vip'
-				// 			})
-				// 		}
-				// 	});
+				// console.log(_that.karr.join(''));
+				if(_that.karr.length<5){
+					uni.showToast({
+						title:'请输入完整的验证码',
+						icon:'none'
+					})
+					return false;
+				}
+				// tools.getAesString(_that.phone,'phoneabc',11)+'&verifycode='
+				// +tools.getAesString(_that.karr.join(''),'verifyco',8)
+				// type 1注册  2找回支付密码 3找回账号密码
+				if(_that.type==1){
+					tools.myRequest('api.login.index.sms', {
+						mobile:_that.phone,
+						verifycode:_that.karr.join('')
+					}, '').then(res => {
+						// console.log(res);
+						tools.warnMessage(res.status,res.result.message,function(){
+							  uni.navigateTo({
+								url:'../register/register?type=1&phone='+_that.phone
+							  });
+						});
+					
+					}).catch(error => {
+						console.log('请求失败：');
+						console.log(error);
+					})
 				
-				// }).catch(error => {
-				// 	console.log('请求失败：');
-				// 	console.log(error);
-				// })
+				}else{
+					uni.navigateTo({
+						url:'../settingCode/settingCode?type='+_that.type+'&phone='+_that.phone+'&verifycode='+_that.karr.join('')
+					});
+				}
 			},
 			addClass(i){
 				this.curindex=i;
+			},
+			timeDjs(){ 
+				let _that=this;
+				_that.seconds = parseInt(_that.seconds) - 1;  
+				if (_that.seconds == 0) {  
+				    _that.seconds= 60; 
+					uni.navigateBack({});
+				    return;  
+				}  
+				setTimeout(function(){_that.timeDjs()},1000); 
 			}
 		}
 	}

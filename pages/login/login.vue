@@ -8,13 +8,13 @@
 				+86 >
 			</view>
 			<view class="inputs">
-				<input type="text" value=""/>
+				<input type="number" :value="phone" @input="fuzhi"/>
 			</view>
 		</view>
 		<view class="gray_tis">
 			未注册的账户登录验证直接注册
 		</view>
-		<view class="orange-btn">
+		<view class="orange-btn" @click="nextSub">
 			下一步
 		</view>
 		<view class="other-contorl">
@@ -69,21 +69,75 @@
 
 <script>
 	import uniPopup from "@/components/uni-popup/uni-popup.vue"
+	import tools from '../../static/js/tools.js'
 	export default {
 		data() {
 			return {
-				
+				phone:''
 			};
 		},
 		components:{
 			uniPopup
 		},
 		mounted(){
-			this.$refs.login.open();
+	
+			// this.$refs.login.open();
+			let params={token:uni.getStorageSync('token')};
+			// uni.request({
+			// 	url:'https://verify5.market.alicloudapi.com/api/v1/mobile/info?appkey=203784822',
+			// 	header:{
+			// 		"Content-Type": "application/json; charset=UTF-8",
+			// 		//请求体类型。
+			// 		"Accept": "application/json", 
+			// 		//请求响应体类型，部分 API 可以根据指定的响应类型来返回对应数据格式，建议手动指定此请求头，如果不设置，部分 HTTP 客户端会设置默认值 */*，导致签名错误。
+			// 		"X-Ca-Version": 1,  
+			// 		// API 版本号，目前所有 API 仅支持版本号『1』，可以不设置此请求头，默认版本号为『1』。
+			// 		"X-Ca-Signature-Headers": "X-Ca-Request-Mode,X-Ca-Version,X-Ca-Stage,X-Ca-Key,X-Ca-Timestamp", 
+			// 		//参与签名的自定义请求头，服务端将根据此配置读取请求头进行签名，此处设置不包含 Content-Type、Accept、Content-MD5、Date 请求头，这些请求头已经包含在了基础的签名结构中，详情参照请求签名说明文档。
+			// 		"X-Ca-Stage": "RELEASE", //默认RELEASE
+			// 		"X-Ca-Key": 203784822,  
+			// 		//请求的 阿里云AppKey，通过云市场等渠道购买的 API 默认已经给 APP 授过权，阿里云所有云产品共用一套 AppKey 体系，删除 ApppKey 请谨慎，避免影响到其他已经开通服务的云产品。
+			// 		"X-Ca-Timestamp": 1471864864235,
+			// 		//请求的时间戳，值为当前时间的毫秒数，也就是从1970年1月1日起至今的时间转换为毫秒，时间戳有效时间为15分钟。
+			// 		"X-Ca-Nonce":"b931bc77-645a-4299-b24b-f3669be577ac",  
+			// 		//请求唯一标识，15分钟内 AppKey+API+Nonce 不能重复，与时间戳结合使用才能起到防重放作用。
+			// 		"X-Ca-Signature": "FJleSrCYPGCU7dMlLTG+UD3Bc5Elh3TV3CWHtSKh1Ys= "
+			// 		//请求签名,使用方参照签名机制生成。
+			// 	},
+			// 	data:params,
+			// 	method:'POST',
+			// 	success(res){
+			// 		console.log(res);
+			// 	}
+			// })
 		},
 		methods:{
 			hideYJlogin(){
 				this.$refs.login.close();
+			},
+			fuzhi(e){
+				this.phone=e.detail.value;
+			},
+			nextSub(){
+				let _that = this;
+				if(!_that.phone){
+					uni.showToast({
+						title:'请输入您的手机号',
+						icon:'none'
+					})
+					return false;
+				}
+				 if(!(/^1[3456789]\d{9}$/.test(_that.phone))){ 
+					 uni.showToast({
+					 	title:'手机号码有误，请重填',
+					 	icon:'none'     
+					 })
+						return false; 
+				} 
+				uni.navigateTo({
+					url:'../register/register?type=2&phone='+_that.phone
+				})
+				
 			}
 		}
 	}

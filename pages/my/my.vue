@@ -1,16 +1,22 @@
 <template>
 	<view>
-		<view class="my-user">
-			<view class="my-set">
-				<view class="setBox">
-					<view class="seticon"></view>
-					<navigator url="../messages/messages" hover-class="none">
-						<view class="messicon">
-							<view class="dian"></view>
-						</view>
-					</navigator>
+		<uni-nav-bar :status-bar="true" :fixed="true">
+			<view></view>
+			<view slot="left"></view>
+			<view slot="right">
+				<view class="my-set">
+					<view class="setBox">
+						<view class="seticon"></view>
+						<navigator url="../messages/messages" hover-class="none">
+							<view class="messicon">
+								<view class="dian"></view>
+							</view>
+						</navigator>
+					</view>
 				</view>
 			</view>
+		</uni-nav-bar>
+		<view class="my-user">
 			<view class="userimg">
 				<image src="../../static/images/default.png" mode="" class="u"></image>
 				<image src="../../static/images/my-vip.png" mode="" class="v" v-show="isSh"></image>
@@ -138,7 +144,7 @@
 			</view>
 			<view class="others">
 				<view class="box">
-					<navigator url="">
+					<navigator url="" hover-class="none">
 						<image src="../../static/images/my-otherYQ.png" mode="aspectFit"></image>
 						<view class="name">
 							邀请有礼
@@ -169,7 +175,7 @@
 						</view>
 					</navigator>
 				</view>
-			<!-- 	<view class="box" v-show="!isSh">
+				<!-- 	<view class="box" v-show="!isSh">
 					<navigator url="">
 						<image src="../../static/images/my-other04.png" mode="aspectFit"></image>
 						<view class="name">
@@ -234,6 +240,7 @@
 
 <script>
 	import tabbar from '../../components/tabbar/tabbar.vue'
+	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	export default {
 		data() {
 			return {
@@ -241,7 +248,8 @@
 			};
 		},
 		components: {
-			'my-tab': tabbar
+			'my-tab': tabbar,
+			uniNavBar
 		},
 	}
 </script>
@@ -259,45 +267,46 @@
 		}
 	}
 
+	.my-set {
+		// position: absolute;
+		// top: -40upx;
+		// right: 31upx;
+       padding-top: 20upx;
+		.setBox {
+			display: flex;
+
+			.seticon {
+				width: 44upx;
+				height: 42upx;
+				@include bg-image('../../static/images/my-setting');
+			}
+
+			.messicon {
+				width: 42upx;
+				height: 43upx;
+				@include bg-image('../../static/images/my-message');
+				margin: 0 32upx;
+				position: relative;
+
+				.dian {
+					width: 16upx;
+					height: 16upx;
+					background-color: #FF0015;
+					border-radius: 50%;
+					position: absolute;
+					right: -8upx;
+					top: -8upx;
+				}
+			}
+		}
+	}
+
 	.my-user {
-		margin: 72upx 0 0 29upx;
+		margin: 0 0 0 29upx;
 		display: flex;
 		align-items: center;
 		position: relative;
 
-		.my-set {
-			position: absolute;
-			top: -40upx;
-			right: 31upx;
-
-			.setBox {
-				display: flex;
-
-				.seticon {
-					width: 44upx;
-					height: 42upx;
-					@include bg-image('../../static/images/my-setting');
-				}
-
-				.messicon {
-					width: 42upx;
-					height: 43upx;
-					@include bg-image('../../static/images/my-message');
-					margin-left: 32upx;
-					position: relative;
-
-					.dian {
-						width: 16upx;
-						height: 16upx;
-						background-color: #FF0015;
-						border-radius: 50%;
-						position: absolute;
-						right: -8upx;
-						top: -8upx;
-					}
-				}
-			}
-		}
 
 		.userimg {
 			width: 101upx;

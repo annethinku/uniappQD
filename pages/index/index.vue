@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view class="yellow-bg">
-			<view class="index-top1">
+		<!-- 	<view class="index-top1">
 				<view class="t1-sao" @click="saoFun"></view>
 				<view class="t1-search">
 					<view class="name">
@@ -19,7 +19,32 @@
 						<view class="dian"></view>
 					</view>
 				</navigator>
-			</view>
+			</view> -->
+			<uni-nav-bar background-color="#ffa739" :shadow="false" style="padding-top: 40upx;" :status-bar="true">
+			    <view>
+					<view class="t1-search">
+						<view class="name">
+							<navigator url="../caddress/caddress" hover-class="none">{{curP}}</navigator>
+						</view>
+						<navigator url="../caddress/caddress" hover-class="none"><view class="jt"></view></navigator>
+						<view class="line"></view>
+						<view class="search"></view>
+						<view class="search-input">
+							<input type="text" value="" placeholder="请输入你想搜索的内容" placeholder-class="input-holder" />
+						</view>
+					</view>
+				</view>
+			    <view slot="left">
+					<view class="t1-sao" @click="saoFun"></view>
+				</view>
+			    <view slot="right">
+					<navigator url="../messages/messages" hover-class="none">
+						<view class="t1-mes">
+							<view class="dian"></view>
+						</view>
+					</navigator>
+				</view>
+			</uni-nav-bar>
 			<view class="index-top2">
 				<swiper :indicator-dots="true" :autoplay="false" :interval="3000" :duration="1000" indicator-color="rgba(254, 129, 76, 0.4)"
 				 indicator-active-color="#FE814C">
@@ -97,6 +122,7 @@
 <script>
 	import tabbar from '../../components/tabbar/tabbar.vue'
 	import tools from '../../static/js/tools.js'
+	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	export default {
 		data() {
 			return {
@@ -208,16 +234,17 @@
 			}
 		},
 		components: {
-			'my-tab': tabbar
+			'my-tab': tabbar,
+			 uniNavBar
 		},
 		onLoad() {
 			// 暂时将token设置为缓存
 			// let token = 'a6a95673-351a-aa7b-67bc-fc0b38a81f54';
 			// let token = '85d5101b-db7c-974e-b2b8-b61884c17286';
 			// let token='f061b504-cf6e-421e-fccc-f5c58ec1926c130123166181217';//（没有余额）
-			let token='703aa66c-f377-d49e-ab5a-7cab355f2e7c177251822091215';//（有余额）
+			// let token='703aa66c-f377-d49e-ab5a-7cab355f2e7c177251822091215';//（有余额）
 			// let token='';
-			uni.setStorageSync('token',token);
+			// uni.setStorageSync('token',token);
 		},
 		onShow() {
 			let curp=uni.getStorageSync('curPos');
@@ -298,7 +325,6 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-
 		.name {
 			font-size: 26upx;
 			color: #333333;
@@ -352,12 +378,10 @@
 	}
 
 	.index-top2 {
-		margin: 0 23upx;
+		margin: 40upx 23upx 0;
 		background-color: #FFFFFF;
 		border-radius: 50upx;
 		padding: 30upx 0 0;
-		margin-top: 51upx;
-
 		swiper {
 			// padding-bottom: 22upx;
 			height: 360upx;
@@ -435,12 +459,10 @@
 	uni-swiper .uni-swiper-dots-horizontal {
 		bottom: 0 !important;
 	}
-    .t3-navs{
-		background-color: #fff;
-		position: fixed;
-		top: 0;
-		left: 0;
-		z-index: 99;
+   
+	.index-top3{
+		width: 100%;
+		overflow: hidden;
 	}
 	.scroll-view_H {
 		padding: 0 0 0 34upx;
@@ -481,6 +503,14 @@
 		.active {
 			font-weight: bold;
 			color: #333333;
+		}
+		&.t3-navs{
+			background-color: #fff;
+			position: fixed;
+			top: 0;
+			left: 0;
+			z-index: 999;
+			padding: 40upx 0 0 34upx;
 		}
 	}
 

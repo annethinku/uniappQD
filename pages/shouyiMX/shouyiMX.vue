@@ -82,69 +82,31 @@
 				<view class="ct_left">
 					收益详细
 				</view>
-				<view class="ct_right">
+			<!-- 	<view class="ct_right">
 					<text>全部</text>
 					<image src="../../static/images/bbs_jian2@2x.png" mode=""></image>
-				</view>
+				</view> -->
 			</view>
 			<view class="shouy_detail">
-				<view class="sylis">
-					<view class="syl_left red"></view>
-					<view class="syl_center">
-						<view class="name">
-							推广的会员
+				<navigator url="../yaoqing/yaoqing" hover-class="none" v-for="(item,index) in arrs" :key="index">
+					<view class="sylis">
+						<view class="syl_left">
+							<image :src="'../../static/images/mx_icon0'+(index+1)+'.png'" mode=""></image>
 						</view>
-						<view class="desc">
-							2020-01-10
+						<view class="syl_center">
+							<view class="name">
+								{{item.name}}
+							</view>
+							<view class="desc">
+								+20.00
+							</view>
 						</view>
-					</view>
-					<view class="syl_right">
-						+20.00
-					</view>
-				</view>
-				<view class="sylis">
-					<view class="syl_left yellow"></view>
-					<view class="syl_center">
-						<view class="name">
-							推广的商家
-						</view>
-						<view class="desc">
-							2020-01-10
+						<view class="syl_right">
+							<image src="../../static/images/my-jiant.png" mode=""></image>
 						</view>
 					</view>
-					<view class="syl_right">
-						+100.00
-					</view>
-				</view>
-				<view class="sylis">
-					<view class="syl_left blue"></view>
-					<view class="syl_center">
-						<view class="name">
-							商家订单
-						</view>
-						<view class="desc">
-							2020-01-10
-						</view>
-					</view>
-					<view class="syl_right">
-						+0.8
-					</view>
-				</view>
-				<view class="sylis">
-					<view class="syl_left green"></view>
-					<view class="syl_center">
-						<view class="name">
-							会员订单
-						</view>
-						<view class="desc">
-							2020-01-10
-						</view>
-					</view>
-					<view class="syl_right">
-						+1.2
-					</view>
-				</view>
-
+								
+				</navigator>
 			</view>
 		</view>
 	</view>
@@ -154,7 +116,7 @@
 	export default {
 		data() {
 			return {
-
+              arrs:[{name:'邀请的用户'},{name:'邀请的会员'},{name:'邀请的商家'},{name:'商家订单'},{name:'会员订单'},{name:'用户订单'}]
 			};
 		}
 	}
@@ -316,33 +278,16 @@
 			.sylis {
 				display: flex;
 				align-items: center;
-				margin: 0 22upx 0 36upx;
-				border-bottom: 1upx #EEEEEE solid;
-				padding: 24upx 10upx;
+				margin: 0 22upx 15upx 36upx;
+				background-color: #F9FBFC;
+				padding: 31upx;
 
 				.syl_left {
-					width: 20upx;
-					height: 20upx;
-					border-radius: 50%;
-					flex-shrink: 0;
-					align-self: flex-start;
-					position: relative;
-					top: 8upx;
-
-					&.red {
-						background: rgba(255, 119, 119, 1);
-					}
-
-					&.yellow {
-						background: #EAD436;
-					}
-
-					&.blue {
-						background: #6D8DFD;
-					}
-
-					&.green {
-						background: #8CC23A;
+					width: 50upx;
+					height: 50upx;
+					image{
+						width: 100%;
+						height: 100%;
 					}
 				}
 
@@ -353,20 +298,20 @@
 					.name {
 						font-size: 28upx;
 						color: #3A425C;
-						font-weight: bold;
 					}
 
 					.desc {
-						font-size: 24upx;
-						color: #999999;
-						margin-top: 20upx;
+						font-size: 28upx;
+						color: #333333;
+						margin-top: 14upx;
 					}
 				}
 
 				.syl_right {
-					font-size: 28upx;
-					color: #333333;
-					font-weight: bold;
+					image{
+						width: 10upx;
+						height: 16upx;
+					}
 				}
 			}
 		}

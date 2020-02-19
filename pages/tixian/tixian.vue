@@ -1,14 +1,16 @@
 <template>
 	<view>
+		<uni-nav-bar left-icon="back" right-text="提现记录" background-color="#FD7B5E" color="#fff" :status-bar="true" @clickLeft="returnTop" @clickRight="jumpRecord"></uni-nav-bar>
 		<view class="tx-top">
-			<view class="top-title">
+			<!-- <view class="top-title">
 				<view class="title-left" @click="returnTop"></view>
 				<view class="title-right">
 					<navigator url="../tixianRecords/tixianRecords" hover-class="none">
 						提现记录
 					</navigator>
 				</view>
-			</view>
+			</view> -->
+		
 			<view class="zh-yue">
 				<text>账户余额 (元)</text>
 				<view class="zh-nums">
@@ -70,6 +72,7 @@
 	import tools from '../../static/js/tools.js'
 	import myCode from '@/components/password/password.vue'
 	import chooseZh from '@/components/chooseZhanghu/chooseZhanghu.vue'
+	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	export default {
 		data() {
 			return {
@@ -84,7 +87,8 @@
 		components: {
 			uniPopup,
 			myCode,
-			chooseZh
+			chooseZh,
+			uniNavBar
 		},
 		mounted(){
 			let _that=this;
@@ -151,6 +155,11 @@
 					console.log('请求失败：');
 					console.log(error);
 				})
+			},
+			jumpRecord(){
+				uni.navigateTo({
+					url:'../tixianRecords/tixianRecords'
+				})
 			}
 		}
 	}
@@ -190,7 +199,7 @@
 
 		.zh-yue {
 			width: 300upx;
-			margin: 37upx auto 0;
+			margin: 20upx auto 0;
 			color: #FFFFFF;
 
 			text {

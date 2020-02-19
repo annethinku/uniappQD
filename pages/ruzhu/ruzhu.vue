@@ -1,7 +1,8 @@
 <template>
 	<view>
+		<uni-nav-bar  left-icon="back" @clickLeft="returnTop" :status-bar="true" :fixed="true"></uni-nav-bar>
 		<view class="rz_top1">
-			<image src="../../static/images/bbs_jian@2x.png" mode="widthFix" class="jt" @click="returnTop"></image>
+			<!-- <image src="../../static/images/bbs_jian@2x.png" mode="widthFix" class="jt" @click="returnTop"></image> -->
 			<image src="../../static/images/ruzhu_bigimg.png" mode="widthFix" class="bg"></image>
 		</view>
 		<view class="bigBG">
@@ -214,11 +215,15 @@
 </template>
 
 <script>
+	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	export default {
 		data() {
 			return {
 
 			};
+		},
+		components:{
+			uniNavBar
 		},
 		methods:{
 			returnTop(){

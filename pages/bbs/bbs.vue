@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<uni-nav-bar  title="社区" :status-bar="true"></uni-nav-bar>
 		<view class="bbs-con">
 			<view class="bc-navs" id="the-id">
 				<scroll-view scroll-x="true" class="bc-scroll" :class="top<10&&top?'fixed':''">
@@ -39,6 +40,7 @@
 <script>
 	import tools from '../../static/js/tools.js'
 	import tabbar from '../../components/tabbar/tabbar.vue'
+	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	export default {
 		data() {
 			return {
@@ -50,7 +52,8 @@
 			};
 		},
 		components: {
-			'my-tab': tabbar
+			'my-tab': tabbar,
+			uniNavBar
 		},
 		filters:{
 			timeChange(val){
@@ -112,6 +115,8 @@
 	.bbs-con {
 		margin-top: 21upx;
 		.bc-navs {
+			width: 100%;
+			overflow: hidden;
 			.bc-scroll {
 				background-color: #FFFFFF;
 				border-bottom: 1upx #EEEEEE solid;
@@ -133,7 +138,7 @@
 			}
 			.fixed {
 				position: fixed;
-				top: 88upx;
+				top:0;
 				left: 0;
 				z-index: 111;
 			}

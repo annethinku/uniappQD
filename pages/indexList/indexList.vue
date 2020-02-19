@@ -1,14 +1,16 @@
 <template>
-	<view>
-		<view class="list_search">
-			<view class="ls_jt" @click="returnPage"></view>
-			<view class="ls_groups">
-				<view class="g_icon"></view>
-				<view class="g_input">
-					<input type="text" value="" placeholder="佛跳墙" />
+	<view  @touchstart="start" @touchend="end">
+		<uni-nav-bar :status-bar="true">
+		    <view class="list_search">
+				<view class="ls_jt" @click="returnPage"></view>
+				<view class="ls_groups">
+					<view class="g_icon"></view>
+					<view class="g_input">
+						<input type="text" value="" placeholder="佛跳墙" />
+					</view>
 				</view>
 			</view>
-		</view>
+		</uni-nav-bar>
 		<view class="list_sorts">
 			<view class="sorts_box" v-for="(item,index) in sorts" :key="index">
 				<view class="sb_imgs">
@@ -87,7 +89,7 @@
 		<!-- 筛选条件弹窗 -->
 		<uni-popup ref="popup" type="top" @change="isShowMask">
 			<view class="saixuan">
-				<view class="list_search">
+				<view class="list_search" style="padding: 29upx 33upx 0 22upx;">
 					<view class="ls_jt" @click="returnPage"></view>
 					<view class="ls_groups">
 						<view class="g_icon"></view>
@@ -204,6 +206,7 @@
 	import uniPopup from "@/components/uni-popup/uni-popup.vue"
 	import stars from '../../components/stars/stars.vue'
 	import RangeSlider from '../../components/range-slider/range-slider.vue';
+	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	export default {
 		data() {
 			return {
@@ -275,13 +278,15 @@
 				step: 50,
 				rangeValues3: [0, 300],
 				scrTop:0,
-				divTop:100
+				divTop:100,
+				startData:{clientX:0,clientY:0}
 			};
 		},
 		components: {
 			uniPopup,
 			RangeSlider,
-			'my-star': stars
+			'my-star': stars,
+			uniNavBar
 		},
 		computed:{
 			nfixed(){
@@ -300,6 +305,27 @@
 			this.getDivtop();
 		},
 		methods: {
+			start(e){
+			    this.startData.clientX=e.changedTouches[0].clientX;
+			    this.startData.clientY=e.changedTouches[0].clientY;
+			},
+			end(e){
+			    // console.log(e)
+			    const subX=e.changedTouches[0].clientX-this.startData.clientX;
+			    const subY=e.changedTouches[0].clientY - this.startData.clientY;
+			    if(subY>50 || subY<-50){
+			        console.log('上下滑')
+			    }else{
+			        if(subX>100){
+			            console.log('右滑')
+						uni.navigateBack({});
+			        }else if(subX<-100){
+			            console.log('左滑')
+			        }else{
+			            console.log('无效')
+			        }
+			    }
+			},
 			// 获取导航距离顶部的位置
 			getDivtop(){
 				const query = uni.createSelectorQuery().in(this);
@@ -378,12 +404,13 @@
 	}
 
 	.list_search {
+		width: 100%;
 		background-color: #FFFFFF;
-		padding: 29upx 33upx 0 22upx;
+		// padding: 29upx 33upx 0 22upx;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-
+        box-sizing: border-box;
 		.ls_jt {
 			width: 20upx;
 			height: 35upx;
@@ -392,7 +419,7 @@
 		}
 
 		.ls_groups {
-			width: auto;
+			width: 100%;
 			flex: 1;
 			height: 68upx;
 			border-radius: 34upx;

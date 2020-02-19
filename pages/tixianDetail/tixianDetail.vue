@@ -7,17 +7,17 @@
 					发起提现
 				</view>
 			</view>
-			<view class="steps-box">
+			<view class="steps-box" :class="details.status==1?'active':''">
 				<view class="dian big red"></view>
 				<view class="title active">
-					微信处理中
+					{{details.status==-1?''(details.applytype+'已拒绝'):(details.applytype+'处理中')}}
 				</view>
 				<view class="desc">
 					预计1-24小时内到账
 				</view>
 			</view>
 			<view class="steps-box">
-				<view class="dian"></view>
+				<view class="dian" :class="details.status==1?'red':''"></view>
 				<view class="title">
 					到账成功
 				</view>
@@ -29,7 +29,7 @@
 					提现金额
 				</view>
 				<view class="desc">
-					￥500.00
+					￥{{details.money}}
 				</view>
 			</view>
 			<view class="de-li">
@@ -37,7 +37,7 @@
 					提现账户
 				</view>
 				<view class="desc">
-					微信
+					{{details.applytype}}
 				</view>
 			</view>
 			<view class="de-li">
@@ -45,22 +45,35 @@
 					提现时间
 				</view>
 				<view class="desc">
-					2020-1-17 12：20
+					{{details.createtime | timeChuli}}
 				</view>
 			</view>
 		</view>
-	    <view class="d-btns">
-	    	好的
-	    </view>
+	    <navigator url="../index/index" hover-class="none" open-type="reLaunch">
+			<view class="d-btns">
+				好的
+			</view>
+		</navigator>
 	</view>
 </template>
 
 <script>
+	import tools from '../../static/js/tools.js'
 	export default {
 		data() {
 			return {
-				
+				details:[]
 			};
+		},
+		filters:{
+			timeChuli(val){
+				return tools.timestampToTime(val);
+			}
+		},
+		onLoad(options) {
+			if(options.data){
+				this.details=JSON.parse(options.data);
+			}
 		}
 	}
 </script>

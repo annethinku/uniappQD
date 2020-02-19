@@ -1,10 +1,12 @@
 <template>
 	<view>
+		<uni-nav-bar  title="定位选择" :status-bar="true" :fixed="true" left-icon="back" 
+		background-color="#FFA446" color="#fff" @clickLeft="returnTop"></uni-nav-bar>
 		<view class="address-t1">
-			<view class="t1-one">
+		<!-- 	<view class="t1-one">
 				<text>定位选择</text>
 				<view class="rjian" @click="returnTop"></view>
-			</view>
+			</view> -->
 			<view class="t1-two">
 				<navigator url="../searchCitys/searchCitys" open-type="navigate" hover-class="none">
 					<view class="icon"></view>
@@ -51,6 +53,7 @@
 </template>
 
 <script>
+	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	export default {
 		data() {
 			return {
@@ -59,6 +62,9 @@
 				zmIndex: 0,
 				curPos: '成都'
 			};
+		},
+		components:{
+			uniNavBar
 		},
 		mounted() {
 			// 获取26个字母

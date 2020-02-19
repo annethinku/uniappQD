@@ -39,6 +39,12 @@ const warnMessage=function(status,data,func){
 	}else if(status==1){
 		// 接口请求成功执行
 		func();
+	}else if(status==-5){
+		//未设置支付密码跳转到设置支付密码页面
+		 //type等于2表示设置支付密码 等于1表示设置登录密码
+		uni.navigateTo({
+			url:"/pages/settingCode/settingCode?type=2"
+		})
 	}else{
 		// 提示接口错误信息
 		uni.showToast({

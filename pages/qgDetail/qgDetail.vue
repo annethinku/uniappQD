@@ -1,15 +1,20 @@
 <template>
 	<view>
-		<view class="dp_top1">
-			<view class="dpt1_left" @click="returnPage"></view>
-			<view class="dpt1_right">
-				<view class="collect active"></view>
-				<!-- <view class="share" @click="showSh"></view> -->
-				<view class="more" @click="showMore">
-					<view class="dian"></view>
+		<uni-nav-bar style="position: relative;z-index: 999;" :status-bar="true">
+			<view></view>
+			<view slot="left">
+				<view class="dpt1_left" @click="returnPage"></view>
+			</view>
+			<view slot="right">
+				<view class="dpt1_right">
+					<view class="collect active"></view>
+					<!-- <view class="share" @click="showSh"></view> -->
+					<view class="more" @click="showMore">
+						<view class="dian"></view>
+					</view>
 				</view>
 			</view>
-		</view>
+		</uni-nav-bar>
 		<view class="qg_quan">
 			<view class="quan_left">
 				<view class="name">
@@ -313,6 +318,7 @@
 	import uniPopup from "@/components/uni-popup/uni-popup.vue"
 	import share from '@/components/share/share.vue'
 	import _app from '@/js_sdk/QuShe-SharerPoster/util/QS-SharePoster/app.js';
+	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	import {
 		getSharePoster
 	} from '@/js_sdk/QuShe-SharerPoster/util/QS-SharePoster/QS-SharePoster.js';
@@ -332,7 +338,8 @@
 			'my-star': stars,
 			 mythumb,
 			 uniPopup,
-			 share
+			 share,
+			 uniNavBar
 		},
 		computed:{
 		},
@@ -604,24 +611,25 @@
 		}
 	}
 
-	.dp_top1 {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 23upx 36upx 23upx 25upx;
-		background-color: #FFFFFF;
-        position: relative;
-		z-index: 999;
+	// .dp_top1 {
+	// 	display: flex;
+	// 	justify-content: space-between;
+	// 	align-items: center;
+	// 	padding: 23upx 36upx 23upx 25upx;
+	// 	background-color: #FFFFFF;
+ //        position: relative;
+	// 	z-index: 999;
 		.dpt1_left {
 			width: 19upx;
 			height: 35upx;
 			@include bg-image('../../static/images/bbs_jian');
+			margin-left: 25upx;
 		}
 
 		.dpt1_right {
 			display: flex;
 			align-items: center;
-
+            margin-right: 36upx;
 			.collect {
 				width: 46upx;
 				height: 44upx;
@@ -656,7 +664,7 @@
 				}
 			}
 		}
-	}
+	// }
 
 	.youh_navs{
 		margin: 0 23upx;

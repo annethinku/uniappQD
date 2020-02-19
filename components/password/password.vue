@@ -15,9 +15,11 @@
 						 @confirm="isTixian?enterTixian:enterT"/>
 					</view>
 				</view>
-				<view class="forget_code">
-					忘记密码？
-				</view>
+				<navigator url="../../pages/foundPassword/foundPassword?type=2" hover-class="none">
+					<view class="forget_code">
+						忘记密码？
+					</view>
+				</navigator>
 			</view>
 		</uni-popup>
 	</view>
@@ -97,25 +99,26 @@
 					// console.log(res);
 					uni.hideToast();
 					tools.warnMessage(res.status,res.result.message,function(){
-						if(res.result.row.status==0){
-							uni.showToast({
-								icon:'none',
-								title:'提现审核中'
-							})
-						}else if(res.result.row.status==1){
-							uni.showToast({
-								icon:'none',
-								title:'提现成功'
-							})
-						}else if(res.result.row.status==-1){
-							uni.showToast({
-								icon:'none',
-								title:'已拒绝提现'
-							})
-						}
-				       setTimeout(function(){
-						   uni.navigateBack({});
-					   },1000)
+						uni.navigateTo({
+							url:'../../pages/tixianDetail/tixianDetail?data='+JSON.stringify(res.result.row)
+						})
+						// if(res.result.row.status==0){
+						// 	uni.showToast({
+						// 		icon:'none',
+						// 		title:'提现审核中'
+						// 	})
+						// }else if(res.result.row.status==1){
+						// 	uni.showToast({
+						// 		icon:'none',
+						// 		title:'提现成功'
+						// 	})
+						// }else if(res.result.row.status==-1){
+						// 	uni.showToast({
+						// 		icon:'none',
+						// 		title:'已拒绝提现'
+						// 	})
+						// }
+				     
 					});
 					
 				}).catch(error => {

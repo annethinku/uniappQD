@@ -6,9 +6,11 @@
 		<view class="gray_tis">
 			修改密码成功！
 		</view>
-		<view class="orange-btn">
-			跳转登陆
-		</view>
+		<navigator url="../login/login" hover-class="none">
+			<view class="orange-btn">
+				跳转登陆
+			</view>
+		</navigator>
 	</view>
 </template>
 
