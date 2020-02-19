@@ -15,7 +15,14 @@
 				</view>
 			</view>
 		</uni-nav-bar>
-		<view class="qg_quan">
+		<view class="bc-navs" id="the-id" v-show="isTaocan">
+			<scroll-view scroll-x="true" class="bc-scroll" :class="top<10&&top?'fixed':''">
+				<view class="nav_li" v-for="(item,index) in navList" :key="index" :class="index==curIndex?'active':''" @click="changeNav(index,item.id)">
+					{{item}}
+				</view>
+			</scroll-view>
+		</view>
+		<view class="qg_quan" v-show="!isTaocan">
 			<view class="quan_left">
 				<view class="name">
 					阿斯顿餐厅代金卷
@@ -36,6 +43,49 @@
 				</view>
 			</view>
 		</view>
+		<view class="taocan_show" v-show="isTaocan">
+			<view class="tc_title">
+				阿斯顿 2-3人餐
+			</view>
+			<view class="tc_time">
+				<view class="tct_left">
+					周一至周日 | 免预约
+				</view>
+				<view class="tct_right">
+					月售255
+				</view>
+			</view>
+			<view class="tc_groups">
+				<scroll-view scroll-x="true" class="group-scroll">
+					<view class="group_img" v-for="(item,index) in 6" :key="index">
+						<image src="" mode=""></image>
+					</view>
+				</scroll-view>
+			</view>
+		</view>
+		<!-- 套餐详细 -->
+		<view class="useRules" v-show="isTaocan">
+			<view class="title">
+				套餐详细
+			</view>
+			<view class="desc">
+				<view class="tname">
+					菜品
+				</view>
+				<view class="desc_li" style="margin-left: 40upx;" v-for="(item,index) in 3" :key="index">
+					<view class="">
+						沙拉（一份）
+					</view>
+					<view class="right_price">
+						￥79
+					</view>
+				</view>
+			</view>
+			<view class="moreRules">
+				更多菜品
+				<image src="../../static/images/index-up@2x.png" mode=""></image>
+			</view>
+		</view>
 		<!-- 使用规则 -->
 		<view class="useRules">
 			<view class="title">
@@ -43,21 +93,21 @@
 			</view>
 			<view class="desc">
 				<view class="desc_li">
-					不限张数  随时退  到期自动退  到店吃
+					不限张数 随时退 到期自动退 到店吃
 					<text class="wenhao">?</text>
 				</view>
 				<view class="desc_li">
-					 有效期：2020.1.20 至 2020.1.28 23:59 （周末、法
-					定节假日通用）                    
+					有效期：2020.1.20 至 2020.1.28 23:59 （周末、法
+					定节假日通用）
 				</view>
 				<view class="desc_li">
-					使用时间：09:00 - 22:00                 
+					使用时间：09:00 - 22:00
 				</view>
 				<view class="desc_li">
-					使用范围：仅适用于菜品              
+					使用范围：仅适用于菜品
 				</view>
 				<view class="desc_li">
-					无需预约，消费高峰期可能需要排队    
+					无需预约，消费高峰期可能需要排队
 				</view>
 			</view>
 			<view class="moreRules">
@@ -96,13 +146,13 @@
 			<view class="cant_address">
 				<image src="../../static/images/detail_address2.png" mode="" class="l"></image>
 				<view class="elisOne">
-					距离355米   新都区七一国际广场5楼22号5楼22号大家好过分的可控硅
+					距离355米 新都区七一国际广场5楼22号5楼22号大家好过分的可控硅
 				</view>
 				<image src="../../static/images/bbs_jian2@2x.png" mode="" class="r"></image>
 			</view>
 		</view>
 		<view class="youh_navs">
-		
+
 			<!-- 推荐菜品 -->
 			<view class="tuij_cai" id="caipin">
 				<view class="common_title">
@@ -113,9 +163,9 @@
 						<image src="../../static/images/detail_rightJ.png" mode=""></image>
 					</view>
 				</view>
-			     <view class="cai_content">
-			     	<view class="caic_top">
-			     		<image src="http://inews.gtimg.com/newsapp_ls/0/11148715054_294195/0.jpg" mode=""></image>
+				<view class="cai_content">
+					<view class="caic_top">
+						<image src="http://inews.gtimg.com/newsapp_ls/0/11148715054_294195/0.jpg" mode=""></image>
 						<view class="caict_mask">
 							<view class="name">
 								鹅野母鸡的实惠大拼盘
@@ -124,31 +174,31 @@
 								￥189
 							</view>
 						</view>
-			     	</view>
+					</view>
 					<view class="caic_bot">
 						<view class="cbbox" v-for="(item,index) in 3" :key="index">
 							<view class="cbbox_top">
-									<image src="http://inews.gtimg.com/newsapp_ls/0/11148715054_294195/0.jpg" mode=""></image>
+								<image src="http://inews.gtimg.com/newsapp_ls/0/11148715054_294195/0.jpg" mode=""></image>
 							</view>
 							<view class="name">
 								手工揉面
 							</view>
 						</view>
 					</view>
-			     </view>
-			</view>
-			
-		<!-- 精选点评 -->
-		    <view class="tuij_cai" style="padding-bottom: 1upx;" id="dianping">
-			<view class="common_title">
-				<view class="title_left">
-					精选点评（99）
-				</view>
-				<view class="title_right">
-					<image src="../../static/images/detail_rightJ.png" mode=""></image>
 				</view>
 			</view>
-			<view class="hotc-cont">
+
+			<!-- 精选点评 -->
+			<view class="tuij_cai" style="padding-bottom: 1upx;" id="dianping">
+				<view class="common_title">
+					<view class="title_left">
+						精选点评（99）
+					</view>
+					<view class="title_right">
+						<image src="../../static/images/detail_rightJ.png" mode=""></image>
+					</view>
+				</view>
+				<view class="hotc-cont">
 					<view class="cont_li" v-for="(item,index) in 2" :key="index">
 						<view class="li_left">
 							<image :src="item.avatar?item.avatar:'../../static/images/default.png'" mode=""></image>
@@ -167,129 +217,141 @@
 							<view class="lir_con">
 								说点什么吧说点什么吧说点什么吧说点什
 								说点什么吧说点什么吧说点什么吧说点什
-								说点什么吧          
+								说点什么吧
 							</view>
 							<mythumb myWidth="172"></mythumb>
 						</view>
-			
+
 					</view>
 				</view>
-			
-		  </view>
-		    </view>
-	   <!-- 其他商家-->
-	   <view class="other_sj">
-	   	  <view class="title">
-	   	  	  其他商家
-	   	  </view>
-		  <view class="list_contents">
-		  	<navigator url="../detail/detail" v-for="(item,index) in 2" :key="index">
-		  		<view class="cont_li">
-		  			<view class="cl_left">
-		  				<view class="thumb">
-		  					<image src="" mode=""></image>
-		  				</view>
-		  				<!-- <view class="pinpai"></view> -->
-		  				<!-- <view class="xiuxi">
+
+			</view>
+		</view>
+		<!-- 其他商家-->
+		<view class="other_sj">
+			<view class="title">
+				其他商家
+			</view>
+			<view class="list_contents">
+				<navigator url="../detail/detail" v-for="(item,index) in 2" :key="index">
+					<view class="cont_li">
+						<view class="cl_left">
+							<view class="thumb">
+								<image src="" mode=""></image>
+							</view>
+							<!-- <view class="pinpai"></view> -->
+							<!-- <view class="xiuxi">
 		  					休息中
 		  				</view> -->
-		  			</view>
-		  			<view class="cl_right">
-		  				<view class="clr_title elisOne">
-		  					大小先生小碗菜
-		  				</view>
-		  				<view class="clr_pos">
-		  					<view class="starCompo">
-		  						<my-star score="4.88"></my-star>
-		  					</view>
-		  					<view class="pricePer">
-		  						￥32/人
-		  					</view>
-		  					<view class="pos">
-		  						3.2km
-		  					</view>
-		  				</view>
-		  				<view class="clr_name">
-		  					<view class="name_l">
-		  						新都区 七一国际广场
-		  					</view>
-		  					<!-- <view class="name_xl">
+						</view>
+						<view class="cl_right">
+							<view class="clr_title elisOne">
+								大小先生小碗菜
+							</view>
+							<view class="clr_pos">
+								<view class="starCompo">
+									<my-star score="4.88"></my-star>
+								</view>
+								<view class="pricePer">
+									￥32/人
+								</view>
+								<view class="pos">
+									3.2km
+								</view>
+							</view>
+							<view class="clr_name">
+								<view class="name_l">
+									新都区 七一国际广场
+								</view>
+								<!-- <view class="name_xl">
 		  						月销量1005
 		  					</view> -->
-		  				</view>
-		  				<!-- <view class="clr_paihang">
+							</view>
+							<!-- <view class="clr_paihang">
 		  					<text class="bor">您收藏的餐厅</text>
 		  					<text>新都区中餐销量排行NO.1</text>
 		  				</view> -->
-		  				<view class="clr_quan">
-		  					<image src="../../static/images/il_quan.png" mode=""></image>
-		  					<text class="elisOne">100代金卷79元</text>
-		  				</view>
-		  				<!-- <view class="clr_quan">
+							<view class="clr_quan">
+								<image src="../../static/images/il_quan.png" mode=""></image>
+								<text class="elisOne">100代金卷79元</text>
+							</view>
+							<!-- <view class="clr_quan">
 		  					<image src="../../static/images/il_tuan.png" mode=""></image>
 		  					<text class="elisOne">双人超值套餐79元，四人超值套餐158元</text>
 		  				</view> -->
-		  			</view>
-		  		</view>
-		  	</navigator>
-		  </view>
-	   </view>
-	   <view style="height: 150upx;"> </view>
-	  <!-- 底部支付等按钮 -->
-	  <view class="bottom-btns">
-	  	  <view class="out-flex">
-	  	  	  <view class="l_price">
-	  	  	  	￥79.00
-	  	  	  </view>
-			<!--  <view class="r_btns">
-			  	去支付
-			  </view> -->
-			  <!-- 非第一次购买显示 -->
-			  <view class="r_btns2">
-			  	  <view class="btn-one black" @tap="shareFc()">
-			  	  	  <image src="../../static/images/detail_shareM.png" mode="aspectFit"></image>
-			  	      <text>分享赚￥3.12</text>
-				  </view>
-				  <view class="btn-one">
-				  	  <image src="../../static/images/detail_money.png" mode="aspectFit"></image>
-				      <text>自购省￥2.26</text>
-				  </view>
-			  </view>
-	  	  </view>
-	  </view>
-	   <!-- 商家详情 更多 弹窗 -->
-	   <uni-popup ref="mores" type="top">
-	   	<view class="toushuC">
-	   		<view class="tc-li">
-	   			<navigator url="../jubao/jubao" hover-class="none" >
-	   				<image src="../../static/images/detail_ricon01@2x.png" mode="aspectFit"></image> 商户报错
-	   			</navigator>
-	   		</view>
-	   		<view class="tc-li">
-	   			<navigator url="../jubao/jubao" hover-class="none" >
-	   					<image src="../../static/images/detail_ricon02@2x.png" mode="aspectFit"></image> 投诉
-	   			</navigator>
-	   		</view>
-			<view class="tc-li">
-				<navigator url="../jubao/jubao" hover-class="none" >
+						</view>
+					</view>
+				</navigator>
+			</view>
+		</view>
+		<view style="height: 150upx;"> </view>
+		<!-- 底部支付等按钮 -->
+		<view class="bottom-btns">
+			<view class="out-flex">
+				<view class="l_price">
+					￥79.00
+					<view class="zhekou" v-show="isTaocan">
+						<view class="zk_left">
+							9.8折
+						</view>
+						<view class="zk_right">
+							￥100
+						</view>
+					</view>
+				</view>
+				<block v-if="isFirst">
+					<view class="r_btns">
+						{{isTaocan?'立即抢购':'去支付'}}
+					</view>
+				</block>
+				<block v-else>
+					<!-- 非第一次购买显示 -->
+					<view class="r_btns2">
+						<view class="btn-one black" @tap="shareFc()">
+							<image src="../../static/images/detail_shareM.png" mode="aspectFit"></image>
+							<text>分享赚￥3.12</text>
+						</view>
+						<view class="btn-one">
+							<image src="../../static/images/detail_money.png" mode="aspectFit"></image>
+							<text>自购省￥2.26</text>
+						</view>
+					</view>
+				</block>
+			</view>
+		</view>
+		<!-- 商家详情 更多 弹窗 -->
+		<uni-popup ref="mores" type="top">
+			<view class="toushuC">
+				<view class="tc-li">
+					<navigator url="../jubao/jubao" hover-class="none">
+						<image src="../../static/images/detail_ricon01@2x.png" mode="aspectFit"></image> 商户报错
+					</navigator>
+				</view>
+				<view class="tc-li">
+					<navigator url="../jubao/jubao" hover-class="none">
+						<image src="../../static/images/detail_ricon02@2x.png" mode="aspectFit"></image> 投诉
+					</navigator>
+				</view>
+				<view class="tc-li">
+					<navigator url="../jubao/jubao" hover-class="none">
 						<image src="../../static/images/detail_ricon03@2x.png" mode="aspectFit"></image> 商家入驻
-				</navigator>
-			</view>
-			<view class="tc-li">
-				<navigator url="../messages/messages" hover-class="none" >
+					</navigator>
+				</view>
+				<view class="tc-li">
+					<navigator url="../messages/messages" hover-class="none">
 						<image src="../../static/images/detail_ricon04@2x.png" mode="aspectFit"></image> 消息
-				</navigator>
-				<view class="dian"></view>
-			</view>
-			<view class="tc-li">
-				<navigator url="../index/index" hover-class="none" open-type="reLaunch">
+					</navigator>
+					<view class="dian"></view>
+				</view>
+				<view class="tc-li">
+					<navigator url="../index/index" hover-class="none" open-type="reLaunch">
 						<image src="../../static/images/detail_ricon05@2x.png" mode="aspectFit"></image> 返回首页
-				</navigator>
+					</navigator>
+				</view>
 			</view>
-	   	</view>
-	   </uni-popup>
-	   <!-- 分享组件 -->
-	    <share ref="myShare"></share>
+		</uni-popup>
+		<!-- 分享组件 -->
+		<share ref="myShare"></share>
 		<view class="hideCanvasView">
 			<canvas class="hideCanvas" canvas-id="default_PosterCanvasId" :style="{width: (poster.width||0) + 'px', height: (poster.height||0) + 'px'}"></canvas>
 		</view>
@@ -303,7 +365,7 @@
 				<view class="backgroundColor-white padding1vh border_radius_10px marginTop2vh">
 					<image :src="poster.finalPath" mode="widthFix" class="posterImage"></image>
 				</view>
-			<!-- 	<view class="flex_row marginTop2vh">
+				<!-- 	<view class="flex_row marginTop2vh">
 					<button type="primary" size="mini" @tap.prevent.stop="saveImage()">保存图片</button>
 					<button type="primary" size="mini" @tap.prevent.stop="share()">分享图片</button>
 				</view> -->
@@ -331,30 +393,50 @@
 				duration: 1000,
 				poster: {},
 				qrShow: false,
-				canvasId: 'default_PosterCanvasId'
+				canvasId: 'default_PosterCanvasId',
+				navList: ['79元2-3人餐', '79元4-6人餐', '79元6-8人餐'],
+				top: null,
+				curIndex: 0,
+				isTaocan: true,
+				isFirst: true
 			};
 		},
 		components: {
 			'my-star': stars,
-			 mythumb,
-			 uniPopup,
-			 share,
-			 uniNavBar
+			mythumb,
+			uniPopup,
+			share,
+			uniNavBar
 		},
-		computed:{
+		computed: {},
+		onLoad(options) {
+			if(options.isTaocan){
+				this.isTaocan=JSON.parse(options.isTaocan);
+			}
 		},
-		mounted(){
+		mounted() {},
+		onPageScroll(e) {
+			this.getDivtop();
 		},
 		methods: {
 			returnPage() {
 				uni.navigateBack({})
 			},
-			showMore(){
+			showMore() {
 				this.$refs.mores.open();
 			},
-			showSh(){
+			showSh() {
 				// 调用分享子组件的方法
 				this.$refs.myShare.showShare();
+			},
+			// 获取导航距离顶部的位置
+			getDivtop() {
+				const query = uni.createSelectorQuery().in(this);
+				query.select('#the-id').boundingClientRect(data => {
+					// console.log("得到布局位置信息" + JSON.stringify(data));
+					// console.log("节点离页面顶部的距离为" + data.top);
+					this.top = data.top;
+				}).exec();
 			},
 			async shareFc() {
 				try {
@@ -365,12 +447,12 @@
 						formData: {
 							//访问接口获取背景图携带自定义数据
 						},
-						background:{
-							width:750,
-							height:1060,
-							backgroundColor:'#FFF'
+						background: {
+							width: 750,
+							height: 1060,
+							backgroundColor: '#FFF'
 						},
-						posterCanvasId: this.canvasId,	//canvasId
+						posterCanvasId: this.canvasId, //canvasId
 						delayTimeScale: 20, //延时系数
 						/* background: {
 							width: 1080,
@@ -387,18 +469,17 @@
 							const lineHeight = bgObj.height * 0.04;
 							//可直接return数组，也可以return一个promise对象, 但最终resolve一个数组, 这样就可以方便实现后台可控绘制海报
 							return new Promise((rs, rj) => {
-								rs([
-									{
+								rs([{
 										type: 'image',
 										url: '/static/2.jpg',
 										alpha: 1,
-										dx:(bgObj.width-bgObj.width*0.9)/2,
-										dy: bgObj.height*0.2,
+										dx: (bgObj.width - bgObj.width * 0.9) / 2,
+										dy: bgObj.height * 0.2,
 										infoCallBack(imageInfo) {
 											let scale = bgObj.width * 0.2 / imageInfo.height;
 											return {
-												dWidth: bgObj.width*0.9, 
-												dHeight: bgObj.width*0.7,
+												dWidth: bgObj.width * 0.9,
+												dHeight: bgObj.width * 0.7,
 												roundRectSet: { // 圆角矩形
 													r: imageInfo.width * .03
 												}
@@ -416,12 +497,12 @@
 										infoCallBack(textLength) {
 											_app.log('index页面的text的infocallback ，textlength:' + textLength);
 											return {
-												dx: bgObj.width/2,
-												dy: bgObj.height*0.05
+												dx: bgObj.width / 2,
+												dy: bgObj.height * 0.05
 											}
 										},
 										serialNum: 0,
-										id: 'tag1'	//自定义标识
+										id: 'tag1' //自定义标识
 									},
 									{
 										type: 'text',
@@ -429,11 +510,11 @@
 										fontWeight: 'bold',
 										size: fontSize,
 										color: '#333',
-										alpha:1,
+										alpha: 1,
 										textAlign: 'center',
 										textBaseline: 'middle',
 										serialNum: 1,
-										allInfoCallback({	//v3.0.1 更新 可以获取drawArray中全部数据
+										allInfoCallback({ //v3.0.1 更新 可以获取drawArray中全部数据
 											drawArray
 										} = {}) {
 											const obj = drawArray.find(item => item.id === 'tag1');
@@ -445,14 +526,14 @@
 											return new Promise((rs, rj) => {
 												setTimeout(() => {
 													rs({
-														dx: bgObj.width/2,
-														dy:  bgObj.height*0.12
+														dx: bgObj.width / 2,
+														dy: bgObj.height * 0.12
 													});
 												}, 1);
 											});
 										}
 									},
-									
+
 									{
 										type: 'qrcode',
 										text: '你好，我是奇豆',
@@ -463,88 +544,89 @@
 										dy: bgObj.height - bgObj.width * 0.3
 									},
 									{
-											type: 'custom',
-											setDraw(Context) {
-												Context.setFillStyle('#FFF1EC');
-												Context.fillRect(bgObj.width*0.05, bgObj.height - bgObj.height * 0.25, bgObj.width*0.6, bgObj.height * 0.25);
-												Context.setGlobalAlpha(1);
+										type: 'custom',
+										setDraw(Context) {
+											Context.setFillStyle('#FFF1EC');
+											Context.fillRect(bgObj.width * 0.05, bgObj.height - bgObj.height * 0.25, bgObj.width * 0.6, bgObj.height *
+												0.25);
+											Context.setGlobalAlpha(1);
+										}
+									},
+									{
+										type: 'text',
+										text: '如何购买？',
+										size: fontSize,
+										color: '#FF6934',
+										alpha: 1,
+										textAlign: 'center',
+										textBaseline: 'middle',
+										infoCallBack(textLength) {
+											return {
+												dx: bgObj.width * 0.38,
+												dy: bgObj.height - bgObj.height * 0.2
 											}
-										},
-										{
-											type: 'text',
-											text: '如何购买？',
-											size: fontSize,
-											color: '#FF6934',
-											alpha: 1,
-											textAlign: 'center',
-											textBaseline: 'middle',
-											infoCallBack(textLength) {
-												return {
-													dx:bgObj.width*0.38,
-													dy:bgObj.height - bgObj.height * 0.2
-												}
+										}
+									},
+									{
+										type: 'text',
+										text: '1、长按识别二维码 ',
+										size: 20,
+										color: '#FF6934',
+										alpha: 1,
+										textAlign: 'left',
+										textBaseline: 'middle',
+										infoCallBack(textLength) {
+											return {
+												dx: bgObj.width * 0.1,
+												dy: bgObj.height - bgObj.height * 0.14
 											}
-										},
-										{
-											type: 'text',
-											text: '1、长按识别二维码 ',
-											size: 20,
-											color: '#FF6934',
-											alpha: 1,
-											textAlign: 'left',
-											textBaseline: 'middle',
-											infoCallBack(textLength) {
-												return {
-													dx:bgObj.width*0.1,
-													dy:bgObj.height - bgObj.height * 0.14
-												}
+										}
+									},
+									{
+										type: 'text',
+										text: '2、点击页面右上角，复制链接',
+										size: 20,
+										color: '#FF6934',
+										alpha: 1,
+										textAlign: 'left',
+										textBaseline: 'middle',
+										infoCallBack(textLength) {
+											return {
+												dx: bgObj.width * 0.1,
+												dy: bgObj.height - bgObj.height * 0.09
 											}
-										},
-										{
-											type: 'text',
-											text: '2、点击页面右上角，复制链接',
-											size: 20,
-											color: '#FF6934',
-											alpha: 1,
-											textAlign: 'left',
-											textBaseline: 'middle',
-											infoCallBack(textLength) {
-												return {
-													dx:bgObj.width*0.1,
-													dy:bgObj.height - bgObj.height * 0.09
-												}
+										}
+									},
+									{
+										type: 'text',
+										text: '3、打开奇豆app购买',
+										size: 20,
+										color: '#FF6934',
+										alpha: 1,
+										textAlign: 'left',
+										textBaseline: 'middle',
+										infoCallBack(textLength) {
+											return {
+												dx: bgObj.width * 0.1,
+												dy: bgObj.height - bgObj.height * 0.04
 											}
-										},
-										{
-											type: 'text',
-											text: '3、打开奇豆app购买',
-											size: 20,
-											color: '#FF6934',
-											alpha: 1,
-											textAlign: 'left',
-											textBaseline: 'middle',
-											infoCallBack(textLength) {
-												return {
-													dx:bgObj.width*0.1,
-													dy:bgObj.height - bgObj.height * 0.04
-												}
+										}
+									},
+									{
+										type: 'text',
+										text: '长按二维码购买',
+										size: 20,
+										color: '#666',
+										alpha: 1,
+										textAlign: 'center',
+										textBaseline: 'middle',
+										infoCallBack(textLength) {
+											return {
+												dx: bgObj.width * 0.82,
+												dy: bgObj.height - bgObj.width * 0.05
 											}
-										},
-										{
-											type: 'text',
-											text: '长按二维码购买',
-											size: 20,
-											color: '#666',
-											alpha: 1,
-											textAlign: 'center',
-											textBaseline: 'middle',
-											infoCallBack(textLength) {
-												return {
-													dx: bgObj.width * 0.82,
-													dy: bgObj.height - bgObj.width * 0.05
-												}
-											}
-										},
+										}
+									},
 								]);
 							})
 						},
@@ -582,7 +664,7 @@
 				// #ifdef APP-PLUS
 				_app.getShare(false, false, 2, '', '', '', this.poster.finalPath, false, false);
 				// #endif
-			
+
 				// #ifndef APP-PLUS
 				_app.showToast('分享了');
 				// #endif
@@ -617,129 +699,147 @@
 	// 	align-items: center;
 	// 	padding: 23upx 36upx 23upx 25upx;
 	// 	background-color: #FFFFFF;
- //        position: relative;
+	//        position: relative;
 	// 	z-index: 999;
-		.dpt1_left {
-			width: 19upx;
-			height: 35upx;
-			@include bg-image('../../static/images/bbs_jian');
-			margin-left: 25upx;
-		}
+	.dpt1_left {
+		width: 19upx;
+		height: 35upx;
+		@include bg-image('../../static/images/bbs_jian');
+		margin-left: 25upx;
+	}
 
-		.dpt1_right {
-			display: flex;
-			align-items: center;
-            margin-right: 36upx;
-			.collect {
-				width: 46upx;
-				height: 44upx;
-				@include bg-image('../../static/images/detail_collect');
-				margin-right: 33upx;
-				&.active{
-					@include bg-image('../../static/images/detail_collectOn');
-				}
-			}
+	.dpt1_right {
+		display: flex;
+		align-items: center;
+		margin-right: 36upx;
 
-			.share {
-				width: 42upx;
-				height: 42upx;
-				@include bg-image('../../static/images/detail_share');
-				margin-right: 33upx;
-			}
+		.collect {
+			width: 46upx;
+			height: 44upx;
+			@include bg-image('../../static/images/detail_collect');
+			margin-right: 33upx;
 
-			.more {
-				width: 39upx;
-				height: 8upx;
-				@include bg-image('../../static/images/detail_more');
-				position: relative;
-
-				.dian {
-					width: 16upx;
-					height: 16upx;
-					background: rgba(255, 0, 21, 1);
-					border-radius: 50%;
-					position: absolute;
-					right: -16upx;
-					top: -20upx;
-				}
+			&.active {
+				@include bg-image('../../static/images/detail_collectOn');
 			}
 		}
+
+		.share {
+			width: 42upx;
+			height: 42upx;
+			@include bg-image('../../static/images/detail_share');
+			margin-right: 33upx;
+		}
+
+		.more {
+			width: 39upx;
+			height: 8upx;
+			@include bg-image('../../static/images/detail_more');
+			position: relative;
+
+			.dian {
+				width: 16upx;
+				height: 16upx;
+				background: rgba(255, 0, 21, 1);
+				border-radius: 50%;
+				position: absolute;
+				right: -16upx;
+				top: -20upx;
+			}
+		}
+	}
+
 	// }
 
-	.youh_navs{
+	.youh_navs {
 		margin: 0 23upx;
-		.tuij_cai{
-			background:rgba(255,255,255,1);
-			box-shadow:0 1upx 20upx 0px rgba(187,187,187,0.2);
-			border-radius:20upx;
+
+		.tuij_cai {
+			background: rgba(255, 255, 255, 1);
+			box-shadow: 0 1upx 20upx 0px rgba(187, 187, 187, 0.2);
+			border-radius: 20upx;
 			margin: 20upx 0 0;
 			padding: 36upx 20upx;
-			.common_title{
+
+			.common_title {
 				display: flex;
 				align-items: center;
-				.title_left{
+
+				.title_left {
 					font-size: 32upx;
 					color: #333333;
 					font-weight: bold;
 				}
-				.title_right{
+
+				.title_right {
 					width: 12upx;
 					height: 20upx;
 					margin-left: auto;
-					image{
+
+					image {
 						width: 100%;
 						height: 100%;
 						vertical-align: text-top;
 					}
 				}
 			}
-			.caic_top{
-				height:300upx;
-				border-radius:12upx;
+
+			.caic_top {
+				height: 300upx;
+				border-radius: 12upx;
 				margin: 38upx 0 48upx;
 				overflow: hidden;
 				position: relative;
 				background-color: #EEEEEE;
-				image{
+
+				image {
 					width: 100%;
 					height: 100%;
 				}
-				.caict_mask{
+
+				.caict_mask {
 					width: 100%;
 					padding: 20upx;
 					position: absolute;
 					left: 0;
 					bottom: 0;
-					background-color: rgba(255,255,255,0.8);
+					background-color: rgba(255, 255, 255, 0.8);
 					font-size: 28upx;
 					color: #333333;
 					display: flex;
 					justify-content: space-between;
 					box-sizing: border-box;
-					.price{
+
+					.price {
 						font-weight: bold;
 					}
 				}
 			}
-			.caic_bot{
+
+			.caic_bot {
 				display: flex;
-				.cbbox{
+
+				.cbbox {
 					margin-right: 17upx;
 					text-align: center;
-					&:last-child{
+
+					&:last-child {
 						margin-right: 0;
 					}
-					.cbbox_top{
-						width:210upx;
-						height:150upx;
-						border-radius:12upx;
+
+					.cbbox_top {
+						width: 210upx;
+						height: 150upx;
+						border-radius: 12upx;
 						overflow: hidden;
-						image{
+
+						image {
 							width: 100%;
 							height: 100%;
 						}
 					}
-					.name{
+
+					.name {
 						font-size: 26upx;
 						color: #333333;
 						margin-top: 23upx;
@@ -747,13 +847,14 @@
 				}
 			}
 		}
+
 		.hotc-cont {
 			margin: 40upx 10upx 0;
-		
+
 			.cont_li {
 				margin-bottom: 54upx;
 				display: flex;
-		
+
 				.li_left {
 					width: 64upx;
 					height: 64upx;
@@ -761,77 +862,83 @@
 					overflow: hidden;
 					flex-shrink: 0;
 					background: #eee;
-		
+
 					image {
 						width: 100%;
 						height: 100%;
 					}
 				}
-		
+
 				.li_right {
 					margin-left: 22upx;
-		            flex: 1;
+					flex: 1;
+
 					.lir_top {
 						display: flex;
 						align-items: center;
-		                margin-bottom: 29upx;
+						margin-bottom: 29upx;
+
 						.t1name {
 							font-size: 26upx;
 							color: #333333;
 						}
-		
+
 						.t1img {
 							width: 28upx;
 							height: 31upx;
 							@include bg-image('../../static/images/bbs-vip');
 							margin: 0 34upx 0 16upx;
 						}
-		
+
 						.t1date {
 							font-size: 24upx;
 							color: #AAAAAA;
 						}
-		
+
 						.t1zan {
 							margin-left: auto;
 							font-size: 24upx;
 							color: #AAAAAA;
-		
+
 							.zanicon {
 								width: 26upx;
 								height: 26upx;
 								@include bg-image('../../static/images/zan');
 								display: inline-block;
 								margin-right: 10upx;
-								&.active{
+
+								&.active {
 									@include bg-image('../../static/images/zanOn');
 								}
 							}
 						}
 					}
-		
+
 					.lir_con {
 						font-size: 30upx;
 						color: #333333;
 						margin: 20upx 0;
 					}
-		
-				
+
+
 				}
 			}
 		}
-		
+
 	}
-	.other_sj{
+
+	.other_sj {
 		margin: 37upx 23upx 16upx;
-		.title{
+
+		.title {
 			font-size: 32upx;
 			font-weight: bold;
 			color: #333333;
 			margin-left: 17upx;
 		}
 	}
-	.toushuC{
+
+	.toushuC {
 		width: 259upx;
 		height: 453upx;
 		@include bg-image('../../static/images/detail_wbg');
@@ -839,7 +946,8 @@
 		top: 80upx;
 		right: 0;
 		line-height: 27upx;
-		.tc-li{
+
+		.tc-li {
 			width: 75%;
 			margin: 0 auto;
 			font-size: 26upx;
@@ -848,13 +956,16 @@
 			padding: 20upx 0 20upx 10upx;
 			box-sizing: border-box;
 			position: relative;
-			&:first-child{
+
+			&:first-child {
 				padding-top: 60upx;
 			}
-			&:last-child{
+
+			&:last-child {
 				border-bottom: none;
 			}
-			image{
+
+			image {
 				width: 36upx;
 				height: 36upx;
 				margin-right: 17upx;
@@ -862,102 +973,130 @@
 				position: relative;
 				top: -4upx;
 			}
-			.dian{
-				width:16upx;
-				height:16upx;
-				background:rgba(255,0,21,1);
-				border:1upx solid rgba(255,255,255,1);
-				border-radius:50%;
+
+			.dian {
+				width: 16upx;
+				height: 16upx;
+				background: rgba(255, 0, 21, 1);
+				border: 1upx solid rgba(255, 255, 255, 1);
+				border-radius: 50%;
 				position: absolute;
 				left: 34upx;
 				top: 10upx;
 			}
 		}
 	}
-	.qg_quan{
+
+	.qg_quan {
 		width: auto;
 		height: 200upx;
 		@include bg-image('../../static/images/detail_quanbg');
 		margin: 20upx 23upx 0;
 		display: flex;
 		align-items: center;
-		.quan_left{
+
+		.quan_left {
 			padding: 40upx 20upx;
 			color: #333333;
 			line-height: 27upx;
-			.name{
+
+			.name {
 				font-size: 22upx;
 			}
-			.title{
+
+			.title {
 				font-size: 32upx;
 				font-weight: bold;
 				margin-top: 29upx;
 			}
-			.price{
+
+			.price {
 				font-size: 30upx;
 				color: #FE7639;
 				margin-top: 31upx;
 				font-weight: bold;
 			}
 		}
-		.quan_right{
+
+		.quan_right {
 			margin-left: auto;
 			text-align: center;
 			width: 150upx;
 			text-align: center;
 			color: #FFFFFF;
 			font-size: 24upx;
-			.btn{
+
+			.btn {
 				display: inline-block;
 				padding: 0 20upx;
-				height:26upx;
+				height: 26upx;
 				line-height: 26upx;
-				background:rgba(255,238,228,1);
-				border-radius:11upx;
+				background: rgba(255, 238, 228, 1);
+				border-radius: 11upx;
 				margin-top: 50upx;
 				font-size: 18upx;
 				color: #FE7338;
 			}
 		}
 	}
-	.useRules{
-		background:rgba(255,255,255,1);
-		box-shadow:0 1upx 20upx 0 rgba(187,187,187,0.2);
-		border-radius:20upx;
+
+	.useRules {
+		background: rgba(255, 255, 255, 1);
+		box-shadow: 0 1upx 20upx 0 rgba(187, 187, 187, 0.2);
+		border-radius: 20upx;
 		margin: 20upx 23upx 0;
-		.title{
+
+		.title {
 			font-size: 32upx;
 			color: #333333;
 			font-weight: bold;
 			padding: 27upx 0 38upx 20upx;
 		}
-		.desc{
+
+		.desc {
 			font-size: 28upx;
 			color: #333333;
 			line-height: 44upx;
-			.desc_li{
+
+			.tname {
+				font-size: 28upx;
+				font-weight: bold;
+				color: #333333;
+				margin-left: 60upx;
+				margin-bottom: 32upx;
+			}
+
+			.desc_li {
 				margin-bottom: 20upx;
 				padding: 0 22upx;
-				.wenhao{
-					width:26upx;
-					height:26upx;
+				display: flex;
+
+				.wenhao {
+					width: 26upx;
+					height: 26upx;
 					line-height: 26upx;
-					border:1upx solid rgba(51,51,51,1);
-					border-radius:50%;
+					border: 1upx solid rgba(51, 51, 51, 1);
+					border-radius: 50%;
 					font-size: 24upx;
 					text-align: center;
 					margin-left: 28upx;
 					display: inline-block;
 				}
+
+				.right_price {
+					margin-left: auto;
+				}
 			}
 		}
-		.moreRules{
-			border:1upx solid rgba(238,238,238,1);
+
+		.moreRules {
+			border: 1upx solid rgba(238, 238, 238, 1);
 			padding: 26upx 29upx;
 			font-size: 28upx;
 			color: #333333;
 			text-align: right;
-			image{
+
+			image {
 				width: 20upx;
 				height: 12upx;
 				margin-left: 21upx;
@@ -965,57 +1104,69 @@
 			}
 		}
 	}
-	.canting_desc{
-		background:rgba(255,255,255,1);
-		box-shadow:0 1upx 20upx 0 rgba(187,187,187,0.2);
-		border-radius:20upx;
+
+	.canting_desc {
+		background: rgba(255, 255, 255, 1);
+		box-shadow: 0 1upx 20upx 0 rgba(187, 187, 187, 0.2);
+		border-radius: 20upx;
 		margin: 20upx 23upx 0;
-		.title{
+
+		.title {
 			font-size: 32upx;
 			color: #333333;
 			font-weight: bold;
 			padding: 34upx 19upx;
 		}
-		.cant_con{
+
+		.cant_con {
 			padding: 0 21upx;
 			display: flex;
-			.cantcleft{
-				width:150upx;
-				height:150upx;
-				border-radius:6upx;
+
+			.cantcleft {
+				width: 150upx;
+				height: 150upx;
+				border-radius: 6upx;
 				overflow: hidden;
 				background-color: #EEEEEE;
 				flex-shrink: 0;
-				image{
+
+				image {
 					width: 100%;
 					height: 100%;
 				}
 			}
-			.cantccenter{
+
+			.cantccenter {
 				margin-left: 26upx;
-				.name{
+
+				.name {
 					font-size: 30upx;
 					color: #333333;
 					font-weight: bold;
 					margin-bottom: 20upx;
 				}
-				.dianm{
+
+				.dianm {
 					font-size: 22upx;
 					color: #666;
 					margin-top: 21upx;
 				}
 			}
-			.cantcright{
+
+			.cantcright {
 				margin-left: auto;
-				.ccrj{
+
+				.ccrj {
 					width: 160upx;
 					text-align: right;
 					margin-bottom: 65upx;
-					image{
+
+					image {
 						width: 12upx;
 						height: 20upx;
 					}
 				}
+
 				.phone {
 					width: 160upx;
 					height: 50upx;
@@ -1025,7 +1176,7 @@
 					border-radius: 25upx;
 					font-size: 24upx;
 					color: #333333;
-				
+
 					image {
 						width: 18upx;
 						height: 23upx;
@@ -1035,22 +1186,25 @@
 				}
 			}
 		}
-		.cant_address{
+
+		.cant_address {
 			width: 100%;
-			border:1upx solid rgba(238,238,238,1);
+			border: 1upx solid rgba(238, 238, 238, 1);
 			padding: 25upx 18upx;
 			font-size: 26upx;
 			color: #A4A4A4;
 			display: flex;
 			align-items: center;
 			box-sizing: border-box;
-			.l{
+
+			.l {
 				width: 17upx;
 				height: 25upx;
 				margin-right: 16upx;
 				flex-shrink: 0;
 			}
-			.r{
+
+			.r {
 				width: 12upx;
 				height: 20upx;
 				margin-left: auto;
@@ -1058,55 +1212,87 @@
 			}
 		}
 	}
-	.bottom-btns{
+
+	.bottom-btns {
 		width: 100%;
 		height: 128upx;
 		background-color: #FFFFFF;
 		position: fixed;
 		bottom: 0;
 		left: 0;
-		box-shadow:0 -1upx 20upx 0 rgba(102,102,102,0.2);
-		.out-flex{
+		box-shadow: 0 -1upx 20upx 0 rgba(102, 102, 102, 0.2);
+
+		.out-flex {
 			height: 100%;
 			padding: 0 23upx;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			.l_price{
+
+			.l_price {
 				font-size: 36upx;
 				color: #FE7639;
 				font-weight: bold;
+
+				.zhekou {
+					display: flex;
+					margin-top: 10upx;
+
+					.zk_left {
+						height: 26upx;
+						line-height: 26upx;
+						background: rgba(255, 238, 228, 1);
+						border-radius: 11upx;
+						font-size: 18upx;
+						font-weight: bold;
+						color: rgba(254, 115, 56, 1);
+						text-align: center;
+					}
+
+					.zk_right {
+						font-size: 26upx;
+						font-weight: bold;
+						color: rgba(187, 187, 187, 1);
+						margin-left: 29upx;
+						text-decoration: line-through;
+					}
+				}
 			}
-			.r_btns{
-				width:260upx;
-				height:84upx;
+
+			.r_btns {
+				width: 260upx;
+				height: 84upx;
 				line-height: 84upx;
 				text-align: center;
-				background:linear-gradient(90deg,rgba(252,136,64,1),rgba(255,103,51,1));
-				border-radius:42upx;
+				background: linear-gradient(90deg, rgba(252, 136, 64, 1), rgba(255, 103, 51, 1));
+				border-radius: 42upx;
 				font-size: 32upx;
 				font-weight: bold;
 				color: #FFFFFF;
 			}
-			.r_btns2{
-				width:524upx;
-				height:84upx;
+
+			.r_btns2 {
+				width: 524upx;
+				height: 84upx;
 				line-height: 84upx;
 				display: flex;
 				align-items: center;
 				overflow: hidden;
-				background:linear-gradient(90deg,rgba(252,136,64,1),rgba(255,103,51,1));
-				border-radius:42upx;
+				background: linear-gradient(90deg, rgba(252, 136, 64, 1), rgba(255, 103, 51, 1));
+				border-radius: 42upx;
 				text-align: center;
-				.btn-one{
+
+				.btn-one {
 					width: 50%;
 					height: 100%;
 					font-size: 28upx;
 					color: #FFFFFF;
-					&.black{
+
+					&.black {
 						background-color: #313131;
 					}
-					image{
+
+					image {
 						width: 30upx;
 						height: 30upx;
 						margin-right: 12upx;
@@ -1116,24 +1302,25 @@
 			}
 		}
 	}
+
 	.hideCanvasView {
 		position: relative;
 	}
-	
+
 	.hideCanvas {
 		position: fixed;
 		top: -99999upx;
 		left: -99999upx;
 		z-index: -99999;
 	}
-	
+
 	.flex_row_c_c {
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
 		align-items: center;
 	}
-	
+
 	.modalView {
 		width: 100%;
 		height: 100%;
@@ -1152,34 +1339,34 @@
 		backface-visibility: hidden;
 		z-index: 999;
 	}
-	
+
 	.modalView.show {
 		opacity: 1;
 		transform: scale(1);
 		pointer-events: auto;
 	}
-	
+
 	.flex_column {
 		display: flex;
 		flex-direction: column;
 	}
-	
+
 	.backgroundColor-white {
 		background-color: white;
 	}
-	
+
 	.border_radius_10px {
 		// border-radius: 10px;
 	}
-	
+
 	.padding1vh {
 		padding: 1vh;
 	}
-	
+
 	.posterImage {
 		width: 100vw;
 	}
-	
+
 	.flex_row {
 		// width: 100vh;
 		display: flex;
@@ -1188,23 +1375,105 @@
 		justify-content: space-between;
 		padding: 0 50upx;
 		box-sizing: border-box;
-		image{
+
+		image {
 			width: 50upx;
 			height: 50upx;
 		}
 	}
-	
+
 	.marginTop2vh {
 		margin-top: 2vh;
 	}
-	.downLoadBtn{
+
+	.downLoadBtn {
 		width: 130upx;
 		padding: 0;
 		margin: 0;
-		height:49upx;
+		height: 49upx;
 		line-height: 49upx;
-		border:2upx solid rgba(255,255,255,1);
-		border-radius:25upx;
+		border: 2upx solid rgba(255, 255, 255, 1);
+		border-radius: 25upx;
 		background-color: transparent;
+	}
+
+	.bc-navs {
+		width: 100%;
+		overflow: hidden;
+
+		.bc-scroll {
+			background-color: #FFFFFF;
+			border-bottom: 1upx #EEEEEE solid;
+			padding-left: 37upx;
+			white-space: nowrap;
+
+			.nav_li {
+				display: inline-block;
+				padding: 29upx 0;
+				margin-right: 63upx;
+				font-size: 32upx;
+				color: #666666;
+
+				&.active {
+					font-size: 36upx;
+					color: #FD793A;
+					font-weight: bold;
+					border-bottom: 4upx #FD793A solid;
+				}
+			}
+		}
+
+		.fixed {
+			position: fixed;
+			top: 0;
+			left: 0;
+			z-index: 111;
+		}
+	}
+
+	.taocan_show {
+		background: rgba(255, 255, 255, 1);
+		box-shadow: 0 1upx 20upx 0 rgba(187, 187, 187, 0.2);
+		border-radius: 20upx;
+		margin: 26upx 23upx 0;
+		padding: 24upx;
+
+		.tc_title {
+			font-size: 42upx;
+			font-weight: bold;
+			color: rgba(51, 51, 51, 1);
+		}
+
+		.tc_time {
+			margin-top: 32upx;
+			display: flex;
+			justify-content: space-between;
+			font-size: 24upx;
+			color: rgba(102, 102, 102, 1);
+		}
+
+		.tc_groups {
+			width: 100%;
+			overflow: hidden;
+			margin-top: 30upx;
+
+			.group-scroll {
+				white-space: nowrap;
+
+				.group_img {
+					display: inline-block;
+					width: 290upx;
+					height: 222upx;
+					background: #EEEEEE;
+					border-radius: 12upx;
+					margin-right: 20upx;
+
+					image {
+						width: 100%;
+						height: 100%;
+					}
+				}
+			}
+		}
 	}
 </style>

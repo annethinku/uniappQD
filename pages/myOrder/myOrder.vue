@@ -25,7 +25,7 @@
 					     <text>阿斯顿餐厅代金卷</text>
 					</view>
 					<view class="ctopright">
-						<!-- <text class="">待付款</text> -->
+						<!-- <text class="">待付款 待使用 已完成 已退款</text> -->
 						<text class="red">退款中</text>
 					</view>
 				</view>
@@ -47,7 +47,11 @@
 						</view>
 						<view class="btnflex">
 							<view class="btn difw">
-								<!-- 再来一单  查看卷码  去点评 -->
+								<!-- 再来一单  退款进度
+								   去付款
+								  再来一单 查看卷码  
+								  删除 去点评
+								   -->
 								删除 
 							</view>
 							<view class="btn">

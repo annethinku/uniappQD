@@ -88,7 +88,7 @@
 				</view> -->
 			</view>
 			<view class="shouy_detail">
-				<navigator url="../yaoqing/yaoqing" hover-class="none" v-for="(item,index) in arrs" :key="index">
+				<navigator :url="index>2?'../yaoqingOrder/yaoqingOrder':'../yaoqing/yaoqing'" hover-class="none" v-for="(item,index) in arrs" :key="index">
 					<view class="sylis">
 						<view class="syl_left">
 							<image :src="'../../static/images/mx_icon0'+(index+1)+'.png'" mode=""></image>

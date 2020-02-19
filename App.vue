@@ -191,7 +191,7 @@
    		}
    	}
    }
-   // 支付按钮
+   // 支付按钮等公用按钮样式
    .compay-btn{
    	width:auto;
    	height:84upx;
@@ -319,5 +319,8 @@
 			width: 80%;
 		}
    }
-   
+   .common_font{
+	   font-size: 28upx;
+	   color: #333333;
+   }
 </style>

@@ -122,9 +122,11 @@
 							</view>
 						</view>
 						<view class="quan_right">
+							<navigator url="../qgDetail/qgDetail?isTaocan=false" hover-class="none">
 							<view class="btn">
 								抢购
 							</view>
+							</navigator>
 							<view class="yueshou">
 								月售255
 							</view>
@@ -153,7 +155,7 @@
 								</view>
 							</view>
 							<view class="quan_right">
-								<navigator url="../qgDetail/qgDetail" hover-class="none">
+								<navigator url="../qgDetail/qgDetail?isTaocan=true" hover-class="none">
 									<view class="btn">
 										抢购
 									</view>

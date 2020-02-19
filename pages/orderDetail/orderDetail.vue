@@ -2,7 +2,7 @@
 	<view>
 		<view class="orange">
 			<view class="ts_font">
-				{{isPay?'订单待使用':'订单还未付款噢~'}}
+				{{isPay?(isUse?(isTuikuan?(istk?'订单已退款':'订单退款中'):'订单已完成'):'订单待使用'):'订单剩余付款时间：3:52:45'}}
 			</view>
 			<view class="orange_gan"></view>
 			<view class="big_white">
@@ -60,23 +60,27 @@
 					<view class="bgwt-li">
 						<view class="name">
 							代金券
-							<view class="desc">
+							<!-- 套餐卷 -->
+							<view class="desc" v-show="!isUse">
 								8张可以用 2020-2-23 22:00到期
 							</view>
 						</view>
-						<view class="phone">
+						<view class="phone" v-show="!isUse">
 							<text>我要退款</text>
 						</view>
 					</view>
 					<view class="juanma">
 						<view class="jum_left" :style="'height: '+(isZk?'':'80upx')+';'">
-							<view class="jum_li" v-for="(item,index) in 6" :key="index">
+							<view class="jum_li" v-for="(item,index) in 6" :key="index" :class="isUse?(isTuikuan?'haveTuik':'haveUse'):''">
 								8889 6542 5432
 							</view>
 						</view>
-						<view class="jum_right">
+						<view class="jum_right" v-show="!isUse">
 							<image src="" mode=""></image>
 						</view>
+					</view>
+					<view class="tuik_show" v-show="isTuikuan">
+						{{istk?'已退款':'退款中'}}
 					</view>
 					<view class="seeAll" @click="toggleAll()">
 						<view v-show="!isZk">
@@ -105,6 +109,57 @@
 						</view>
 					</view>
 				</view>
+				<!-- 套餐480upx -->
+				<view class="bgw_two"  :style="'height: '+(isZk03?'':'380upx')+';overflow:hidden;'">
+					<view class="bgwt-li">
+						<view class="name">
+					       代金券信息
+						   <!-- 套餐详细 -->
+						</view>
+					</view>
+					<view class="bgwt-li">
+						<view class="name">
+							阿斯顿餐厅代金卷（8张）
+							<!-- 阿斯顿 2-3人餐（1份） -->
+						</view>
+						<view class="common_font">
+							￥79
+						</view>
+					</view>
+					<view class="bgwo-bot">
+						<view class="bgwobli">
+							<view class="lilabel" style="text-align: left;text-align-last: left;">
+								备注
+							</view>
+						</view>
+						<view class="bgwo-bot">
+							<!-- 套餐显示 -->
+							<!-- <view class="bgwt-li" v-for="(item,index) in 6" :key="index">
+								<view class="name">
+								 沙拉   （一份）
+								</view>
+								<view class="common_font">
+									￥79
+								</view>
+							</view> -->
+							<view class="bgwobli" v-for="(item,index) in 6" :key="index">
+								<view class="lifont">
+									店内人均消费参考价：￥60
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+				<view class="seeAll diffpad" @click="toggleAll03()">
+						<view v-show="!isZk03">
+							查看全部
+							<image src="../../static/images/index-up@2x.png" mode=""></image>
+						</view>
+						<view v-show="isZk03">
+							收起
+							<image src="../../static/images/index-down@2x.png" mode=""></image>
+						</view>
+					</view>
 				<view class="bgw_two">
 					<view class="bgwt-li">
 						<view class="name">
@@ -163,8 +218,8 @@
 					</view>
 
 				</view>
-				<!-- 温馨提示 付款后显示 -->
-				<view class="bgw_two" v-show="isPay"  :style="'height: '+(isZk02?'':'250upx')+';overflow:hidden;'">
+				<!-- 温馨提示 -->
+				<view class="bgw_two"  :style="'height: '+(isZk02?'':'250upx')+';overflow:hidden;'">
 					<view class="bgwt-li">
 						<view class="name">
 							温馨提示
@@ -223,8 +278,7 @@
 							<image src="../../static/images/index-down@2x.png" mode=""></image>
 						</view>
 					</view>
-				
-				<view class="bgw_two" v-show="!isPay">
+			<!--<view class="bgw_two" v-show="!isPay">
 					<view class="bgwt-li">
 						<view class="name">
 							商品金额
@@ -244,7 +298,7 @@
 					<view class="totalPrice">
 						总价：￥79.00
 					</view>
-				</view>
+				</view> -->
 			</view>
 			<view style="height: 200upx;"></view>
 		</view>
@@ -257,7 +311,7 @@
 		</view>
 		<view class="pay-btn" v-show="isPay">
 			<view class="fukuan-btn">
-				<view class="fk-common orange" @click="showEwm">
+				<view class="fk-common orange" @click="showEwm" v-show="!isUse">
 					扫码使用
 				</view>
 				<view class="fk-common">
@@ -288,8 +342,12 @@
 		data() {
 			return {
 				isPay: true,
+				isUse:true,
+				isTuikuan:true,
+				istk:true,
 				isZk: false,
-				isZk02:false
+				isZk02:false,
+				isZk03:false
 			};
 		},
 		components:{
@@ -308,6 +366,13 @@
 					this.isZk02 = false;
 				} else {
 					this.isZk02 = true;
+				}
+			},
+			toggleAll03() {
+				if (this.isZk03) {
+					this.isZk03 = false;
+				} else {
+					this.isZk03 = true;
 				}
 			},
 			showEwm(){
@@ -346,7 +411,8 @@
 		.big_white {
 			background-color: #FFFFFF;
 			margin: -10upx 30upx 0;
-
+            box-shadow:0 1upx 10upx 0 rgba(136,136,136,0.1);
+			position: relative;
 			.bgw_one {
 				padding: 29upx 20upx 35upx 46upx;
 
@@ -428,8 +494,9 @@
 			.bgw_two {
 				margin: 35upx 12upx 0;
 				border-top: 1upx #C4C4C4 dashed;
+				transition: all 1s ease-in;
 				padding: 38upx 33upx 0;
-
+                
 				.bgwt-li {
 					display: flex;
 					justify-content: space-between;
@@ -493,6 +560,13 @@
 
 					.jum_li {
 						margin-bottom: 17upx;
+						&.haveUse{
+							color: #999999;
+							text-decoration: line-through;
+						}
+						&.haveTuik{
+							color: #999999;
+						}
 					}
 				}
 
@@ -600,5 +674,10 @@
 				height: 100%;
 			}
 		}
+	}
+	.tuik_show{
+		font-size: 28upx;
+		color: #E55959;
+		text-align: right;
 	}
 </style>

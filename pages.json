@@ -231,6 +231,18 @@
 				"navigationBarTitleText": "退款详情"
 			}
         }
+        ,{
+            "path" : "pages/yaoqingOrder/yaoqingOrder",
+            "style" : {
+				"navigationStyle": "custom"
+			}
+        }
+        ,{
+            "path" : "pages/help/help",
+            "style" : {
+				"navigationBarTitleText": "使用帮助"
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
