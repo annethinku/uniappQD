@@ -300,6 +300,8 @@
 					</view>
 				</view> -->
 			</view>
+			<!-- 白色背景边角 -->
+			<view class="white_bgb"></view>
 			<view style="height: 200upx;"></view>
 		</view>
 		<view class="pay-btn" v-show="!isPay">
@@ -389,7 +391,17 @@
 	page {
 		background-color: #F8F9F7;
 	}
+ @mixin bg-image($url) {
+ 	background-image: url($url + "@2x.png");
+ 	background-size: 100% auto;
+ 	background-repeat: no-repeat;
  
+ 	@media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3) {
+ 		background-image: url($url + "@3x.png");
+ 		background-size: 100% auto;
+ 		background-repeat: no-repeat;
+ 	}
+ }
 	.orange {
 		width: 100%;
 		height: 409upx;
@@ -601,6 +613,13 @@
 				}
 			}
 		}
+		.white_bgb{
+			height: 70upx;
+			@include  bg-image('../../static/images/orderD_bg');
+			margin: 0 30upx;
+			position: relative;
+			z-index: 2;
+		}
 	}
 
 	.pay-btn {
@@ -608,6 +627,7 @@
 		position: fixed;
 		bottom: 0;
 		left: 0;
+		z-index: 3;
 		background-color: #FFFFFF;
 		padding: 23upx 36upx;
 		box-sizing: border-box;
