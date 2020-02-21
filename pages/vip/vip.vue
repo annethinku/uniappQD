@@ -215,12 +215,15 @@
 		</view>
 		<!-- 选择支付账户弹窗 -->
 		<chooseZh :info="info" ref="zhanghu"></chooseZh>
+		<!-- 输入支付密码弹窗 -->
+		<myCode ref="password" :money="money"></myCode>
 	</view>
 </template>
 
 <script>
 	import tools from '../../static/js/tools.js'
 	import chooseZh from '@/components/chooseZhanghu/chooseZhanghu.vue'
+	import myCode from '@/components/password/password.vue'
 	export default {
 		data() {
 			return {
@@ -231,7 +234,8 @@
 			};
 		},
 		components:{
-			chooseZh
+			chooseZh,
+			myCode
 		},
 		mounted() {
 			let token = uni.getStorageSync('token'); //登录后才会有token
@@ -261,6 +265,19 @@
 			openVip(){
 				let token = uni.getStorageSync('token'); //登录后才会有token
 				let _that=this;
+				tools.myRequest('api.member.withdrawal.cli', {
+					token: token
+				}, '').then(res => {
+					// console.log(res);
+					uni.hideToast();
+					tools.warnMessage(res.status,res.result.message,function(){
+						  _that.$refs.password.showCode();
+					});
+					
+				}).catch(error => {
+					console.log('请求失败：');
+					console.log(error);
+				})
 				tools.myRequest('api.attestation.order.submit', {
 					goodsid:_that.vipQy.goods.id,
 					total:1,

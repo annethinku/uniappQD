@@ -1,7 +1,12 @@
 	@mixin bg-image($url) {
 		background-image: url($url + "@2x.png");
+		background-size: 100% auto;
+		background-repeat: no-repeat;
+
 		@media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3) {
 			background-image: url($url + "@3x.png");
+			background-size: 100% auto;
+			background-repeat: no-repeat;
 		}
 	}
 	/* 渐变 */
@@ -11,4 +16,33 @@
 	  background: -webkit-linear-gradient(top,  $color 0%,$color1 100%); /* Chrome10-25,Safari5.1-6 */
 	  background: linear-gradient(to bottom,  $color 0%,$color1 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$color, endColorstr=$color1,GradientType=0 ); /* IE6-9 */
+	}
+	// 不同字体
+	// http://scqidou.com/addons/ewei_shopv2/font/PingFang Bold.ttf
+	// 粗体
+	
+	// http://scqidou.com/addons/ewei_shopv2/font/PingFang Light.ttf
+	// 细体
+	
+	// http://scqidou.com/addons/ewei_shopv2/PingFang Medium.ttf
+	// 中等
+	
+	// http://scqidou.com/addons/ewei_shopv2/font/PingFang Regular.ttf
+	// 常规
+	
+	@font-face {
+		font-family: 'pfMedium';
+		src: url('./static/fonts/PingFangMedium.ttf') format('truetype');
+	}
+	@font-face {
+		font-family: 'pfBold';
+		src: url('./static/fonts/PingFangBold.ttf') format('truetype');
+	}
+	@font-face {
+		font-family: 'pfRegular';
+		src: url('./static/fonts/PingFangRegular.ttf') format('truetype');
+	}
+	@font-face {
+		font-family: 'pfLight';
+		src: url('./static/fonts/PingFangLight.ttf') format('truetype');
 	}

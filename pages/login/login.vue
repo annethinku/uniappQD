@@ -73,7 +73,8 @@
 	export default {
 		data() {
 			return {
-				phone:''
+				phone:'',
+				type:4
 			};
 		},
 		components:{
@@ -134,8 +135,37 @@
 					 })
 						return false; 
 				} 
-				uni.navigateTo({
-					url:'../register/register?type=2&phone='+_that.phone
+				tools.myRequest('api.login.index.verification_one',{mobile:_that.phone}, '').then(res => {
+					// console.log(res);
+					tools.warnMessage(res.status,res.result.message,function(){
+						// 发送验证码
+					 tools.myRequest('api.member.zf.verifycode', {
+					 	mobile:_that.phone
+					 }, '').then(res => {
+					 	// console.log(res);
+					 	tools.warnMessage(res.status,res.result.message,function(){
+					 	    uni.showToast({
+					 	    	title:res.result.message,
+					 			icon:'success',
+					 			success() {
+					 				setTimeout(()=>{
+					 					// tools.getAesString(_that.phone,'phoneabc',11)
+					 					uni.navigateTo({
+					 						url:'../shuruYanzm/shuruYanzm?type='+_that.type+'&phone='+_that.phone
+					 					})
+					 				},1000)
+					 			}
+					 	    })
+					 	});
+					 
+					 }).catch(error => {
+					 	console.log('请求失败：');
+					 	console.log(error);
+					 })
+					},res.result.mobile);
+				}).catch(error => {
+					console.log('请求失败：');
+					console.log(error);
 				})
 				
 			}

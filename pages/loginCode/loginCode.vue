@@ -114,9 +114,9 @@
 							success() {
 								uni.setStorageSync('token', res.result.token);
 								setTimeout(()=>{
-									uni.navigateBack({
-										delta:4
-									});
+									uni.reLaunch({
+										url:'../index/index'
+									})
 								},1000)
 							}
 						})

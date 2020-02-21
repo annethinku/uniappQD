@@ -1,33 +1,35 @@
 <template>
-	<view  @touchstart="start" @touchend="end">
-		<uni-nav-bar :status-bar="true">
+	<view>
+		<uni-nav-bar :status-bar="true" style="padding-top: 40upx;">
 		    <view class="list_search">
 				<view class="ls_jt" @click="returnPage"></view>
 				<view class="ls_groups">
 					<view class="g_icon"></view>
 					<view class="g_input">
-						<input type="text" value="" placeholder="佛跳墙" />
+						<input type="text" :value="keyword" placeholder="佛跳墙" @input="fuzhiSearch" @confirm="enterSearch"/>
 					</view>
 				</view>
 			</view>
 		</uni-nav-bar>
 		<view class="list_sorts">
-			<view class="sorts_box" v-for="(item,index) in sorts" :key="index">
+			<view class="sorts_box" v-for="(item,index) in sorts" :key="index" @click="changeSorts(item.id)">
 				<view class="sb_imgs">
-					<image :src="'../../static/images/il_icon0'+(index+1)+'.png'" mode=""></image>
+					<image :src="item.thumb" mode=""></image>
 				</view>
 				<view class="sb_title">
-					{{item.title}}
+					{{item.navname}}
 				</view>
 			</view>
 		</view>
 		<view class="list_navs" id="the-id" :class="(nfixed?'navFixed':'')">
 			<view class="navs_box" @click="open($event,1)" :class="curindex==1?'active':''">
-				<text>附近</text>
+				<text v-if="leftList[curName]">{{leftList[curName].name}}</text>
+				<text v-else>附近</text>
 				<text class="nav_jt"></text>
 			</view>
 			<view class="navs_box" @click="open($event,2)" :class="curindex==2?'active':''">
-				<text>综合</text>
+				<text v-if="zhList[zhcurName]">{{zhList[zhcurName].name}}</text>
+				<text v-else>综合</text>
 				<text class="nav_jt"></text>
 			</view>
 			<view class="navs_box" @click="open($event,3)" :class="curindex==3?'active':''">
@@ -36,51 +38,48 @@
 			</view>
 		</view>
 		<view class="list_contents">
-			<navigator url="../detail/detail" v-for="(item,index) in 5" :key="index">
+			<!-- <view class="cont_li" v-for="(item,index) in 10" :key="index">111</view> -->
+			<navigator url="../detail/detail" v-for="(item,index) in list" :key="index">
 				<view class="cont_li">
 					<view class="cl_left">
 						<view class="thumb">
-							<image src="" mode=""></image>
+							<image :src="item.logo" mode=""></image>
 						</view>
-						<view class="pinpai"></view>
-						<view class="xiuxi">
+						<view class="pinpai" v-show="item.catename"></view>
+						<view class="xiuxi" v-show="item.ztyy!=1">
 							休息中
 						</view>
 					</view>
 					<view class="cl_right">
 						<view class="clr_title elisOne">
-							大小先生小碗菜
+							{{item.merchname}}
 						</view>
 						<view class="clr_pos">
 							<view class="starCompo">
 								<my-star score="4.88"></my-star>
 							</view>
-							<view class="pricePer">
-								￥32/人
+							<view class="pricePer" v-show="item.avgs">
+								￥{{item.avgs}}/人
 							</view>
 							<view class="pos">
-								3.2km
+								{{item.dist | juliFit}}km
 							</view>
 						</view>
 						<view class="clr_name">
 							<view class="name_l">
-								新都区 七一国际广场
+								{{item.address}}
 							</view>
-							<view class="name_xl">
-								月销量1005
+							<view class="name_xl" v-show="item.count>0">
+								月销量{{item.count}}
 							</view>
 						</view>
 						<view class="clr_paihang">
 							<text class="bor">您收藏的餐厅</text>
 							<text>新都区中餐销量排行NO.1</text>
 						</view>
-						<view class="clr_quan">
-							<image src="../../static/images/il_quan.png" mode=""></image>
-							<text class="elisOne">100代金卷79元</text>
-						</view>
-						<view class="clr_quan">
-							<image src="../../static/images/il_tuan.png" mode=""></image>
-							<text class="elisOne">双人超值套餐79元，四人超值套餐158元</text>
+						<view class="clr_quan" v-for="(item2,index2) in item.temporary" :key="index2">
+							<image :src="item2.advimg" mode=""></image>
+							<text class="elisOne">{{item2.title}}</text>
 						</view>
 					</view>
 				</view>
@@ -94,17 +93,19 @@
 					<view class="ls_groups">
 						<view class="g_icon"></view>
 						<view class="g_input">
-							<input type="text" value="" placeholder="佛跳墙" />
+							<input type="text" :value="keyword" placeholder="佛跳墙"  @input="fuzhiSearch" @confirm="enterSearch"/>
 						</view>
 					</view>
 				</view>
 				<view class="list_navs">
 					<view class="navs_box" @click="open($event,1)" :class="curindex==1?'active':''">
-						<text>附近</text>
+						<text v-if="leftList[curName]">{{leftList[curName].name}}</text>
+						<text v-else>附近</text>
 						<text class="nav_jt"></text>
 					</view>
 					<view class="navs_box" @click="open($event,2)" :class="curindex==2?'active':''">
-						<text>综合</text>
+						<text v-if="zhList[zhcurName]">{{zhList[zhcurName].name}}</text>
+						<text v-else>综合</text>
 						<text class="nav_jt"></text>
 					</view>
 					<view class="navs_box" @click="open($event,3)" :class="curindex==3?'active':''">
@@ -114,87 +115,102 @@
 				</view>
 				<view class="saix_con">
 					<!-- 附近 -->
-					<view class="fujin" v-show="curindex!=3">
+					<view class="fujin" v-show="curindex==1">
 						<view class="fuj_left">
-							<view class="name" v-for="(item,index) in leftList" :key="index" :class="index==0?'active':''">
-								{{item.name}}
-							</view>
+							<scroll-view scroll-y="true" class="fujscroll">
+								<view class="name" :class="'附近'==curName?'active':''" @click="clickFujin(0,'附近')">
+									附近
+								</view>
+								<view class="name" v-for="(item,index) in leftList" :key="index" 
+								:class="index==curName?'active':''" @click="clickFujin(item.code,index)">
+									{{item.name}}
+								</view>
+							</scroll-view>
 						</view>
 						<view class="fuj_right">
-							<view class="desc" v-for="(item,index) in rightList" :key="index" :class="index==0?'active':''">
-								{{item.name}}
-							</view>
+							<scroll-view scroll-y="true" class="fujscroll">
+								<view class="desc" :class="'附近'==curMi?'active':''" 
+								@click="clickFjjuli(0,'附近')">
+									附近
+								</view>
+								<view class="desc" v-for="(item,index) in rightList" :key="index" :class="index==curMi?'active':''" 
+								@click="clickFjjuli(item,index)">
+									{{item | cljuli}}
+								</view>
+							</scroll-view>
+						</view>
+					</view>
+					<!-- 综合 -->
+					<view class="fujin" v-show="curindex==2">
+						<view class="fuj_left">
+							<scroll-view scroll-y="true" class="fujscroll">
+								<view class="name" v-for="(item,index) in zhList" :key="index" 
+								:class="index==zhcurName?'active':''" @click="clickZonghe(item.eng,index)">
+									{{item.name}}
+								</view>
+							</scroll-view>
 						</view>
 					</view>
 					<!-- 筛选 -->
 					<view class="saix" v-show="curindex==3">
-						<view class="saix_box">
-							<view class="sab_title">
-								餐饮服务
-							</view>
-							<view class="sab_options">
-								<view class="option_box" :class="canyi==index?'active':''" v-for="(item,index) in canyArr" :key="index" @click="checkedCur(index)">
-									{{item}}
-									<image src="../../static/images/il_gou.png" mode="" v-show="canyi==index"></image>
-								</view>
-							</view>
-						</view>
-						<view class="saix_box">
-							<view class="sab_title">
-								活动促销
-							</view>
-							<view class="sab_options">
-								<view class="option_box" :class="huodong==index?'active':''" v-for="(item,index) in huodArr" :key="index"
-								 @click="checkedCur2(index)">
-									{{item}}
-									<image src="../../static/images/il_gou.png" mode="" v-show="huodong==index"></image>
-								</view>
-							</view>
-						</view>
-						<view class="saix_box">
-							<view class="sab_title">
-								价格
-								<text v-if="parseInt(rangeValues3[0])>= parseInt(rangeValues3[1])">￥{{ rangeValues3[1] }}+</text>
-								<text v-else>￥{{ rangeValues3[0] }}~{{ rangeValues3[1] }}</text>
-							</view>
-							<!-- <text>{{ rangeValues3[0] }}</text> -->
-							<!-- <text>~</text> -->
-							<!-- <text>{{ rangeValues3[1] }}</text> -->
-							<RangeSlider
-								:width="slideWidth"
-								:height="slideHeight"
-								:blockSize="slideBlockSize"
-								:min="slideMin"
-								:max="slideMax"
-								:values="rangeValues3"
-								:step="step"
-								:liveMode="isLiveMode"
-								@rangechange="onRangeChange3"
-								background-color="#AAAAAA"
-								active-color="#FF8B2D"
-							>
-								<view slot="minBlock" class="range-slider-block"></view>
-								<!-- 左边滑块的内容 -->
-								<view slot="maxBlock" class="range-slider-block"></view>
-								<!-- 右边滑块的内容 -->
-							</RangeSlider>
-						</view>
-						<view class="saix_box">
-							<view class="sab_title">
-								其他服务
-							</view>
-							<view class="sab_options">
-								<view class="option_box" :class="other==index?'active':''" v-for="(item,index) in otherArr" :key="index"
-								 @click="checkedCur3(index)">
-									{{item}}
-									<image src="../../static/images/il_gou.png" mode="" v-show="other==index"></image>
-								</view>
-							</view>
-						</view>
-					    <view class="saix_btns">
-					    	<view class="btn_cz btn" @click="chongzhi">重置</view>
-							<view class="btn_sure btn">确认</view>
-					    </view>
+					   <scroll-view scroll-y="true" class="fujscroll">					
+					   		<view class="saix_box">
+					   			<view class="sab_title">
+					   				活动促销
+					   			</view>
+					   			<view class="sab_options">
+					   				<view class="option_box" :class="item.active?'active':''" v-for="(item,index) in huodArr" :key="index"
+					   				 @click="checkedCur(index)">
+					   					{{item.name}}
+					   					<image src="../../static/images/il_gou.png" mode="" v-show="item.active"></image>
+					   				</view>
+					   			</view>
+					   		</view>
+					   		<view class="saix_box">
+					   			<view class="sab_title">
+					   				价格
+					   				<text v-if="parseInt(rangeValues3[0])>= parseInt(rangeValues3[1])">￥{{ rangeValues3[1] }}+</text>
+					   				<text v-else>￥{{ rangeValues3[0] }}~{{ rangeValues3[1] }}</text>
+					   			</view>
+					   			<!-- <text>{{ rangeValues3[0] }}</text> -->
+					   			<!-- <text>~</text> -->
+					   			<!-- <text>{{ rangeValues3[1] }}</text> -->
+					   			<RangeSlider ref="progress"
+					   				:width="slideWidth"
+					   				:height="slideHeight"
+					   				:blockSize="slideBlockSize"
+					   				:min="slideMin"
+					   				:max="slideMax"
+					   				:values="rangeValues3"
+					   				:step="step"
+					   				:liveMode="isLiveMode"
+					   				@rangechange="onRangeChange3"
+					   				background-color="#AAAAAA"
+					   				active-color="#FF8B2D"
+					   			>
+					   				<view slot="minBlock" class="range-slider-block"></view>
+					   				<!-- 左边滑块的内容 -->
+					   				<view slot="maxBlock" class="range-slider-block"></view>
+					   				<!-- 右边滑块的内容 -->
+					   			</RangeSlider>
+					   		</view>
+					   		<view class="saix_box">
+					   			<view class="sab_title">
+					   				其他服务
+					   			</view>
+					   			<view class="sab_options">
+					   				<view class="option_box" :class="item.active?'active':''" v-for="(item,index) in otherArr" :key="index"
+					   				 @click="checkedCur2(index)">
+					   					{{item.navname}}
+					   					<image src="../../static/images/il_gou.png" mode="" v-show="item.active"></image>
+					   				</view>
+					   			</view>
+					   		</view>
+					   </scroll-view>
+					   <view class="saix_btns">
+					   	<view class="btn_cz btn" @click="chongzhi">重置</view>
+					   	<view class="btn_sure btn" @click="sureSaixuan">确认</view>
+					   </view>
 					</view>
 				</view>
 			</view>
@@ -207,6 +223,7 @@
 	import stars from '../../components/stars/stars.vue'
 	import RangeSlider from '../../components/range-slider/range-slider.vue';
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
+	import tools from '../../static/js/tools.js'
 	export default {
 		data() {
 			return {
@@ -249,26 +266,32 @@
 				}, {
 					name: '10km'
 				}],
-				zonghe: [{
-					name: '综合排序'
+				zhList: [{
+					name: '综合排序',
+					eng:0
 				}, {
-					name: '距离优先'
+					name: '距离优先',
+					eng:'distance'
 				}, {
-					name: '人气优先'
+					name: '人气优先',
+					eng:'popularity'
 				}, {
-					name: '销量优先'
+					name: '销量优先',
+					volume:'volume'
 				}, {
-					name: '低价优先'
+					name: '低价优先',
+					eng:'low_price'
 				}, {
-					name: '高价优先'
+					name: '高价优先',
+					eng:'high_price'
 				}],
 				curindex: 0,
+				curMi:null,
+				curName:null,
+				zhcurName:null,
 				canyArr: ['距离优先', '人气优先', '销量优先', '低价优先', '高价优先'],
 				huodArr: ['买单立减', '代金券', '团购套餐'],
 				otherArr: ['营业中', '可停车', '有包厢', '可预定', '24小时营业', '有WIFI', '可排队'],
-				canyi: null,
-				huodong: null,
-				other: null,
 				slideWidth: 600,
 				slideHeight: 30,
 				slideBlockSize: 30,
@@ -279,7 +302,19 @@
 				rangeValues3: [0, 300],
 				scrTop:0,
 				divTop:100,
-				startData:{clientX:0,clientY:0}
+				list:[],
+				// 获取列表所传参数
+				lat:30.821124,
+				lng:104.172203,
+				delicacy_category:0,
+				page:1,
+				comprehensive:0,
+				activity:[],
+				money:[],
+				service:[],
+				code:510100,
+				codes:0,
+				keyword:''
 			};
 		},
 		components: {
@@ -297,34 +332,96 @@
 				}
 			}
 		},
+		filters:{
+			juliFit(val){
+				let nv=val.split("公里")[0];
+				return parseFloat(nv).toFixed(1);
+			},
+			cljuli(val){
+				let str='';
+				if(val>=1000){
+					str=(val/1000)+'km';
+				}else{
+					str=(val)+'m';
+				}
+				return str;
+			}
+		},
 		onPageScroll(res) {
 			this.scrTop=res.scrollTop;
 			this.getDivtop();
 		},
+		onLoad(options){
+			if(options.lat){
+				this.lat=options.lat;
+			}
+			if(options.lng){
+				this.lng=options.lng;
+			}
+			if(uni.getStorageSync('curCode')){
+				this.code=uni.getStorageSync('curCode');
+			}
+		},
 		mounted() {
-			this.getDivtop();
+			let _that=this;
+			_that.getDivtop();
+			_that.getData();
+		},
+		onReachBottom(){
+			this.page=this.page+1;
+			this.getData();
 		},
 		methods: {
-			start(e){
-			    this.startData.clientX=e.changedTouches[0].clientX;
-			    this.startData.clientY=e.changedTouches[0].clientY;
+			// 获取列表数据
+			getData(){
+				// lat（当前位置纬度），lng（当前位置经度），delicacy_category（美食分类id，点击分类则携带），page（页数），
+				// code（用户定位或者选择地址的代码），comprehensive（综合,默认是综合排序，0或者不携带就是综合排序，距离distance，
+				// 人气popularity，销量volume，低价low_price，高价high_price），activity[]（活动，数组传输），
+				// money（数组，money[0]：最低价格，money[1]：最高价格），service（服务id，数组）
+				// codes（附近地区的行政代码）mi（米），token（有就带），keyword（查询内容）
+				let _that=this;
+				let token=uni.getStorageSync('token');
+				let params={
+					lat:_that.lat,
+					lng:_that.lng,
+					delicacy_category:_that.delicacy_category,
+					page:_that.page,
+					code:_that.code,
+					comprehensive:_that.comprehensive,
+					activity:_that.activity,
+					money:_that.rangeValues3,
+					service:_that.service,
+					mi:_that.mi,
+					codes:_that.codes,
+					token:token,
+					keyword:_that.keyword
+				};
+				tools.myRequest('api.delicacy.list',params, '').then(res => {
+					// console.log(res);
+					uni.hideToast();
+					tools.warnMessage(res.status,res.result.message,function(){
+						_that.sorts=res.result.category;
+						_that.list=res.result.list;
+					});
+				}).catch(error => {
+					console.log('请求失败：');
+					console.log(error);
+				})
 			},
-			end(e){
-			    // console.log(e)
-			    const subX=e.changedTouches[0].clientX-this.startData.clientX;
-			    const subY=e.changedTouches[0].clientY - this.startData.clientY;
-			    if(subY>50 || subY<-50){
-			        console.log('上下滑')
-			    }else{
-			        if(subX>100){
-			            console.log('右滑')
-						uni.navigateBack({});
-			        }else if(subX<-100){
-			            console.log('左滑')
-			        }else{
-			            console.log('无效')
-			        }
-			    }
+			// 获取附近数据
+			getFujing(){
+				let _that=this;
+				tools.myRequest('api.delicacy.list.nearby',{code:_that.code}, '').then(res => {
+					// console.log(res);
+					uni.hideToast();
+					tools.warnMessage(res.status,res.result.message,function(){
+						_that.leftList = res.result.data.dq;
+						_that.rightList = res.result.data.mi;
+					});
+				}).catch(error => {
+					console.log('请求失败：');
+					console.log(error);
+				})
 			},
 			// 获取导航距离顶部的位置
 			getDivtop(){
@@ -335,6 +432,45 @@
 				  this.divTop=data.top;
 				}).exec();
 			},
+			// 点击筛选获取数据
+			getSaixuan(){
+				let _that=this;
+				tools.myRequest('api.delicacy.list.screen',{code:_that.code}, '').then(res => {
+					// console.log(res);
+					uni.hideToast();
+					tools.warnMessage(res.status,res.result.message,function(){
+						if(!_that.huodArr[0].name){
+							_that.huodArr = res.result.activity;
+							_that.otherArr = res.result.service;
+						}else{
+							console.log('重新赋值了')
+						}
+					});
+				}).catch(error => {
+					console.log('请求失败：');
+					console.log(error);
+				})
+			},
+			// 点击附近数据
+			clickFujin(codes,index){
+				this.codes=codes;
+				this.curName=index;
+			},
+			// 点击综合数据
+			clickZonghe(eng,index){
+				this.comprehensive=eng;
+				this.zhcurName=index;
+				this.$refs.popup.close();
+				this.getData();
+			},
+			// 点击附近数据距离
+			clickFjjuli(mi,index){
+				this.mi=mi;
+				this.curMi=index;
+				this.$refs.popup.close();
+				this.getData();
+			},
+			// 返回上一页
 			returnPage() {
 				uni.navigateBack({});
 			},
@@ -343,13 +479,11 @@
 				if (this.curindex != i) {
 					this.curindex = i;
 					if (i == 1) { //附近
-						this.leftList = this.leftList2;
-						this.rightList = this.rightList2;
+						this.getFujing();
 					} else if (i == 2) { //综合
-						this.leftList = this.zonghe;
-						this.rightList = [];
+					
 					} else if (i == 3) { //筛选
-
+                       this.getSaixuan();
 					}
 					this.$refs.popup.open();
 				} else {
@@ -365,22 +499,66 @@
 				}
 			},
 			checkedCur(index) {
-				this.canyi = index;
+				if(this.huodArr[index].active){
+					// this.huodArr[index].active=false;
+					this.$set(this.huodArr[index],'active',false);
+				}else{
+					// this.huodArr[index].active=true;
+					this.$set(this.huodArr[index],'active',true);
+				}
 			},
 			checkedCur2(index) {
-				this.huodong = index;
-			},
-			checkedCur3(index) {
-				this.other = index;
+				if(this.otherArr[index].active){
+					// this.otherArr[index].active=false;
+					this.$set(this.otherArr[index],'active',false);
+				}else{
+					// this.otherArr[index].active=true;
+					this.$set(this.otherArr[index],'active',true);
+				}
 			},
 			onRangeChange3: function(e) {
 				this.rangeValues3 = [e.minValue, e.maxValue];
 			},
 			chongzhi(){
-				this.canyi=null;
-				this.huodong=null;
-				this.other=null;
 				this.rangeValues3=[0,300];
+				this.slideWidth=600;
+				this.slideHeight= 30;
+				this.slideBlockSize= 30;
+				this.slideMin= 0;
+				this.slideMax= 300;
+				this.isLiveMode= true;
+				this.step= 50;
+				this.activity=[];
+				this.service=[];
+				this.$refs.progress._refresh();
+				for(let i=0;i<this.huodArr.length;i++){
+					this.huodArr[i].active=false;
+				}
+				for(let i=0;i<this.otherArr.length;i++){
+					this.otherArr[i].active=false;
+				}
+			},
+			sureSaixuan(){
+				this.money=this.rangeValues3;
+				for(let i=0;i<this.huodArr.length;i++){
+					if(this.huodArr[i].active){
+						this.activity.push(this.huodArr[i].id);
+					}
+				}
+				for(let i=0;i<this.otherArr.length;i++){
+					if(this.otherArr[i].active){
+						this.service.push(this.otherArr[i].id);
+					}
+				}
+				this.$refs.popup.close();
+				this.getData();
+			},
+			fuzhiSearch(e){
+				this.keyword=e.detail.value;
+			},
+			enterSearch(){
+				this.$refs.popup.close();
+				this.getData();
 			}
 		}
 	}
@@ -457,7 +635,6 @@
 		.sorts_box {
 			width: 20%;
 			text-align: center;
-
 			.sb_imgs {
 				width: 88upx;
 				height: 88upx;
@@ -652,5 +829,8 @@
 				}
 			}
 		}
+	}
+	.fujscroll{
+		height: 600upx;
 	}
 </style>

@@ -69,7 +69,7 @@
 				}
 				// tools.getAesString(_that.phone,'phoneabc',11)+'&verifycode='
 				// +tools.getAesString(_that.karr.join(''),'verifyco',8)
-				// type 1注册  2找回支付密码 3找回账号密码
+				// type 1注册  2找回支付密码 3找回账号密码 4验证码登录
 				if(_that.type==1){
 					tools.myRequest('api.login.index.sms', {
 						mobile:_that.phone,
@@ -88,9 +88,40 @@
 					})
 				
 				}else{
-					uni.navigateTo({
-						url:'../settingCode/settingCode?type='+_that.type+'&phone='+_that.phone+'&verifycode='+_that.karr.join('')
-					});
+					// 验证码是否输入正确
+					tools.myRequest('api.login.index.verification_two', {
+						mobile:_that.phone,
+						verifycode:_that.karr.join('')
+					}, '').then(res => {
+						// console.log(res);
+						tools.warnMessage(res.status,res.result.message,function(){
+							// 验证码登录
+							if(_that.type==4){
+								uni.showToast({
+									title:"登录成功",
+									icon:"none",
+									success() {
+										uni.setStorageSync('token',res.result.token);
+										setTimeout(()=>{
+											uni.reLaunch({
+												url:'../index/index'
+											})
+										},1000)
+									}
+								})
+							}else{
+								uni.navigateTo({
+									url:'../settingCode/settingCode?type='+_that.type+'&phone='+_that.phone+'&verifycode='+_that.karr.join('')
+								});
+							}
+						  
+						});
+					
+					}).catch(error => {
+						console.log('请求失败：');
+						console.log(error);
+					})
+				
 				}
 			},
 			addClass(i){

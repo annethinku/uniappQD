@@ -12,6 +12,7 @@
 
 <script>
 	import uniSearchBar from '@/components/uni-search-bar/uni-search-bar.vue'
+	import tools from '../../static/js/tools.js'
 	export default {
 		data() {
 			return {
@@ -27,30 +28,49 @@
 		},
 		mounted() {
 			// 获取城市数据json
-			uni.request({
-				url: '../../static/js/city.json',
-				data: {},
-				header: {},
-				success: (res) => {
-					this.citys = (res.data.city);
-					this.citys.map((item, index) => {
-						item.lists.map((item2, index2) => {
-							this.chinaList.push(item2.name);
-							this.englishList.push(item2.sp);
-							this.englishList2.push(item2.qp);
-						});
-					});
-				}
-			});
+			// uni.request({
+			// 	url: '../../static/js/city.json',
+			// 	data: {},
+			// 	header: {},
+			// 	success: (res) => {
+			// 		this.citys = (res.data.city);
+			// 		this.citys.map((item, index) => {
+			// 			item.lists.map((item2, index2) => {
+			// 				this.chinaList.push(item2.name);
+			// 				this.englishList.push(item2.sp);
+			// 				this.englishList2.push(item2.qp);
+			// 			});
+			// 		});
+			// 	}
+			// });
+			this.getCitys();
 		},
 		methods: {
+			// 获取城市数据
+			getCitys(){
+				let _that=this;
+				tools.myRequest('api.delicacy.location',{}, '').then(res => {
+					// console.log(res);
+					uni.hideToast();
+					tools.warnMessage(res.status,res.result.message,function(){
+						_that.citys=res.result.list;
+						_that.citys.map((item, index) => {
+							item.lists.map((item2, index2) => {
+								_that.chinaList.push(item2.name);
+							});
+						});
+					});
+				}).catch(error => {
+					console.log('请求失败：');
+					console.log(error);
+				})
+			},
 			enterSearch(e) {
 				let val = e.value;
 				let _that=this;
 				_that.result=[];
 				_that.chinaList.map((item, index) => {
-					if (item == val || _that.englishList2[index] == val
-					 || _that.englishList[index].indexOf(val) ==0 ||  _that.englishList[index]==val) {
+					if (item == val) {
 						if(_that.result.indexOf(item)==-1){
 							_that.result.unshift(item);
 						}
@@ -63,8 +83,7 @@
 					let val = e.value;
 					if (val) {
 						_that.chinaList.map((item, index) => {
-							if (item.indexOf(val) != -1 || _that.englishList2[index] == val 
-							|| _that.englishList[index].indexOf(val) ==0 ||  _that.englishList[index]==val) {
+							if (item.indexOf(val) != -1) {
 								if(_that.result.indexOf(item)==-1){
 									_that.result.unshift(item);
 								}
@@ -77,10 +96,19 @@
 				deaa();
 			},
 			returnIndex(name){
+				let _that=this;
 				uni.setStorageSync('curPos',name);
+				_that.citys.map((item, index) => {
+					item.lists.map((item2, index2) => {
+						if(item2.name==name){
+							uni.setStorageSync('curCode',item2.code);
+						}
+					});
+				});
 				uni.navigateBack({
 					delta:2
 				})
+				
 			}
 		}
 	}

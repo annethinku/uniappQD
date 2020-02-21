@@ -288,14 +288,13 @@
 		background-image: url($url + "@2x.png");
 		background-size: 100% auto;
 		background-repeat: no-repeat;
-
+	
 		@media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3) {
 			background-image: url($url + "@3x.png");
 			background-size: 100% auto;
 			background-repeat: no-repeat;
 		}
 	}
-
 	.yellow-bg {
 		width: 750upx;
 		height: 718upx;
@@ -398,7 +397,7 @@
 		width: 25%;
 		text-align: center;
 		margin-bottom: 25upx;
-
+font-family:'pfMedium';
 		.icon {
 			width: 80upx;
 			height: 80upx;

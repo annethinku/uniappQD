@@ -155,7 +155,30 @@
 				
 				}else{
 					// 设置找回账号密码
-					
+					tools.myRequest('api.login.index.verification_two_c', {
+						mobile:_that.phone,
+						verifycode: _that.verifycode,
+						pwd:_that.code1
+					}, '').then(res => {
+						// console.log(res);
+						uni.hideToast();
+						tools.warnMessage(res.status,res.result.message,function(){
+							uni.showToast({
+								icon:'success',
+								title:res.result.message,
+								success() {
+									setTimeout(()=>{
+										uni.reLaunch({
+											url:'../loginCode/loginCode'
+										})
+									},1000)
+								}
+							})
+						});
+					}).catch(error => {
+						console.log('请求失败：');
+						console.log(error);
+					})
 				}
 			
 			}

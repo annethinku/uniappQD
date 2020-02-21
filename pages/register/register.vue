@@ -180,7 +180,8 @@
 				tools.myRequest('api.login.index.register', {
 					agentid:_that.yqrid,
 					mobile:_that.phone,
-					pwd:_that.code1
+					pwd:_that.code1,
+					verifycode:_that.verifycode
 				}, '').then(res => {
 					// console.log(res);
 					tools.warnMessage(res.status,res.result.message,function(){

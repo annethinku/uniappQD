@@ -2,7 +2,7 @@
 	<view>
 		<view class="records-list">
 			<!-- <navigator url="../tixianDetail/tixianDetail" hover-class="none" v-for="(item,index) in list" :key="index"> -->
-				<view class="reco-li">
+				<view class="reco-li" v-for="(item,index) in list" :key="index">
 					<view class="rel-left">
 						<view class="title">
 							{{item.title}}

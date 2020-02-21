@@ -74,8 +74,16 @@
 					// console.log(res);
 					tools.warnMessage(res.status,res.result.message,function(){
 					    if(res.result.result){
-							uni.reLaunch({
-								url:'../../pages/vip/vip'
+							uni.showToast({
+								icon:'success',
+								title:'会员开通成功',
+								success() {
+									setTimeout(()=>{
+										uni.navigateTo({
+											url:'../../pages/vip/vip'
+										})
+									},1000)
+								}
 							})
 						}
 					});

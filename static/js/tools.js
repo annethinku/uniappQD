@@ -30,7 +30,7 @@ const myRequest = function(url, data, method) {
  * @param {Object} data 提示信息
  * @param {Object} func 回调函数
  */
-const warnMessage=function(status,data,func){
+const warnMessage=function(status,data,func,phone){
 	if(status==-2){
 		// 跳转登录
 		uni.navigateTo({
@@ -45,6 +45,12 @@ const warnMessage=function(status,data,func){
 		uni.navigateTo({
 			url:"/pages/settingCode/settingCode?type=2"
 		})
+	}else if(status==111){
+		// 未注册过的用户跳转注册
+		uni.navigateTo({
+			url:'../register/register?type=2&phone='+phone
+		})
+		
 	}else{
 		// 提示接口错误信息
 		uni.showToast({

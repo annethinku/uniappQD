@@ -30,17 +30,17 @@
 			</view>
 		</view>
 		<view class="address-hot">
-			<view class="hotname" :class="curPos=='成都'?'active':''" @click="chooseAddress('成都')">成都</view>
-			<view class="hotname" :class="curPos=='北京'?'active':''" @click="chooseAddress('北京')">北京</view>
-			<view class="hotname" :class="curPos=='上海'?'active':''" @click="chooseAddress('上海')">上海</view>
+			<view class="hotname" :class="curPos=='成都'?'active':''" @click="chooseAddress('成都',510100)">成都</view>
+			<view class="hotname" :class="curPos=='北京'?'active':''" @click="chooseAddress('北京',110100)">北京</view>
+			<view class="hotname" :class="curPos=='上海'?'active':''" @click="chooseAddress('上海',310000)">上海</view>
 		</view>
 		<view class="citys">
 			<view class="city_box" v-for="(item,index) in citys" :key="index" :id="'cid'+index">
 				<view class="title">
-					{{item.title}}
+					{{item.title | upperFit}}
 				</view>
 				<view class="content">
-					<view class="con_li" v-for="(item2,index2) in item.lists" :key="index2" @click="chooseAddress(item2.name)">
+					<view class="con_li" v-for="(item2,index2) in item.lists" :key="index2" @click="chooseAddress(item2.name,item2.code)">
 						{{item2.name}}
 					</view>
 				</view>
@@ -54,6 +54,7 @@
 
 <script>
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
+	import tools from '../../static/js/tools.js'
 	export default {
 		data() {
 			return {
@@ -66,21 +67,26 @@
 		components:{
 			uniNavBar
 		},
+		filters:{
+			upperFit(val){
+				return val.toUpperCase();
+			}
+		},
 		mounted() {
 			// 获取26个字母
-			for (var i = 0; i < 26; i++) {
-				this.zimuArr.push(String.fromCharCode((65 + i)));
-			}
+			// for (var i = 0; i < 26; i++) {
+			// 	this.zimuArr.push(String.fromCharCode((65 + i)));
+			// }
 			// 获取城市数据json 加了下面请求就会闪退 希望数据存到后台
-			uni.request({
-				url: 'http://qidou.eezzz.cn/attachment/images/emj/city.json',
-				data: {},
-				header: {},
-				success: (res) => {
-					this.citys = (res.data.city);
-				}
-			});
-
+			// uni.request({
+			// 	url: 'http://qidou.eezzz.cn/attachment/images/emj/city.json',
+			// 	data: {},
+			// 	header: {},
+			// 	success: (res) => {
+			// 		this.citys = (res.data.city);
+			// 	}
+			// });
+           this.getCitys();
 		},
 		onShow() {
 			let curp = uni.getStorageSync('curPos');
@@ -97,6 +103,24 @@
 
 		},
 		methods: {
+			// 获取城市数据
+			getCitys(){
+				let _that=this;
+				tools.myRequest('api.delicacy.location',{}, '').then(res => {
+					// console.log(res);
+					uni.hideToast();
+					tools.warnMessage(res.status,res.result.message,function(){
+						_that.citys=res.result.list;
+						for(let i=0;i<_that.citys.length;i++){
+							_that.zimuArr.push(_that.citys[i].title.toUpperCase());
+						}
+						
+					});
+				}).catch(error => {
+					console.log('请求失败：');
+					console.log(error);
+				})
+			},
 			// 返回上一页箭头
 			returnTop() {
 				uni.navigateBack({})
@@ -118,13 +142,14 @@
 				this.zmIndex = index;
 			},
 			// 选择地址
-			chooseAddress(val) {
+			chooseAddress(val,code) {
 				this.curPos = val;
 				// uni.pageScrollTo({
 				//     duration:500,
 				//     scrollTop:0
 				// })
 				uni.setStorageSync('curPos', val);
+				uni.setStorageSync('curCode', code);
 				this.returnTop();
 			},
 			// 获取元素距离顶部的位置
