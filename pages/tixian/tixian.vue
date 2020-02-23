@@ -64,6 +64,27 @@
 		<chooseZh :info="info.type_array" ref="zhanghu" tixian="true" @getName="getName"></chooseZh>
 		<!-- 输入支付密码弹窗 -->
 		<myCode ref="password" isTixian="true" :money="money"></myCode>
+		<!-- 实名认证弹窗 -->
+		<uni-popup ref="shiming" type="center">
+			<view class="shim-mask">
+				<image src="../../static/images/tixian_close.png" mode="" class="sm_close" @click="hideShiming"></image>
+				<view class="sm_bigm">
+					<image src="../../static/images/tixian_mask.png" mode=""></image>
+				</view>
+				<view class="sm_black">
+					您还没有完成实名认证，请认证后使
+					用提现功能。
+				</view>
+				<view class="sm_desc">
+					提示：信息仅用于打款认证，请放心填写
+				</view>
+				<navigator url="../sfRenZ/sfRenZ" hover-class="none">
+					<view class="sm_btn">
+						立即认证
+					</view>
+				</navigator>
+			</view>
+		</uni-popup>
 	</view>
 </template>
 
@@ -110,7 +131,8 @@
 			}).catch(error => {
 				console.log('请求失败：');
 				console.log(error);
-			})
+			});
+			_that.$refs.shiming.open();
 		},
 		methods: {
 			getName(name){
@@ -160,6 +182,9 @@
 				uni.navigateTo({
 					url:'../tixianRecords/tixianRecords'
 				})
+			},
+			hideShiming(){
+				this.$refs.shiming.close();
 			}
 		}
 	}
@@ -337,5 +362,51 @@
 		margin-top: 100upx;
 	}
 
-	
+	.shim-mask{
+		width: 670upx;
+		background-color: #FFFFFF;
+		border-radius: 10upx;
+		padding: 36upx 0 42upx;
+		position: relative;
+		text-align: center;
+		.sm_close{
+			width: 62upx;
+			height: 68upx;
+			position: absolute;
+			top: 0;
+			right: 44upx;
+		}
+		.sm_bigm{
+			width: 540upx;
+			height: 294upx;
+			margin: 0 auto;
+			image{
+				width: 100%;
+				height: 100%;
+			}
+		}
+		.sm_black{
+			width: 479upx;
+			margin: 38upx auto 0;
+			font-size: 30upx;
+			color: #333333;
+		}
+		.sm_desc{
+			font-size: 24upx;
+			color: #999999;
+			margin-top: 90upx;
+		}
+		.sm_btn{
+			width:400upx;
+			height:92upx;
+			line-height: 92upx;
+			background:linear-gradient(90deg,rgba(253,123,94,1),rgba(253,78,62,1));
+			border-radius:46upx;
+			font-size: 36upx;
+			color: #FFFFFF;
+			font-weight: bold;
+			text-align: center;
+			margin: 48upx auto 0;
+		}
+	}
 </style>

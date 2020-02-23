@@ -216,7 +216,7 @@
 		<!-- 选择支付账户弹窗 -->
 		<chooseZh :info="info" ref="zhanghu"></chooseZh>
 		<!-- 输入支付密码弹窗 -->
-		<myCode ref="password" :money="money"></myCode>
+		<myCode ref="password"></myCode>
 	</view>
 </template>
 

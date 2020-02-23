@@ -126,6 +126,9 @@
 			},
 			sendYzm(){
 				let _that=this;
+				if(_that.seconds>0){
+					return false;
+				}
 				tools.myRequest('api.member.zf.verifycode', {
 					mobile:_that.phone
 				}, '').then(res => {

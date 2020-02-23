@@ -131,7 +131,7 @@
 					uni.createSelectorQuery().select(child).boundingClientRect((res) => {
 						uni.pageScrollTo({
 							duration: 500,
-							scrollTop: (res.top - data.top) + (580 / 2)
+							scrollTop: (res.top - data.top) + (500 / 2)
 						})
 					}).exec()
 				}).exec();

@@ -1,5 +1,8 @@
 <template>
 	<view>
+		<block v-if="!isLogin">
+			<view class="noLogin-mask" @click="jumpLogin"></view>
+		</block>
 		<uni-nav-bar :status-bar="true" :fixed="true">
 			<view></view>
 			<view slot="left"></view>
@@ -18,15 +21,15 @@
 		</uni-nav-bar>
 		<view class="my-user">
 			<view class="userimg">
-				<image src="../../static/images/default.png" mode="" class="u"></image>
+				<image :src="isLogin?'../../static/images/default.png':'../../static/images/my-nologin.png'" mode="" class="u"></image>
 				<image src="../../static/images/my-vip.png" mode="" class="v" v-show="isSh"></image>
 			</view>
 			<view class="userinfo">
 				<view class="nickname">
-					zc169
+					{{isLogin?'zg123':'点击登录'}}
 				</view>
 				<view class="des">
-					推荐人ID：132240
+					{{isLogin?'推荐人ID：12355':'登录更精彩'}}
 				</view>
 			</view>
 			<view class="shanghu" v-show="isSh">
@@ -83,7 +86,7 @@
 			</view>
 			<navigator url="../tixian/tixian" hover-class="none">
 				<view class="tixian">
-					<image src="" mode=""></image>
+					<image src="../../static/images/my_qianbao.png" mode=""></image>
 					<text>立即提现</text>
 				</view>
 			</navigator>
@@ -244,13 +247,28 @@
 	export default {
 		data() {
 			return {
-				isSh: false
+				isSh: false,
+				isLogin:false
 			};
 		},
 		components: {
 			'my-tab': tabbar,
 			uniNavBar
 		},
+		mounted() {
+			let token=uni.getStorageSync('token');
+			if(token){
+				this.isLogin=true;
+			}
+			console.log(token)
+		},
+		methods:{
+			jumpLogin(){
+				uni.navigateTo({
+					url:'../login/login'
+				})
+			}
+		}
 	}
 </script>
 
@@ -444,6 +462,7 @@
 				width: 25upx;
 				height: 24upx;
 				margin-right: 15upx;
+				vertical-align: middle;
 			}
 
 			text {
@@ -566,5 +585,14 @@
 				}
 			}
 		}
+	}
+	.noLogin-mask{
+		width: 100%;
+		height: 100%;
+		// background-color: rgba(0,0,0,0.5);
+		position: fixed;
+		left: 0;
+		top: 0;
+		z-index: 1000;
 	}
 </style>

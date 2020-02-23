@@ -243,6 +243,24 @@
 				"navigationBarTitleText": "使用帮助"
 			}
         }
+        ,{
+            "path" : "pages/productDetail/productDetail",
+            "style" : {
+				"navigationBarTitleText": "商品详情"
+			}
+        }
+        ,{
+            "path" : "pages/sfRenZ/sfRenZ",
+            "style" : {
+				"navigationBarTitleText": "身份认证"
+			}
+        }
+        ,{
+            "path" : "pages/rzSuccess/rzSuccess",
+            "style" : {
+				"navigationBarTitleText": ""
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

@@ -123,6 +123,7 @@
 	import tabbar from '../../components/tabbar/tabbar.vue'
 	import tools from '../../static/js/tools.js'
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
+	import permision from "@/js_sdk/wa-permission/permission.js"
 	export default {
 		data() {
 			return {
@@ -221,7 +222,8 @@
 				],
 				scrTop:0,
 				divTop:0,
-				curP:'成都'
+				curP:'成都',
+				isIos: true
 			}
 		},
 		computed:{
@@ -245,10 +247,34 @@
 			// let token='703aa66c-f377-d49e-ab5a-7cab355f2e7c177251822091215';//（有余额）
 			// let token='';
 			// uni.setStorageSync('token',token);
+			
+			// #ifdef APP-PLUS
+			this.isIos = (plus.os.name == "iOS")
+			// #endif
+			
+		
 		},
 		onShow() {
 			let curp=uni.getStorageSync('curPos');
 			this.curP=curp?curp:'成都';
+			// #ifdef APP-PLUS
+			let isOpenPos=permision.checkSystemEnableLocation(); //返回true或false
+			if(!isOpenPos){
+				uni.showModal({
+				    content: '我们需要获取您的位置信息才能更好的为您服务哦！',
+				    showCancel: false
+				});
+			}
+			// 没有授权位置信息打开授权
+			if(this.isIos){
+				let isOpios=permision.judgeIosPermission("location"); //判断iOS上是否给予位置权限，有权限返回true，否则返回false
+				if(!isOpios){
+					permision.gotoAppPermissionSetting();
+				}
+			}else{
+				this.requestAndroidPermission('android.permission.ACCESS_FINE_LOCATION');
+			}
+			// #endif
 		},
 		mounted(){
 			this.getDivtop();
@@ -279,7 +305,24 @@
 				        console.log('条码内容：' + res.result);
 				    }
 				});
-			}
+			},
+			// 安卓是否授权位置
+			async requestAndroidPermission(permisionID) {
+			    var result = await permision.requestAndroidPermission(permisionID)
+			    var strStatus
+			    if (result == 1) {
+			        strStatus = "已获得授权"
+			    } else if (result == 0) {
+			        strStatus = "未获得授权"
+					permision.gotoAppPermissionSetting();
+			    } else {
+			        strStatus = "被永久拒绝权限"
+			    }
+			    uni.showModal({
+			        content: permisionID + strStatus,
+			        showCancel: false
+			    });
+			},
 		}
 	}
 </script>

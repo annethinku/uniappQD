@@ -22,28 +22,36 @@
 				</view>
 			</scroll-view>
 		</view>
-		<view class="qg_quan" v-show="!isTaocan">
-			<view class="quan_left">
-				<view class="name">
-					阿斯顿餐厅代金卷
+		<navigator url="../productDetail/productDetail?isTaocan=false" v-show="!isTaocan" hover-class="none">
+			<view class="qg_quan">
+				<view class="quan_left">
+					<view class="name">
+						阿斯顿餐厅代金卷
+					</view>
+					<view class="title">
+						79元代100元 代金卷
+					</view>
+					<view class="price">
+						￥79.00
+					</view>
 				</view>
-				<view class="title">
-					79元代100元 代金卷
-				</view>
-				<view class="price">
-					￥79.00
+				<view class="quan_right">
+					<!-- <view class="time">
+						周一至周日
+					</view> -->
+					<view class="btn">
+						月售255
+					</view>
 				</view>
 			</view>
-			<view class="quan_right">
-				<view class="time">
-					周一至周日
-				</view>
-				<view class="btn">
-					月售255
-				</view>
-			</view>
-		</view>
+		</navigator>
 		<view class="taocan_show" v-show="isTaocan">
+			<navigator url="../productDetail/productDetail?isTaocan=true" hover-class="none">
+				<view class="sp_detail">
+					商品详情
+					<image src="../../static/images/my-jiant.png" mode=""></image>
+				</view>
+			</navigator>
 			<view class="tc_title">
 				阿斯顿 2-3人餐
 			</view>
@@ -64,7 +72,7 @@
 			</view>
 		</view>
 		<!-- 套餐详细 -->
-		<view class="useRules" v-show="isTaocan">
+		<view class="useRules" v-show="isTaocan" :style="isTaocan?'margin-top:20upx':''">
 			<view class="title">
 				套餐详细
 			</view>
@@ -87,7 +95,7 @@
 			</view>
 		</view>
 		<!-- 使用规则 -->
-		<view class="useRules">
+		<view class="useRules" :style="isTaocan?'margin-top:20upx':''">
 			<view class="title">
 				使用规则
 			</view>
@@ -989,14 +997,14 @@
 
 	.qg_quan {
 		width: auto;
-		height: 200upx;
+		height: 234upx;
 		@include bg-image('../../static/images/detail_quanbg');
-		margin: 20upx 23upx 0;
+		margin: 20upx 0 0;
 		display: flex;
 		align-items: center;
 
 		.quan_left {
-			padding: 40upx 20upx;
+			padding: 40upx 40upx;
 			color: #333333;
 			line-height: 27upx;
 
@@ -1019,7 +1027,7 @@
 		}
 
 		.quan_right {
-			margin-left: auto;
+			margin: 0 20upx 0 auto;
 			text-align: center;
 			width: 150upx;
 			text-align: center;
@@ -1033,7 +1041,7 @@
 				line-height: 26upx;
 				background: rgba(255, 238, 228, 1);
 				border-radius: 11upx;
-				margin-top: 50upx;
+				margin-top: 100upx;
 				font-size: 18upx;
 				color: #FE7338;
 			}
@@ -1044,7 +1052,7 @@
 		background: rgba(255, 255, 255, 1);
 		box-shadow: 0 1upx 20upx 0 rgba(187, 187, 187, 0.2);
 		border-radius: 20upx;
-		margin: 20upx 23upx 0;
+		margin: 0 23upx;
 
 		.title {
 			font-size: 32upx;
@@ -1437,7 +1445,20 @@
 		border-radius: 20upx;
 		margin: 26upx 23upx 0;
 		padding: 24upx;
-
+        position: relative;;
+		.sp_detail{
+			font-size: 22upx;
+			color: #666;
+			position: absolute;
+			right: 34upx;
+			top: 34upx;
+			image{
+				width: 10upx;
+				height: 14upx;
+				margin-left: 13upx;
+				vertical-align: middle;
+			}
+		}
 		.tc_title {
 			font-size: 42upx;
 			font-weight: bold;

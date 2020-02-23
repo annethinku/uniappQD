@@ -1,8 +1,8 @@
 <template>
 	<view>
 		<view class="records-list">
-			<!-- <navigator url="../tixianDetail/tixianDetail" hover-class="none" v-for="(item,index) in list" :key="index"> -->
-				<view class="reco-li" v-for="(item,index) in list" :key="index">
+			<navigator url="../tixianDetail/tixianDetail" hover-class="none" v-for="(item,index) in list" :key="index">
+				<view class="reco-li">
 					<view class="rel-left">
 						<view class="title">
 							{{item.title}}
@@ -16,11 +16,11 @@
 							{{item.money}}
 						</view>
 						<view class="desc" :class="item.status!=1?'red':''">
-							{{item.status==0?'审核中':(item.status==1?'提现成功':'被拒绝')}}
+							{{item.status==0?'审核中':(item.status==1?'提现成功':'提现失败')}}
 						</view>
 					</view>
 				</view>
-			<!-- </navigator> -->
+			</navigator>
 		</view>
 	</view>
 </template>

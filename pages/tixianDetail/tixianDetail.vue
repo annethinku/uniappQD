@@ -24,6 +24,15 @@
 			</view>
 		</view>
 		<view class="details">
+			<!-- 提现失败展示 -->
+			<view class="fail_tx">
+				原因：您的身份证信息不匹配，系统自动取消提现
+				申请。如相关信息填写正常后任无法登陆或者其他
+				问题，请
+				 <text>
+					联系客服。
+				</text>               
+			</view>
 			<view class="de-li">
 				<view class="label">
 					提现金额
@@ -52,6 +61,7 @@
 	    <navigator url="../index/index" hover-class="none" open-type="reLaunch">
 			<view class="d-btns">
 				好的
+				<!-- 去修改 -->
 			</view>
 		</navigator>
 	</view>
@@ -145,6 +155,15 @@
 				font-size: 30upx;
 				color: #333333;
 				font-weight: bold;
+			}
+		}
+		.fail_tx{
+			font-size: 30upx;
+			line-height: 50upx;
+			color: #666666;
+			padding: 44upx 20upx;
+			text{
+				color: #FD5845;
 			}
 		}
 	}

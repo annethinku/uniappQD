@@ -343,4 +343,16 @@
 		font-size: 28upx;
 		color: #333333;
 	}
+	// 红色按钮
+	.common_redbtn{
+		height:92upx;
+		line-height: 92upx;
+		font-weight: bold;
+		background:linear-gradient(90deg,rgba(253,123,94,1),rgba(253,78,62,1));
+		border-radius:46upx;
+		font-size: 36upx;
+		color: #FFFFFF;
+		text-align: center;
+		margin: 100upx 40upx;
+	}
 </style>
